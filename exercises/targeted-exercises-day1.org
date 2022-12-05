@@ -1,0 +1,62 @@
+* Objective
+
+The learning targets of this exercise:
+
+- Setup a project with targets.
+- Naming conventions.
+- Work with an existing project.
+# Dependency graph, function name, cue. Export.
+# study population
+# index date
+# flowchart
+# table 1
+
+
+** Warm-up: systemic hints
+
+- Check R version
+- Check R-studio version
+- Install packages:
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+targets, tarchetypes, data.table, matrixStats, Publish, ranger, glmnet
+#+END_SRC
+- R-studio settings: never save .Rdata
+- Projects
+- Search functionality
+- Automatic header
+- dput
+
+
+** Nutshell data :noexport:
+
+#+ATTR_LATEX: :options otherkeywords={}, deletekeywords={}
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+library(heaven)
+library(data.table)
+make_pnr <- function(data,len){
+  data[,pnr:=as.character(pnr)]
+  N <- nchar(data$pnr)
+  len <- pmax(len,max(N))
+  for (m in 1:(len-1)){
+    v=paste0(paste0(rep("0",len-m),collapse=""),data$pnr[N==m])
+    set(data,j="pnr",i=which(N==m),value=v)
+  }
+  data
+}
+set.seed(9)
+adm <- simAdmissionData(9999,diagnoses=c(c("DI21","DI22"),icdcodes[sample(1:.N,size=13)]$diag))
+make_pnr(adm,len=6)
+fwrite(adm,"~/metropolis/Teaching/targetedRegisterAnalysis/exercises/nutshell/rawdata/lpr.csv",quote=TRUE)
+pop <- adm[grep("DI2[12]",diag)]
+pop <- pop[pop[,.I[1],by="pnr"]$V1]
+pop <- pop[,.(pnr,inddto,uddto)]
+set.seed(9)
+N <- 100000
+demo <- data.table(pnr=1:N,sex=rbinom(N,1,.42),birth_date=as.Date("1950-01-01")+runif(N,-365.25*20,365.25*20))
+make_pnr(demo,len=6)
+fwrite(demo,"~/metropolis/Teaching/targetedRegisterAnalysis/exercises/nutshell/rawdata/cpr.csv",quote=TRUE)
+#+END_SRC
+
+
+
+

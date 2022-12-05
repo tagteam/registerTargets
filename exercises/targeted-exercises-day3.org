@@ -1,0 +1,37 @@
+* Modeling
+
+
+#+ATTR_LATEX: :options otherkeywords={}, deletekeywords={}
+#+BEGIN_SRC R  :results output raw drawer  :exports both  :session *R* :cache yes
+library(targets)
+library(data.table)
+library(Publish)
+source("code/synthesize_statins.R")
+cc <- fread("data/statin_coeffients.txt")
+CC <- cc[1:match("ASCVD_0",cc$variable),1:match("ASCVD_0",names(cc))]
+CC <- cc[1:match("Statins_0",cc$variable),1:match("Statins_0",names(cc))]
+## CC <- cc[1:match("age",cc$variable),1:match("age",names(cc))]
+m <- synthesize_statins(CC,continuous=list("age"=list(sd=10),"ldl"=list(sd=0.5)))
+n <- 100000
+d <- setDT(lava::sim(m,n))
+org(glm(Statins_0~age+sex,data=d,family="binomial"))
+org(glm(ldl~sex,data=d,family="gaussian"))
+org(glm(Statins_0~age+ldl+sex,data=d,family="binomial"))
+#+END_SRC
+
+#+RESULTS[(2022-11-30 12:33:59) b94673be17f26797f6e123ec29aeb1ba62cc3899]:
+:results:
+| Variable    | Units |   OddsRatio | CI.95       | p-value  |
+|-------------+-------+-------------+-------------+----------|
+| age         |       |        0.97 | [0.96;0.98] | <0.0001  |
+| sex         |       |        1.00 | [0.97;1.03] | 0.9597   |
+| Variable    | Units | Coefficient | CI.95       | p-value  |
+|-------------+-------+-------------+-------------+----------|
+| (Intercept) |       |        3.04 | [3.03;3.05] | < 0.0001 |
+| sex         |       |        0.23 | [0.21;0.24] | < 0.0001 |
+| Variable    | Units |   OddsRatio | CI.95       | p-value  |
+|-------------+-------+-------------+-------------+----------|
+| age         |       |        0.98 | [0.96;0.99] | 0.001379 |
+| ldl         |       |        2.61 | [2.56;2.65] | < 0.0001 |
+| sex         |       |        0.80 | [0.77;0.83] | < 0.0001 |
+:end:

@@ -1,0 +1,14 @@
+* Roadmap
+
+Learning targets.
+
+Search in register data. 
+
+Study pop
+Exposure
+Covariates
+Outcome
+
+
+
+G-formula
