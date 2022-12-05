@@ -18,7 +18,7 @@ The learning targets of this exercise:
 - Check R-studio version
 - Install packages:
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
-targets, tarchetypes, data.table, matrixStats, Publish, ranger, glmnet
+install.packages(c("targets", "tarchetypes", "data.table", "matrixStats", "Publish", "ranger", "glmnet", "lava"))
 #+END_SRC
 - R-studio settings: never save .Rdata
 - Projects

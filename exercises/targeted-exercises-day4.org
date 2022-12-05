@@ -3,94 +3,17 @@
 library(targets)
 library(data.table)
 library(Publish)
-source("exercises/code/synthesize_statins.R")
-cc <- fread("exercises/data/statin_coeffients.txt")
-## vars <- c("sex","age","ldl","Statins_0","ASVCD_1","Statins_1","antihypertensive_1","diabetes_1","cancer_1","copd_1","Statins_2","antihypertensive_2","diabetes_2","cancer_2","copd_2","Statins_3","antihypertensive_3","diabetes_3","cancer_3","copd_3")
-vars <- c("sex","age","ldl","Statins_0","CVD_1","Statins_1","CVD_1","Censored_1","Statins_2","CVD_2")
-## cc <- cc[,c("variable","(Intercept)","sex","age","ldl","Statins_0","antihypertensive_0","diabetes_0","cancer_0","copd_0","Statins_1","antihypertensive_1","diabetes_1","cancer_1","copd_1","Statins_2","antihypertensive_2","diabetes_2","cancer_2","copd_2","Statins_3","antihypertensive_3","diabetes_3","cancer_3","copd_3")]
-CC <- cc[variable%in%vars,c(1:2,unlist(sapply(vars,function(v)grep(paste0(v,"$"),names(cc))))),with=FALSE]
-CC[variable=="Censored_1",sex:=0.01]
-CC[variable=="Censored_1",age:=-0.01]
-CC[variable=="Censored_1",ldl:=0]
-CC[variable=="Censored_1",Statins_1:=0]
-CC[variable=="Censored_1",Intercept:=log(.1)]
-CC[variable=="Censored_1"]
-#
-CC[variable=="CVD_1",sex:=-0.2]
-CC[variable=="CVD_1",age:=0.05]
-CC[variable=="CVD_1",ldl:=0.01]
-CC[variable=="CVD_1",Statins_0:=-0.1]
-CC[variable=="CVD_1",Statins_1:=-0.5]
-CC[variable=="CVD_1",Intercept:=log(.001)]
-CC[variable=="CVD_1"]
-#
-CC[variable=="CVD_2",sex:=-0.2]
-CC[variable=="CVD_2",age:=0.05]
-CC[variable=="CVD_2",ldl:=0.01]
-CC[variable=="CVD_2",Statins_0:=-0.05]
-CC[variable=="CVD_2",Statins_1:=-0.1]
-CC[variable=="CVD_2",Statins_2:=-0.5]
-CC[variable=="CVD_2",Intercept:=log(.001)]
-CC[variable=="CVD_2"]
-#
-m <- synthesize_statins(CC,continuous=list("age"=list(sd=10),"ldl"=list(sd=0.5)))
-# intercepts
-## m$mean
-# coefficients for outcome variables 
-## CC[grepl("CVD_",CC$variable)]
-# coefficients for censoring variables 
-## CC[grepl("Censored_",CC$variable)]
-set.seed(8)
-n <- 10000
-d <- setDT(lava::sim(m,n))
-d[CVD_1==1,CVD_2:=1]
-## d[,.(age=mean(age),sex=mean(sex),Statins_0=mean(Statins_0)),]
-## d[,.(age=mean(age)),by=sex]
-## org(glm(Statins_0~age+ldl+sex,data=d,family="binomial"))
-org(glm(CVD_1~age+ldl+sex+Statins_0,data=d,family="binomial"))
-## org(glm(Statins_1~age+ldl+sex+Statins_0,data=d,family="binomial"))
-## org(glm(CVD_2~age+ldl+sex+Statins_2,data=d,family="binomial"))
-d[,table(CVD_1,CVD_2)]
+library(lava)
 #+END_SRC
-
-#+RESULTS[(2022-12-01 09:24:28) ba8430fb85541eef057d19524aba31e86cdb866f]:
-:results:
-     variable Intercept  sex   age ldl Statins_0 Statins_1 Statins_2
-1: Censored_1 -2.302585 0.01 -0.01   0        NA         0        NA
-   variable Intercept  sex  age  ldl Statins_0 Statins_1 Statins_2
-1:    CVD_1 -6.907755 -0.2 0.05 0.01      -0.1      -0.5        NA
-   variable Intercept  sex  age  ldl Statins_0 Statins_1 Statins_2
-1:    CVD_2 -6.907755 -0.2 0.05 0.01     -0.05      -0.1      -0.5
-age :  75.349 + 1.21*sex 
-ldl :  3.94902 + 0.24*sex+-0.01*age 
-Statins_0 :  -4.55997 + -0.23*sex+-0.02*age+0.97*ldl 
-Statins_1 :  -3.4771 + -0.25*sex+-0.03*age+0.87*ldl 
-CVD_1 :  -6.90776 + -0.2*sex+0.05*age+0.01*ldl+-0.1*Statins_0+-0.5*Statins_1 
-Censored_1 :  -2.30259 + 0.01*sex+-0.01*age+0*ldl+0*Statins_1 
-Statins_2 :  -1.69237 + -0.16*sex+-0.06*age+0.58*ldl+5.42*Statins_1 
-CVD_2 :  -6.90776 + -0.2*sex+0.05*age+0.01*ldl+-0.05*Statins_0+-0.1*Statins_1+-0.5*Statins_2
-|   Variable | Units | OddsRatio |       CI.95 |   p-value |
-|------------+-------+-----------+-------------+-----------|
-|        age |       |      1.09 | [0.98;1.20] |   0.10861 |
-|        ldl |       |      0.91 | [0.82;1.01] |   0.09102 |
-|        sex |       |      0.84 | [0.66;1.07] |   0.14901 |
-|  Statins_0 |       |      1.36 | [0.93;1.99] |   0.11710 |
-     CVD_2
-CVD_1    0    1
-    0 9264  347
-    1    0  389
-:end:
 
 #+ATTR_LATEX: :options otherkeywords={}, deletekeywords={}
 #+BEGIN_SRC R  :results output raw drawer  :exports both  :session *R* :cache yes  
-set.seed(8)
-n <- 10000
-d <- setDT(lava::sim(m,n))
 for (f in list.files("code",pattern = "R$",full.names = TRUE))source(f)
+m <- sample_statins_data()
+d <- sim(m,N=10000,seed=8)
 dd <- event_node_manipulator(data=d,k=2,outcome="CVD",competing=NULL,censored="Censored",outcome_is_competing=NULL)
 x <- Ltmle(data=dd,Qform=c("CVD_1"="Q.kplus1 ~ sex + age + ldl + Statins_0 + Statins_1","CVD_2"="Q.kplus1 ~ sex + age + ldl + Statins_0 + Statins_1"),gform=c("Statins_0"="Statins_0 ~ sex + age + ldl","Statins_1"="Statins_1 ~ sex + age + ldl + Statins_0","Censored_1"="Censored_1 ~ sex + age + ldl + Statins_0 + Statins_1","Statins_2"= "Statins_2 ~ sex + age + ldl + Statins_0 + Statins_1"),Anodes=c("Statins_0","Statins_1","Statins_2"),Lnodes=c("sex","age","ldl"),Ynodes=c("CVD_1","CVD_2"),Cnodes=c("Censored_1"),estimate.time=FALSE,survivalOutcome=TRUE,variance.method="ic",SL.library="glm",abar=c(1,1,1))
 y <- Ltmle(data=dd,Qform=c("CVD_1"="Q.kplus1 ~ sex + age + ldl + Statins_0 + Statins_1","CVD_2"="Q.kplus1 ~ sex + age + ldl + Statins_0 + Statins_1"),gform=c("Statins_0"="Statins_0 ~ sex + age + ldl","Statins_1"="Statins_1 ~ sex + age + ldl + Statins_0","Censored_1"="Censored_1 ~ sex + age + ldl + Statins_0 + Statins_1","Statins_2"= "Statins_2 ~ sex + age + ldl + Statins_0 + Statins_1"),Anodes=c("Statins_0","Statins_1","Statins_2"),Lnodes=c("sex","age","ldl"),Ynodes=c("CVD_1","CVD_2"),Cnodes=c("Censored_1"),estimate.time=FALSE,survivalOutcome=TRUE,variance.method="ic",SL.library="glm",abar=c(0,0,0))
-
 w <- Ltmle(data=dd,Qform=c("CVD_1"="Q.kplus1 ~ sex + age + ldl + Statins_0 + Statins_1","CVD_2"="Q.kplus1 ~ sex + age + ldl + Statins_0 + Statins_1"),gform=c("Statins_0"="Statins_0 ~ sex + age + ldl","Statins_1"="Statins_1 ~ sex + age + ldl + Statins_0","Censored_1"="Censored_1 ~ sex + age + ldl + Statins_0 + Statins_1","Statins_2"= "Statins_2 ~ sex + age + ldl + Statins_0 + Statins_1"),Anodes=c("Statins_0","Statins_1","Statins_2"),Lnodes=c("sex","age","ldl"),Ynodes=c("CVD_1","CVD_2"),Cnodes=c("Censored_1"),estimate.time=FALSE,survivalOutcome=TRUE,variance.method="ic",SL.library="glm",abar=list(c(1,1,1),c(0,0,0)))
 W <- Ltmle(data=dd,Qform=c("CVD_1"="Q.kplus1 ~ sex + age + ldl + Statins_0 + Statins_1","CVD_2"="Q.kplus1 ~ sex + age + ldl + Statins_0 + Statins_1"),gform=c("Statins_0"="Statins_0 ~ sex + age + ldl","Statins_1"="Statins_1 ~ sex + age + ldl + Statins_0","Censored_1"="Censored_1 ~ sex + age + ldl + Statins_0 + Statins_1","Statins_2"= "Statins_2 ~ sex + age + ldl + Statins_0 + Statins_1"),Anodes=c("Statins_0","Statins_1","Statins_2"),Lnodes=c("sex","age","ldl"),Ynodes=c("CVD_1","CVD_2"),Cnodes=c("Censored_1"),estimate.time=FALSE,survivalOutcome=TRUE,variance.method="ic",SL.library="glmnet",abar=list(c(1,1,1),c(0,0,0)),SL.cvControl=list(alpha=0.5,selector='undersmooth'),verbose=TRUE)
 publish(w)
