@@ -12,7 +12,7 @@ CleanData <- function(data,
              }
     }
     is.na.strict <- function(x) is.na(x) & !is.nan.df(x)
-    changed <- FALSE
+    changed <- NULL
     ua <- rep(TRUE, nrow(data))
     if (ncol(data) == 1)
         return(data)
@@ -20,8 +20,9 @@ CleanData <- function(data,
         length(grep("called.from.estimate.g", as.character(body(deterministic.Q.function)))) >
         0
     for (i in 1:(ncol(data) - 1)) {
+        current_variable_i <- names(data)[i]
         if (anyNA(data[ua, i])){
-            stop(paste0("Missing values in variable ",names(data)[i],".\n",
+            stop(paste0("Missing values in variable ",current_variable_i,".\n",
                         "NA values are not permitted in data except after censoring or a survival event"))
         }
         ## stop("NA values are not permitted in data except after censoring or a survival event")
@@ -41,25 +42,27 @@ CleanData <- function(data,
             ua[ua] <- !is.deterministic[ua]
             if (anyNA(ua))
                 stop("internal ltmle error - ua should not be NA in CleanData")
-            if (!all(is.na.strict(data[is.deterministic, setdiff((i +
-                                                                  1):ncol(data), nodes$Y), drop = FALSE]))) {
-                data[is.deterministic, setdiff((i + 1):ncol(data),
-                                               nodes$Y)] <- NA
-                changed <- TRUE
+            if (!all(is.na.strict(data[is.deterministic, setdiff((i + 1):ncol(data), nodes$Y), drop = FALSE]))) {
+                data[is.deterministic, setdiff((i + 1):ncol(data),nodes$Y)] <- NA
+                this_change <- list(names(data)[setdiff((i + 1):ncol(data),nodes$Y)])
+                names(this_change) <- current_variable_i
+                changed <- c(changed,this_change)
             }
             if (i %in% nodes$C) {
                 censored <- data[, i] == "censored" & ua
-                if (!all(is.na.strict(data[censored, (i + 1):ncol(data),
-                                           drop = FALSE]))) {
+                if (!all(is.na.strict(data[censored, (i + 1):ncol(data), drop = FALSE]))) {
                     data[censored, (i + 1):ncol(data)] <- NA
-                    changed <- TRUE
+                    this_change <- list(names(data)[(i + 1):ncol(data)])
+                    names(this_change) <- current_variable_i
+                    changed <- c(changed,this_change)
                 }
                 ua[ua] <- !censored[ua]
                 if (anyNA(ua))
                     stop("internal ltmle error - ua should not be NA in CleanData")
             }
-            if (changed && showMessage) {
+            if (length(changed)>0 && showMessage) {
                 message("Note: for internal purposes, all nodes after a censoring event are set to NA and \n all nodes (except Ynodes) are set to NA after Y=1 if survivalFunction is TRUE (or if specified by deterministic.Q.function).\n Your data did not conform and has been adjusted. This may be relevant if you are \n writing your own deterministic function(s) or debugging ltmle.")
+                print(changed)
             }
         }
     }

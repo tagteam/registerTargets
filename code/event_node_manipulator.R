@@ -1,4 +1,5 @@
 event_node_manipulator <- function(data,k,outcome,competing="Dead",censored="Censored",outcome_is_competing="death"){
+    data <- copy(data)
     #
     # manipulation of the event nodes
     #
@@ -12,6 +13,23 @@ event_node_manipulator <- function(data,k,outcome,competing="Dead",censored="Cen
     C_nodes_position <- match(C_nodes,names(data))
     D_nodes_position <- match(D_nodes,names(data))
     #
+    # in ltmle all censoring nodes should be factors with levels censored and uncensored (in that order!)
+    #
+    for (Ck in C_nodes){
+        ckvals <- unique(data[[Ck]])
+        if (!all(ckvals%in%c(0,1,"censored","uncensored",TRUE,FALSE,NA)))
+            stop(paste("Censoring variable ",Ck," has uncomfortable values: ",
+                       paste(setdiff(ckvals,c(0,1,"censored","uncensored",TRUE,FALSE)),
+                             collapse = ", ")))
+        if (all(ckvals)%in%c(0,1)){
+            data[[Ck]] <- factor(data[[Ck]],levels = 1:0,labels = c("censored","uncensored"))
+        }else{
+            if (all(ckvals)%in%c(FALSE,TRUE)){
+                data[[Ck]] <- factor(data[[Ck]],levels = c(TRUE,FALSE),labels = c("censored","uncensored"))
+            }
+        }
+    }
+    #
     # IMPORTANT: when outcome or death occurs in an interval followed by censoring,
     # we choose to uncensor the outcome and the death.
     #
@@ -24,6 +42,18 @@ event_node_manipulator <- function(data,k,outcome,competing="Dead",censored="Cen
             }
             if (any(has_outcome_or_death_and_censored)){
                 set(data,j=C_nodes_position[[q]],i=which(has_outcome_or_death_and_censored),value="uncensored")
+            }
+        }
+    }else{
+        for (q in 1:k){
+            has_outcome <- data[[Y_nodes_position[[q]]]]%in%1
+            if (length(C_nodes_position) >= q)
+                has_censored <- data[[C_nodes_position[[q]]]]%in%c(1,"censored")
+            else
+                has_censored <- FALSE
+            has_outcome_or_censored <- has_outcome || has_censored
+            if (any(has_outcome_or_censored)){
+                set(data,j=C_nodes_position[[q]],i=which(has_outcome_or_censored),value="uncensored")
             }
         }
     }
@@ -53,8 +83,11 @@ event_node_manipulator <- function(data,k,outcome,competing="Dead",censored="Cen
     for (Ck in C_nodes){
         ## later_nodes=setdiff((match(Ck,names(data))+1):NCOL(data),c(Y_nodes,D_nodes))
         later_nodes=(match(Ck,names(data))+1):NCOL(data)
-        if (any(has_censored <- (data[[Ck]]%in%"censored"))){
-            for (l in later_nodes) set(data,j=l,i=which(has_censored),value=NA)
+        if (any(has_censored <- (data[[Ck]]%in%c(1,"censored")))){
+            for (l in later_nodes) {
+                cat("setting ",names(data)[l]," to na after ",Ck,"\n")
+                set(data,j=l,i=which(has_censored),value=NA)
+            }
         }
     }
     data

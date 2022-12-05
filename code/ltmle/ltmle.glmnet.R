@@ -20,10 +20,11 @@ ltmle.glmnet <- function(Y,
     FAM <- ifelse(length(unique(Y))>2,"gaussian","binomial")
     ## print("gaussian")
     ## tictoc::tic()
-    if (length(selector)>0&&selector=="undersmooth")
+    if (length(selector)>0&&selector=="undersmooth"){
         uoh <- try(fit <- glmnet::glmnet(X,Y,weights = obsWeights,lambda = NULL,alpha = alpha,nlambda = nlambda,trace.it = 0L,family=FAM,...))
-    else
+    } else{
         uoh <- try(fit <- glmnet::cv.glmnet(x = X,y = Y,weights = obsWeights,lambda = NULL,type.measure = loss,nfolds = nfolds,family = FAM,alpha = alpha,nlambda = nlambda,...))
+    }
     ## tictoc::toc()
     if (inherits(uoh,"try-error")) browser()
     ## print(c(fit$lambda.min,fit$lambda.1se))

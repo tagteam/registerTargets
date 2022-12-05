@@ -1,6 +1,4 @@
-GetSummaryLtmleMSMInfo <-
-function (object, estimator) 
-{
+GetSummaryLtmleMSMInfo <- function (object, estimator) {
     if (!estimator %in% c("tmle", "iptw", "gcomp")) 
         stop("estimator should be one of: tmle, iptw, gcomp")
     if (estimator == "tmle") {

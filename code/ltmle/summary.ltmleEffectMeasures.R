@@ -1,25 +1,15 @@
-summary.ltmleEffectMeasures <-
-function (object, estimator = ifelse(object$gcomp, "gcomp", "tmle"), 
-    ...) 
-{
+summary.ltmleEffectMeasures <- function (object, estimator = ifelse(object$gcomp, "gcomp", "tmle"), ...) {
     info <- GetSummaryLtmleMSMInfo(object, estimator)
     beta <- info$estimate
     IC <- info$IC
     y0 <- plogis(beta[1])
     y1 <- plogis(beta[1] + beta[2])
     names(y0) <- names(y1) <- NULL
-    eff.list <- list(treatment = list(long.name = "Treatment Estimate", 
-        est = y1, gradient = c(y1 * (1 - y1), y1 * (1 - y1)), 
-        log.std.err = FALSE, CIBounds = 0:1), control = list(long.name = "Control Estimate", 
-        est = y0, gradient = c(y0 * (1 - y0), 0), log.std.err = FALSE, 
-        CIBounds = 0:1), ATE = list(long.name = "Additive Treatment Effect", 
-        est = y1 - y0, gradient = c(y1 * (1 - y1) - y0 * (1 - 
-            y0), y1 * (1 - y1)), log.std.err = FALSE, CIBounds = c(-1, 
-            1)), RR = list(long.name = "Relative Risk", est = y1/y0, 
-        gradient = c(y0 - y1, 1 - y1), log.std.err = TRUE, CIBounds = c(0, 
-            Inf)), OR = list(long.name = "Odds Ratio", est = exp(beta[2]), 
-        gradient = c(0, 1), log.std.err = TRUE, CIBounds = c(0, 
-            Inf)))
+    eff.list <- list(treatment = list(long.name = "Treatment Estimate",est = y1,gradient = c(y1 * (1 - y1), y1 * (1 - y1)),log.std.err = FALSE,CIBounds = 0:1),
+                     control = list(long.name = "Control Estimate",est = y0,gradient = c(y0 * (1 - y0), 0),log.std.err = FALSE,CIBounds = 0:1),
+                     ATE = list(long.name = "Additive Treatment Effect",est = y1 - y0,gradient = c(y1 * (1 - y1) - y0 * (1 - y0), y1 * (1 - y1)),log.std.err = FALSE,CIBounds = c(-1, 1)),
+                     RR = list(long.name = "Relative Risk",est = y1/y0,gradient = c(y0 - y1, 1 - y1),log.std.err = TRUE,CIBounds = c(0,Inf)),
+                     OR = list(long.name = "Odds Ratio",est = exp(beta[2]),gradient = c(0, 1),log.std.err = TRUE,CIBounds = c(0, Inf)))
     if (!object$binaryOutcome) {
         eff.list$RR <- eff.list$OR <- NULL
     }
@@ -30,7 +20,7 @@ function (object, estimator = ifelse(object$gcomp, "gcomp", "tmle"),
     }
     else {
         measures.variance.estimate <- lapply(eff.list, GetSummary, 
-            object$variance.estimate, n)
+                                             object$variance.estimate, n)
     }
     measures.max <- measures.IC
     for (i in seq_along(measures.variance.estimate)) {
@@ -57,8 +47,8 @@ function (object, estimator = ifelse(object$gcomp, "gcomp", "tmle"),
         })
     }
     ans <- list(call = object$call, effect.measures = measures.max, 
-        variance.estimate.ratio = info$variance.estimate.ratio, 
-        estimator = estimator)
+                variance.estimate.ratio = info$variance.estimate.ratio, 
+                estimator = estimator)
     class(ans) <- "summary.ltmleEffectMeasures"
     return(ans)
 }

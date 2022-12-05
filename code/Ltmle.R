@@ -9,13 +9,19 @@ Ltmle <- function (data, Anodes, Cnodes = NULL, Lnodes = NULL, Ynodes,
     require(matrixStats)
     if (verbose) message("Loading ltmle functions ...")
     for (f in list.files("code/ltmle/",pattern = ".R$",full.names = TRUE)) {
-        print(f)
+        ## print(f)
         source(f)
     }
     if (verbose) message("Checking data ...")
     data <- CheckData(data)
     if (verbose) message("Creating inputs ...")
     msm.inputs <- GetMSMInputsForLtmle(data, abar, rule, gform)
+    if ("glmnet" %in% SL.library && !is.numeric(SL.cvControl$alpha)&&SL.cvControl$alpha >= 0 &&SL.cvControl$alpha <= 1){
+        stop("Need value: alpha to decide between lasso, elastic net, ridge.\nE.g., SL.cvControl=list(alpha=0.5,selector='undersmooth')")
+    }
+    if ("glmnet" %in% SL.library && length(SL.cvControl$selector) %in% c("undersmooth","lambda.min")){
+        stop("Need penalty selector to be either 'undersmooth' or 'lambda.min'")
+    }
     inputs <- CreateInputs(data = data, Anodes = Anodes, Cnodes = Cnodes,
                            Lnodes = Lnodes, Ynodes = Ynodes, survivalOutcome = survivalOutcome,
                            Qform = Qform, gform = msm.inputs$gform, Yrange = Yrange,

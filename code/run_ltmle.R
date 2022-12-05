@@ -87,8 +87,6 @@ run_ltmle <- function(OUT,
             d.se=sd(d.IC)/sqrt(length(d.IC))
             d.lower=d.est - qnorm(.975)*d.se
             d.upper=d.est + qnorm(.975)*d.se
-            rr <- exp(log(r)-log(r1))
-            rr.se <- sd(log(r.IC)-log(r.IC))
             data.table(treatment=reg,
                        reference=names(loop)[1],
                        estimate=d.est,

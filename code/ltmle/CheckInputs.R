@@ -163,8 +163,10 @@ CheckInputs <-
         if (anyNA(data[deterministic, Ynode]) || !all(data[deterministic,
                                                            Ynode] == 1))
             stop("For survival outcomes, once a Ynode jumps to 1 (e.g. death), all subsequent Ynode values should be 1.")
-        if (anyNA(data[uncensored, Ynode]))
-            stop("Ynodes may not be NA except after censoring")
+        if (anyNA(data[uncensored, Ynode])){
+            stop("Ynodes may not be NA except after censoring:\n",
+                 "Variable: ", names(data)[Ynode], " has ",sum(is.na(data[uncensored, Ynode]))," missing values without previous censoring.")
+        }
     }
     if (!is.equal(dim(regimes)[1:2], c(nrow(data), length(nodes$A))))
         stop("Problem with abar or regimes:\n   In ltmleMSM, regimes should have dimensions n x num.Anodes x num.regimes\n   In ltmle, abar should be a matrix with dimensions n x num.Anodes or a vector with length num.Anodes")

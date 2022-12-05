@@ -1,4 +1,4 @@
-Ltmle <- function (data, Anodes, Cnodes = NULL, Lnodes = NULL, Ynodes,
+tmle <- function (data, Anodes, Cnodes = NULL, Lnodes = NULL, Ynodes,
                    survivalOutcome = NULL, Qform = NULL, gform = NULL, abar,
                    rule = NULL, gbounds = c(0.01, 1), Yrange = NULL, deterministic.g.function = NULL,
                    stratify = FALSE, SL.library = "glm", SL.cvControl = list(),
