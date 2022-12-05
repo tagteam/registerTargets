@@ -1,0 +1,63 @@
+Dear participants
+
+welcome to the PhD course "Targeted register analysis". The course
+starts on Monday the 12th of December 2022 at 8:15 in room CSS
+22-0-19, Øster Farimagsgade 5, 1014 Copenhagen. See map of CSS:
+
+https://publichealth.ku.dk/contact/
+
+Please read carefully the following instructions:
+
+----------------------------------------------------------------------
+
+1. If you cannot participate in the course please unsubscribe by email
+   as soon as possible.  The email should be send to the phd course
+   administration <fak-phdkursus@sund.ku.dk> with a copy to the course
+   secretary Susanne Kragskov Laupstad <skl@sund.ku.dk>.
+
+2. To participate in the computer exercises you need to bring your own
+   laptop. 
+
+3. You need to install the free statistical software R (http://www.r-project.org/) 
+
+4. You need to install the free statistical software R-studio (http://www.rstudio.com/)
+ 
+5. On windows please install Rtools (https://cran.r-project.org/bin/windows/Rtools/)
+     
+6. You need to have access to the wireless Internet. In the class
+   rooms you can access eduroam:
+   
+  http://it.ku.dk/english/students/wireless_net/
+
+  To connect to eduroam you should be able to use a KU user name
+   (three letters and three integers).
+
+  If this does not work, and you have no other way to connect to the
+   Internet, please contact <itsupport@sund.ku.dk> before the start of
+   the course.
+   
+  If you do not have a KU user name or for some other reason cannot connect your 
+  laptop to the wireless internet eduroam, then we will work on a
+  temporary solution for the period of the course. Please let us know
+  by email right away.
+
+8. Get familiar (try it out!) with Rstudio projects https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects
+
+9. Install the R-package =targets= and bookmark the user manual https://books.ropensci.org/targets/ 
+   
+10. If you run into trouble with any one of steps 3-9 send an email to Thomas A. Gerds: tag@biostat.ku.dk
+----------------------------------------------------------------------
+
+Looking very much forward to see you soon!
+
+Course secretary:
+
+Susanne Kragskov
+email: sk@biostat.ku.dk
+tel:   +45 35327901
+
+Course director:
+
+Thomas A. Gerds
+email: tag@biostat.ku.dk
+phone +45 35327914
