@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  6 2022 (10:51) 
 ## Version: 
-## Last-Updated: Dec  6 2022 (11:30) 
+## Last-Updated: Dec  6 2022 (12:44) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 8
+##     Update #: 9
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -18,7 +18,7 @@
 this <- function(n){
     d = data.table(id = 1:n,
                    sex = rep(c("female","male"),length.out = n),
-                   age = rnorm(n = n,mean = 70,sd =7))()
+                   age = rnorm(n = n,mean = 70,sd =7))
     return(d)
 }
 

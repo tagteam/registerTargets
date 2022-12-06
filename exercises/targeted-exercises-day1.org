@@ -7,8 +7,9 @@ The learning targets of this exercise:
 - Naming conventions.
 - Work with an existing targets-project.
 
-** Exercise 1: Warm-up
+----------------------------------------------------------------------
 
+** Exercise 1: Warm-up
 
 *** System 
 
@@ -134,7 +135,7 @@ lazyDateCoding(d,pattern="date")
 
 
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----------------------------------------------------------------------
 
 ** Exercise 2: Targeted projects
 
@@ -146,11 +147,27 @@ https://github.com/tagteam/registerTargets/archive/refs/heads/main.zip
 
 *** Create RStudio projects
 
-Using the RStudio dialog ='New project'= to create the following three 
+Using the RStudio dialog ='New project'= to create projects in the
+following three subfolders:
+1. =exercises/nuts=
+2. =exercises/pro_ami=
+3. =exercises/pro_stat=
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----------------------------------------------------------------------
 
-** Exercise 3: Getting used to targets
+** Exercise 3: The structure of a minimal targets project
+
+- Switch to RStudio project 'nuts' (e.g., via recent projects)
+- Open the file =_targets.R= (e.g., via "Control-Shift f" eller "Control .") 
+- Read the file =_targets.R=
+- Open and run the file =run_targets.R=
+- Answer the following question:
+
+ /What is the ratio of the maximum female age and the maximum male age?/    
+
+----------------------------------------------------------------------
+
+** Exercise 4: Modifying an existing targets project
 
 This exercise uses the project defined by the folder ='nuts'= which
 obviously is short for ='nutshell'=. Given that you have suceeded with

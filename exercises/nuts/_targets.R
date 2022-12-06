@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  6 2022 (10:30) 
 ## Version: 
-## Last-Updated: Dec  6 2022 (11:16) 
+## Last-Updated: Dec  6 2022 (12:45) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 16
+##     Update #: 19
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -51,11 +51,21 @@ BARPLOT <- tar_target(bp,{
 #
 # The targets pipeline is a list of targets. The targets can be pre-defined
 # like 'NUTS' and BARPLOT above or defined directly in the pipeline (in which case
-# target does not have an R-object name:
+# target does not have an R-object name). Targets that occur later in the pipleline,
+# i.e., the following list, may depend on targets that occur earlier in the pipeline,
+# e.g., the target BARPLOT can refer to the target names 'data' and 'cbPalette' 
+# 
 list(NUTS,
-     tar_target(data,{this(n)},packages = "data.table"),
+     tar_target(data,{
+         this(n)
+     },packages = "data.table"),
+     # Comment: color blind friendly palette
      tar_target(cbPalette,c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")),
-     BARPLOT
+     BARPLOT,
+     tar_target(answer, {
+         m = data[,.(max = max(age)),by = "sex"]
+         sum(m[["max"]])
+     })
      )
 #
 # Continue reading in the file nuts/run_targets.R
