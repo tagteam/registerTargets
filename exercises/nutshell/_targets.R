@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  4 2022 (11:02) 
 ## Version: 
-## Last-Updated: Dec  4 2022 (12:19) 
+## Last-Updated: Dec  6 2022 (07:48) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 12
+##     Update #: 13
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -16,7 +16,7 @@
 ### Code:
 library(targets)
 library(data.table)
-setwd("/home/tag/metropolis/Teaching/targetedRegisterAnalysis/exercises/nutshell/")
+setwd("~/metropolis/Teaching/targetedRegisterAnalysis/exercises/nutshell/")
 for (f in list.files("functions/",pattern = "R$",full.names = TRUE)){source(f)}
 list(
     tar_target(study_start, as.Date("2000-01-01")),
@@ -27,7 +27,7 @@ list(
     # hospital admissions: outcome, comorbidity 
     tar_target(icd_codes, list(
                               # myocardial infarction
-                              "MI" = c("DI22[12]"))),
+                              "MI" = c("DI2[12]"))),
     # prescription data: exposure, comedicine 
     tar_target(atc_codes,list(#beta blockers
                              bb = c('C07'),
@@ -44,7 +44,6 @@ list(
                make_table1(study_pop),
                packages = "Publish")
 )
-
 
 ######################################################################
 ### _targets.R ends here

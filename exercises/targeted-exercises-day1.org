@@ -1,4 +1,4 @@
-* Objective
+* Objectives
 
 The learning targets of this exercise:
 
@@ -12,19 +12,122 @@ The learning targets of this exercise:
 # table 1
 
 
-** Warm-up: systemic hints
+** Exercise 1: Warm-up
 
-- Check R version
-- Check R-studio version
-- Install packages:
-#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
-install.packages(c("targets", "tarchetypes", "data.table", "matrixStats", "Publish", "ranger", "glmnet", "lava"))
+
+*** System 
+
+The exercises for this course were developed using R version =4.2.1=
+and RStudio version =2022.07.2+576=. The versions of the most
+important R-packages are:
+
+#+BEGIN_SRC R  :results output   :exports both  :session *R* :cache yes
+course_packages  <- c("targets","data.table","ranger","glmnet","Publish","lava","riskRegression","matrixStats")
+nix=lapply(course_packages,function(p){
+  v=packageVersion(p)
+  cat(paste(p,":",v,"\n"))
+})
 #+END_SRC
-- R-studio settings: never save .Rdata
-- Projects
-- Search functionality
+
+#+RESULTS[(2022-12-06 08:19:16) d50d6bdfaa160c509365daa4952692130d95c860]:
+: targets : 0.13.5 
+: data.table : 1.14.6 
+: ranger : 0.14.1 
+: glmnet : 4.1.4 
+: Publish : 2022.4.3 
+: lava : 1.6.10 
+: riskRegression : 2022.11.28 
+: matrixStats : 0.62.0
+
+You may have different versions installed and this is useful
+knowlegde. If at some point the exercises do not work as expected it
+may be due to a different version of the software.
+
+**** Check your R version 
+
+In the R console execute the following command
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+version
+#+END_SRC  
+  
+**** Check your  R-studio version
+
+#+ATTR_LATEX: :options otherkeywords={}, deletekeywords={}
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+Rstudio -> Help -> About Rstudio
+#+END_SRC
+
+**** Install packages/check package versions
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes
+nix <- lapply(course_packages,function(p){
+  if (!do.call(require,list(package=p,quietly=TRUE))){
+    install.packages(package=p)
+  }
+  do.call(library,list(package=p,quietly=TRUE,warn.conflicts=FALSE))
+  packageVersion(pkg=p)
+})
+#+END_SRC
+
+*** Systemics 
+
+**** .RData
+Experienced R-studio users may have done this already and can skip
+this exercise. To avoid that large register data are unpurposely saved or loaded
+when you exit or enter the R-session in RStudio open the RStudio menu
+
+=Tools -> Global options=
+
+and
+
+1. uncheck the save .RData into workspace at startup
+2. set the save workspace to .RData on exit to =Never= 
+
+  [[./rstudio-save-Rdata-never.png]]
+
+**** Projects
+
+For the exercises, we expect all students to work with RStudio
+projects, see https://r4ds.had.co.nz/workflow-projects.html.  Each
+student needs to create the specific RStudio projects for the
+exercises as follows:
+
+1. Download from github and extract files (see detailed instructions in Exercise 2)
+2. Create new project using the RStudio =new project= dialog
+   - Existing directory 
+   - Project name (see detailed instructions in Exercise 2)
+
+
+**** OPTIONAL: RStudio search functions
+
+RStudio has quite remarkable search/find functions, including
+- =Control-Shift-f=
+- =Control-.=
+- =F2= when cursor is on a function name
+
+See https://support.posit.co/hc/en-us/articles/200710523-Navigating-Code-in-the-RStudio-IDE
+
+**** OPTIONAL: Leaving humanreadible traces
+
+https://www.rdataguy.com/2019/11/lesson-7-creating-rscript-header_11.html
+
+**** OPTIONAL: Lazy coder
+
+R-syntax is difficult to remember ... 
 - Automatic header
 - dput
+
+
+===========================================================================================
+
+** Exercise 2: Targeted projects
+
+*** Download the files
+
+*** Create projects
+
+*** Getting used to targets 
+
 
 
 
