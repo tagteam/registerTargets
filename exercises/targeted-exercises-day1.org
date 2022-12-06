@@ -2,15 +2,10 @@
 
 The learning targets of this exercise:
 
+- Check R and RStudio 
 - Setup a project with targets.
 - Naming conventions.
-- Work with an existing project.
-# Dependency graph, function name, cue. Export.
-# study population
-# index date
-# flowchart
-# table 1
-
+- Work with an existing targets-project.
 
 ** Exercise 1: Warm-up
 
@@ -29,7 +24,6 @@ nix=lapply(course_packages,function(p){
 })
 #+END_SRC
 
-#+RESULTS[(2022-12-06 08:19:16) d50d6bdfaa160c509365daa4952692130d95c860]:
 : targets : 0.13.5 
 : data.table : 1.14.6 
 : ranger : 0.14.1 
@@ -109,24 +103,96 @@ See https://support.posit.co/hc/en-us/articles/200710523-Navigating-Code-in-the-
 
 **** OPTIONAL: Leaving humanreadible traces
 
+When inspecting other peoples code it is quite useful to know who
+started the project and when. Unfortunately, no one has time to do
+this. Luckily RStudio allows you to define automatic headers:
+
 https://www.rdataguy.com/2019/11/lesson-7-creating-rscript-header_11.html
 
 **** OPTIONAL: Lazy coder
 
-R-syntax is difficult to remember ... 
-- Automatic header
-- dput
+R-syntax is difficult to remember ...
+- 
+- dput inserts code in R-code syntax, such as names of dataset or levels of a factor:
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+library(survival)
+dput(names(pbc))
+dput(unique(pbc$edema))
+#+END_SRC  
+  
+- Publish::lazyFactorCoding
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+d <- data.table(a=rep(1:3,4),
+                b=letters[1:2],
+                adate=paste0("15-",8:11,"-2020"),
+                bdate=paste0(8:11,"-15","-2020"))
+lazyFactorCoding(d)
+lazyDateCoding(d,pattern="date")
+#+END_SRC  
 
 
-===========================================================================================
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ** Exercise 2: Targeted projects
 
-*** Download the files
+*** Download all files from github
 
-*** Create projects
+**** As a zip file
 
-*** Getting used to targets 
+https://github.com/tagteam/registerTargets/archive/refs/heads/main.zip
+
+*** Create RStudio projects
+
+Using the RStudio dialog ='New project'= to create the following three 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+** Exercise 3: Getting used to targets
+
+This exercise uses the project defined by the folder ='nuts'= which
+obviously is short for ='nutshell'=. Given that you have suceeded with
+Exercise 2, you should now switch to the RStudio project 'nuts'.
+
+*** Initial status of the project 
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+tar_load(table1)
+#+END_SRC
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+tar_manifest()
+#+END_SRC
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+tar_outdated()
+#+END_SRC
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+tar_make()
+#+END_SRC
+
+*** Changing the code 
+
+- Open the file =functions/get_study_pop.R= (i.e., put cursor on
+  function name and press F2). Find the comment # exclusion criteria and enter the following 
+  line
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+study_pop[index >= study_start]
+#+END_SRC
+
+- Save the file (Control-s)
+- run the following commands
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+tar_outdated()
+#optional: tar_visnetwork()
+tar_make()
+#+END_SRC  
+
 
 
 
