@@ -3,13 +3,14 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  6 2022 (11:06) 
 ## Version: 
-## Last-Updated: Dec  6 2022 (12:56) 
+## Last-Updated: Dec  7 2022 (11:31) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 6
+##     Update #: 9
 #----------------------------------------------------------------------
 ## 
 ### Commentary:
-## This file applies some basic functions of the targets
+## 
+## This file runs some of the most important functions of the targets
 ## package to the project 'nuts' (which obviously is short for 'nutshell')
 ## 
 ### Change Log:

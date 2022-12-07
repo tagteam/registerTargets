@@ -1,23 +1,26 @@
+#+TITLE: 
+#+setupfile:~/emacs-genome/snps/org-templates/setup-basic-stats-homepage.org
+#+superman-export-target: exercise
+
 * Objectives
 
 The learning targets of this exercise:
 
-- Check R and RStudio 
-- Setup a project with targets.
-- Naming conventions.
-- Work with an existing targets-project.
+- Check your R-setup.
+- Create RStudio projects.
+- Use the R-package =targets= to pipeline the work.
 
 ----------------------------------------------------------------------
 
-** Exercise 1: Warm-up
+** Exercise 1 
 
 *** System 
 
-The exercises for this course were developed using R version =4.2.1=
-and RStudio version =2022.07.2+576=. The versions of the most
-important R-packages are:
+The exercises for this course were developed and tested using R
+version =4.2.1= and RStudio version =2022.07.2+576=. The versions of
+the most important R-packages are:
 
-#+BEGIN_SRC R  :results output   :exports both  :session *R* :cache yes
+#+BEGIN_SRC R  :results output   :exports  (exercise-with-code)  :session *R* :cache yes
 course_packages  <- c("targets","data.table","ranger","glmnet","Publish","lava","riskRegression","matrixStats")
 nix=lapply(course_packages,function(p){
   v=packageVersion(p)
@@ -34,9 +37,10 @@ nix=lapply(course_packages,function(p){
 : riskRegression : 2022.11.28 
 : matrixStats : 0.62.0
 
-You may have different versions installed and this is useful
-knowlegde. If at some point the exercises do not work as expected it
-may be due to a different version of the software.
+You may have different versions installed on your computer and whether
+this is the case can be useful knowlegde. If at some point the
+exercises do not work as expected it may be due to a different version
+of the software.
 
 **** Check your R version 
 
@@ -66,10 +70,15 @@ nix <- lapply(course_packages,function(p){
 
 *** Systemics 
 
-**** .RData
-Experienced R-studio users may have done this already and can skip
-this exercise. To avoid that large register data are unpurposely saved or loaded
-when you exit or enter the R-session in RStudio open the RStudio menu
+**** Turn off .RData
+
+The .RData files if they exist contain the R-objects that you had
+loaded when you exited your previous R session. It is generally better
+to keep the R-code that produces these objects. Also, the R-package
+=targets= that we are going to work with provides a much more
+sophisticated way to save objects. A third reason is that large
+register data when unpurposely saved in .RData or loaded from .RData
+slow down everything. Hence, to turn the .RData dialog off goto:
 
 =Tools -> Global options=
 
@@ -78,29 +87,14 @@ and
 1. uncheck the save .RData into workspace at startup
 2. set the save workspace to .RData on exit to =Never= 
 
-  [[./rstudio-save-Rdata-never.png]]
+  [[./figures/rstudio-save-Rdata-never.png]]
 
 **** Projects
 
-For the exercises, we expect all students to work with RStudio
-projects, see https://r4ds.had.co.nz/workflow-projects.html.  Each
-student needs to create the specific RStudio projects for the
-exercises as follows:
-
-1. Download from github and extract files (see detailed instructions in Exercise 2)
-2. Create new project using the RStudio =new project= dialog
-   - Existing directory 
-   - Project name (see detailed instructions in Exercise 2)
-
-
-**** OPTIONAL: RStudio search functions
-
-RStudio has quite remarkable search/find functions, including
-- =Control-Shift-f=
-- =Control-.=
-- =F2= when cursor is on a function name
-
-See https://support.posit.co/hc/en-us/articles/200710523-Navigating-Code-in-the-RStudio-IDE
+For the exercises, we work with RStudio projects, see section 8.4 in
+this document: https://r4ds.had.co.nz/workflow-projects.html. You
+should now read about projects and then create the specific RStudio
+projects for the exercises as explained in Exercise 2.
 
 **** OPTIONAL: Leaving humanreadible traces
 
@@ -110,10 +104,37 @@ this. Luckily RStudio allows you to define automatic headers:
 
 https://www.rdataguy.com/2019/11/lesson-7-creating-rscript-header_11.html
 
+**** OPTIONAL: RStudio search functions
+
+Sometimes it is interesting to copy a specific piece of code from a
+different project. However, it can be difficult to know where someone
+(including yourself) has saved these lines of code. Note that RStudio
+has quite remarkable search/find functions, including
+- =Control-Shift-f=
+- =Control-.=
+- =F2= when cursor is on a function name
+
+See also
+https://support.posit.co/hc/en-us/articles/200710523-Navigating-Code-in-the-RStudio-IDE
+
 **** OPTIONAL: Lazy coder
 
-R-syntax is difficult to remember ...
-- 
+R-syntax is difficult to remember. 
+- RStudio has snippets, see =Tools -> Edit Code Snippets=
+
+Whenever you catch yourself looking up the same cryptic code for the
+third time it is worth considering a new snippet. For example, here is
+a snippet which inserts code to select the first row per person from a
+data.table:
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+snippet first
+	${1:name}[${1}[,.I[1],by="pnr"]$V1]
+#+END_SRC
+
+Here is a reference:
+https://support.posit.co/hc/en-us/articles/204463668-Code-Snippets-in-the-RStudio-IDE
+
 - dput inserts code in R-code syntax, such as names of dataset or levels of a factor:
 
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
@@ -134,81 +155,59 @@ lazyDateCoding(d,pattern="date")
 #+END_SRC  
 
 
-
 ----------------------------------------------------------------------
 
 ** Exercise 2: Targeted projects
 
 *** Download all files from github
 
-**** As a zip file
+**** Via zip file
 
 https://github.com/tagteam/registerTargets/archive/refs/heads/main.zip
 
+Unzip the file in a good neighborhood on your computer. 
+
+**** Using git
+
+If you have the program =git= installed you can clone the github repository:
+
+git clone https://github.com/tagteam/registerTargets/
+
 *** Create RStudio projects
 
-Using the RStudio dialog ='New project'= to create projects in the
+Use the RStudio dialog /New project/ where you choose /Existing Directory/ 
+to create projects in the
 following three subfolders:
+
 1. =exercises/nuts=
-2. =exercises/pro_ami=
-3. =exercises/pro_stat=
+2. =exercises/ami=
+3. =exercises/statins=
+
+Notes: The subfolders appear as a result of the previous step
+(Download all files from github).  The project name /nuts/ is
+obviously is short for /in a nutshell/.
 
 ----------------------------------------------------------------------
 
 ** Exercise 3: The structure of a minimal targets project
 
-- Switch to RStudio project 'nuts' (e.g., via recent projects)
+- Switch to the RStudio project /nuts/ (e.g., via recent projects)
 - Open the file =_targets.R= (e.g., via "Control-Shift f" eller "Control .") 
 - Read the file =_targets.R=
 - Open and run the file =run_targets.R=
 - Answer the following question:
 
- /What is the ratio of the maximum female age and the maximum male age?/    
+ /What is the sum of the maximum female age and the maximum male age?/    
 
 ----------------------------------------------------------------------
 
 ** Exercise 4: Modifying an existing targets project
 
-This exercise uses the project defined by the folder ='nuts'= which
-obviously is short for ='nutshell'=. Given that you have suceeded with
-Exercise 2, you should now switch to the RStudio project 'nuts'.
+- switch to RStudio project /ami/
+- Open and read the file =_targets.R=
+- Open and read the functions that are used in the pipeline.
+- Open the file =_run_targets.R= and work out the exercises defined there.
 
-*** Initial status of the project 
-
-#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
-tar_load(table1)
-#+END_SRC
-
-#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
-tar_manifest()
-#+END_SRC
-
-#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
-tar_outdated()
-#+END_SRC
-
-#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
-tar_make()
-#+END_SRC
-
-*** Changing the code 
-
-- Open the file =functions/get_study_pop.R= (i.e., put cursor on
-  function name and press F2). Find the comment # exclusion criteria and enter the following 
-  line
-
-#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
-study_pop[index >= study_start]
-#+END_SRC
-
-- Save the file (Control-s)
-- run the following commands
-
-#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
-tar_outdated()
-#optional: tar_visnetwork()
-tar_make()
-#+END_SRC  
 
 
 
