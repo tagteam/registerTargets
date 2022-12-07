@@ -3,17 +3,20 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  6 2022 (11:06) 
 ## Version: 
-## Last-Updated: Dec  6 2022 (12:50) 
+## Last-Updated: Dec  6 2022 (12:56) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 5
+##     Update #: 6
 #----------------------------------------------------------------------
 ## 
-### Commentary: 
+### Commentary:
+## This file applies some basic functions of the targets
+## package to the project 'nuts' (which obviously is short for 'nutshell')
 ## 
 ### Change Log:
 #----------------------------------------------------------------------
 ## 
 ### Code:
+library(targets)
 # list the targets
 tar_manifest()
 # plot the dependency graf
