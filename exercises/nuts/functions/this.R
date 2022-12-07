@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  6 2022 (10:51) 
 ## Version: 
-## Last-Updated: Dec  6 2022 (12:44) 
+## Last-Updated: Dec  7 2022 (16:01) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 9
+##     Update #: 11
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -21,7 +21,6 @@ this <- function(n){
                    age = rnorm(n = n,mean = 70,sd =7))
     return(d)
 }
-
 
 ######################################################################
 ### this.R ends here

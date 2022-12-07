@@ -20,7 +20,7 @@ version =4.2.1= and RStudio version =2022.07.2+576=. The versions of
 the most important R-packages are:
 
 #+BEGIN_SRC R  :results output   :exports  (exercise-with-code)  :session *R* :cache yes
-course_packages  <- c("targets","data.table","ranger","glmnet","Publish","lava","riskRegression","matrixStats")
+course_packages  <- c("targets","data.table","ranger","glmnet","Publish","lava","riskRegression","matrixStats","ggplot2")
 nix=lapply(course_packages,function(p){
   v=packageVersion(p)
   cat(paste(p,":",v,"\n"))
@@ -193,11 +193,35 @@ obviously is short for /in a nutshell/.
 - Switch to the RStudio project /nuts/ (e.g., via recent projects)
 - Open the file =_targets.R= (e.g., via "Control-Shift f" eller "Control .") 
 - Read the file =_targets.R=
-- Open and run the file =run_targets.R=
+- Open and work through the file =run_targets.R= then continue here
 - Answer the following question:
 
  /What is the sum of the maximum female age and the maximum male age?/    
 
+- Add the following line in the file =functions/this.R= inside the
+  definition =(1=2)=. Then run =tar_make()= and see what happens and
+  follow the suggestion of the error message:
+  
+ Tips: https://books.ropensci.org/targets/debugging.html
+
+ here in particular Sections 3.4 Error messages and 3.5 Functions. 
+  
+- Add the following new target to the pipeline:
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+tar_target(demo_table,{
+  data[,agegroup:=  acut(age,breaks=c(-Inf,60,65,70,75,Inf),
+                         format="%l-%u",
+                         format.low="below %u",
+                         format.high="above %l")]
+  data[,.N,keyby=c("sex","agegroup")]},
+  packages=c("data.table","Publish"))
+#+END_SRC
+
+  Run =tar_make()= then load and print this new target:
+  =tar_load(demo_table)= followed by =print(demo_table)=
+ 
+ 
 ----------------------------------------------------------------------
 
 ** Exercise 4: Modifying an existing targets project
@@ -208,7 +232,9 @@ obviously is short for /in a nutshell/.
 - Open the file =_run_targets.R= and work out the exercises defined there.
 
 
+** Exercise 5 (optional)
 
+Introduce a targets pipeline into one of your own projects.
 
 
 
