@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  7 2022 (11:31) 
 ## Version: 
-## Last-Updated: Dec  7 2022 (11:42) 
+## Last-Updated: Dec  7 2022 (11:55) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 1
+##     Update #: 4
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -14,6 +14,16 @@
 #----------------------------------------------------------------------
 ## 
 ### Code:
+
+library(targets)
+
+# See status
+tar_manifest()
+tar_visnetwork(targets_only = TRUE)
+tar_outdated()
+
+# Run targets
+tar_make()
 
 # As you have seen the last target of the pipeline is table1.
 # Since this project has been run before, you can directly load/read
@@ -39,11 +49,8 @@ tar_make()
 t1a <- tar_read(table1)
 
 # Compare the new table against the one before the change
-all.equal(t1,t1a)
 t1
 t1a
-
-
 
 ######################################################################
 ### run_targets.R ends here

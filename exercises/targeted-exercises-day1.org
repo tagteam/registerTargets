@@ -1,6 +1,5 @@
-#+TITLE: 
+#+TITLE: PhD course: Targeted Register Analysis
 #+setupfile:~/emacs-genome/snps/org-templates/setup-basic-stats-homepage.org
-#+superman-export-target: exercise
 
 * Objectives
 
