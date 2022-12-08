@@ -1,9 +1,9 @@
-#+TITLE: PhD course: Targeted Register Analysis
+#+TITLE: PhD course: Targeted Register Analysis: Day 1
 #+setupfile:~/emacs-genome/snps/org-templates/setup-basic-stats-homepage.org
 
 * Objectives
 
-The learning targets of this exercise:
+The learning targets of this exercise are:
 
 - Check your R-setup.
 - Create RStudio projects.
@@ -198,16 +198,46 @@ obviously is short for /in a nutshell/.
 
  /What is the sum of the maximum female age and the maximum male age?/    
 
-- Add the following line in the file =functions/this.R= inside the
-  definition =(1=2)=. Then run =tar_make()= and see what happens and
-  follow the suggestion of the error message:
+- Trouble shooting: Using targets makes it generally more difficult
+  to identify why/where the error/warning is coming from. To be prepared:
+  + Note that =tar_make()= runs the file =_targets.R= by default in a fresh clean R
+    session. Hence, (syntax) errors can appear in one of the functions
+    that are sourced in the beginning of the file =_targets.R=
+  + Note that when a warning occurs you can temporarily turns warnings into
+    errors, via =options(warn=2)= such that =traceback()= can help to identify where the warning is coming from.  
+  + When an error occurs in a specific target, you can load the
+    objects that this target depends on, either manually or using
+    =tar_load_everything()=.  Once all dependencies are loaded you can
+    evaluate the target which has an error line by line. To make this easy it
+    it recommended to match the name of the arguments such that the =_targets.R= looks like this 
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  :eval never
+    ...,
+    tar_target(como, {
+      get_como(study_pop=study_pop, icd_codes=icd_codes)
+    },
+    tar_target(table1, {
+      get_table1(study_pop=study_pop, como=como)
+    },
+    ...
+#+END_SRC    
+  It is also recommended to save a function called =get_como= in a file called =get_como.R= to make it
+  easy to find the code.
+  + Example of an error in the pipeline: Add the following line in the file =functions/this.R= inside the
+  definition =(1=2)=. Note that this is a syntax error. Then run =tar_make()= and see what happens,
+  i.e., consider the error message. You may follow the suggestion of the error message:
   
  Tips: https://books.ropensci.org/targets/debugging.html
 
- here in particular Sections 3.4 Error messages and 3.5 Functions. 
-  
-- Add the following new target to the pipeline:
+ and here in particular look into Sections 3.4 'Error messages' and 3.5 'Functions'. You will learn that
+ a good place to start looking is the file =_targets/meta/meta=. It is convenient to read this file with
+ R:
+ #+ATTR_LATEX: :options otherkeywords={}, deletekeywords={}
+ #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+  tar_meta(fields = c("warnings","error"))
+ #+END_SRC
 
+- Add the following new target to the pipeline: 
+ 
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
 tar_target(demo_table,{
   data[,agegroup:=  acut(age,breaks=c(-Inf,60,65,70,75,Inf),
@@ -220,8 +250,14 @@ tar_target(demo_table,{
 
   Run =tar_make()= then load and print this new target:
   =tar_load(demo_table)= followed by =print(demo_table)=
- 
- 
+- Extract and move the body of the just created target 'demo_table' to a new file
+  =functions/get_demo_table.R=, adapt the file =_targets.R=:
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+tar_target(demo_table,{
+  get_demo_table(data)
+},packages=c("data.table","Publish"))
+#+END_SRC  
+  Then run =tar_make()= again ...
 ----------------------------------------------------------------------
 
 ** Exercise 4: Modifying an existing targets project

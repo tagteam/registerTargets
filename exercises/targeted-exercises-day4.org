@@ -1,21 +1,22 @@
-#+ATTR_LATEX: :options otherkeywords={}, deletekeywords={}
-#+BEGIN_SRC R  :results output raw drawer  :exports both  :session *R* :cache yes  
-library(targets)
-library(data.table)
-library(Publish)
-library(lava)
-#+END_SRC
+#+TITLE: PhD course: Targeted Register Analysis: Day 4
+#+setupfile:~/emacs-genome/snps/org-templates/setup-basic-stats-homepage.org
 
-#+ATTR_LATEX: :options otherkeywords={}, deletekeywords={}
-#+BEGIN_SRC R  :results output raw drawer  :exports both  :session *R* :cache yes  
-for (f in list.files("code",pattern = "R$",full.names = TRUE))source(f)
-m <- sample_statins_data()
-d <- sim(m,N=10000,seed=8)
-dd <- event_node_manipulator(data=d,k=2,outcome="CVD",competing=NULL,censored="Censored",outcome_is_competing=NULL)
-x <- Ltmle(data=dd,Qform=c("CVD_1"="Q.kplus1 ~ sex + age + ldl + Statins_0 + Statins_1","CVD_2"="Q.kplus1 ~ sex + age + ldl + Statins_0 + Statins_1"),gform=c("Statins_0"="Statins_0 ~ sex + age + ldl","Statins_1"="Statins_1 ~ sex + age + ldl + Statins_0","Censored_1"="Censored_1 ~ sex + age + ldl + Statins_0 + Statins_1","Statins_2"= "Statins_2 ~ sex + age + ldl + Statins_0 + Statins_1"),Anodes=c("Statins_0","Statins_1","Statins_2"),Lnodes=c("sex","age","ldl"),Ynodes=c("CVD_1","CVD_2"),Cnodes=c("Censored_1"),estimate.time=FALSE,survivalOutcome=TRUE,variance.method="ic",SL.library="glm",abar=c(1,1,1))
-y <- Ltmle(data=dd,Qform=c("CVD_1"="Q.kplus1 ~ sex + age + ldl + Statins_0 + Statins_1","CVD_2"="Q.kplus1 ~ sex + age + ldl + Statins_0 + Statins_1"),gform=c("Statins_0"="Statins_0 ~ sex + age + ldl","Statins_1"="Statins_1 ~ sex + age + ldl + Statins_0","Censored_1"="Censored_1 ~ sex + age + ldl + Statins_0 + Statins_1","Statins_2"= "Statins_2 ~ sex + age + ldl + Statins_0 + Statins_1"),Anodes=c("Statins_0","Statins_1","Statins_2"),Lnodes=c("sex","age","ldl"),Ynodes=c("CVD_1","CVD_2"),Cnodes=c("Censored_1"),estimate.time=FALSE,survivalOutcome=TRUE,variance.method="ic",SL.library="glm",abar=c(0,0,0))
-w <- Ltmle(data=dd,Qform=c("CVD_1"="Q.kplus1 ~ sex + age + ldl + Statins_0 + Statins_1","CVD_2"="Q.kplus1 ~ sex + age + ldl + Statins_0 + Statins_1"),gform=c("Statins_0"="Statins_0 ~ sex + age + ldl","Statins_1"="Statins_1 ~ sex + age + ldl + Statins_0","Censored_1"="Censored_1 ~ sex + age + ldl + Statins_0 + Statins_1","Statins_2"= "Statins_2 ~ sex + age + ldl + Statins_0 + Statins_1"),Anodes=c("Statins_0","Statins_1","Statins_2"),Lnodes=c("sex","age","ldl"),Ynodes=c("CVD_1","CVD_2"),Cnodes=c("Censored_1"),estimate.time=FALSE,survivalOutcome=TRUE,variance.method="ic",SL.library="glm",abar=list(c(1,1,1),c(0,0,0)))
-W <- Ltmle(data=dd,Qform=c("CVD_1"="Q.kplus1 ~ sex + age + ldl + Statins_0 + Statins_1","CVD_2"="Q.kplus1 ~ sex + age + ldl + Statins_0 + Statins_1"),gform=c("Statins_0"="Statins_0 ~ sex + age + ldl","Statins_1"="Statins_1 ~ sex + age + ldl + Statins_0","Censored_1"="Censored_1 ~ sex + age + ldl + Statins_0 + Statins_1","Statins_2"= "Statins_2 ~ sex + age + ldl + Statins_0 + Statins_1"),Anodes=c("Statins_0","Statins_1","Statins_2"),Lnodes=c("sex","age","ldl"),Ynodes=c("CVD_1","CVD_2"),Cnodes=c("Censored_1"),estimate.time=FALSE,survivalOutcome=TRUE,variance.method="ic",SL.library="glmnet",abar=list(c(1,1,1),c(0,0,0)),SL.cvControl=list(alpha=0.5,selector='undersmooth'),verbose=TRUE)
-publish(w)
-publish(W)
-#+END_SRC
+* Objectives
+
+The learning targets of this exercise are:
+
+- Review a working analysis using longitudinal targeted minimum loss estimation (=ltmle=)
+- Modify the analysis according to variations of the target parameters
+- Modify the analysis to work with competing risks
+
+** Exercise 1
+
+- Switch to the RStudio project /statins/ (e.g., via recent projects)
+- Open the file =_targets.R= (e.g., via "Control-Shift f" eller "Control .") 
+- Read the file =_targets.R=
+- Open and work through the file =run_targets.R= then continue here  
+  
+** Exercise 2
+
+- Change the analysis to use =glm= instead of =glmnet=
+- Subset the analysis 

@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  6 2022 (11:06) 
 ## Version: 
-## Last-Updated: Dec  7 2022 (11:31) 
+## Last-Updated: Dec  8 2022 (14:20) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 9
+##     Update #: 10
 #----------------------------------------------------------------------
 ## 
 ### Commentary:
@@ -46,6 +46,9 @@ tar_make()
 
 # read a specific target
 tar_read(answer)
+
+# go back to exercise file and continue Exercise 3
+# https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day1.org
 
 ######################################################################
 ### run_targets.R ends here
