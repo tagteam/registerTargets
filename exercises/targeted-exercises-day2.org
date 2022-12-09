@@ -260,11 +260,11 @@ grep("A01",heaven::atccodes$ATC,value=TRUE)
 grepl("A01",heaven::atccodes$ATC)
 #+END_SRC
 
-We can use that heaven::atccodes is a data.table and subset to all
-matching rows:
+Note that the object =heaven::atccodes= is a =data.table= and hence we
+can subset to all matching rows as follows:
 
 #+BEGIN_SRC R  :results output :exports both  :session *R* :cache yes  
-heaven::atccodes[grepl("A01",heaven::atccodes$ATC)]
+heaven::atccodes[grepl("A01",ATC)]
 #+END_SRC
 
 #+begin_example
@@ -283,7 +283,8 @@ heaven::atccodes[grepl("A01",heaven::atccodes$ATC)]
 #+end_example
 
 Now, we only want ATC codes which start with "A01". Hence, we specify
-a so-called /regular expression/:
+a so-called /regular expression/ where the =^= indicates that the term
+=^A01= should occur at the beginning of the ATC code:
 
 #+BEGIN_SRC R  :results output :exports both  :session *R* :cache yes  
 heaven::atccodes[grepl("^A01",heaven::atccodes$ATC)]
