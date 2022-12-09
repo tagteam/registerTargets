@@ -22,7 +22,8 @@ For the exercises of this course we use =data.table= syntax, because
 =data.table= is perfectly suited for register data: it is fast and
 memory efficient. However, it is totally fine if you prefer to work
 with =tidyverse/dplyr/tibble= or ordinary =data.frame=, just use
-=as_tibble()= and =as.data.frame= in the sequel.
+=as_tibble()= and =as.data.frame= to transform the =data.tables= when
+you work out the exercises.
 
 Here is the link to =data.table= introduction, tutorials
 etc. https://github.com/Rdatatable/data.table and just below are
@@ -134,7 +135,6 @@ pop <- data.table(pnr=1:3,date=as.Date(c("2022-04-01","2022-08-17","2022-03-12")
 pop
 #+END_SRC
 
-#+RESULTS[(2022-12-09 16:42:59) 80d6d22d9c3b63cbc1a2bb0931df8475bfcc9abb]:
 :    pnr       date
 : 1:   1 2022-04-01
 : 2:   2 2022-08-17
@@ -150,7 +150,6 @@ labka <- data.table(pnr=c(2,2,2,3,3,3,3,3,4,4),
 labka
 #+END_SRC
 
-#+RESULTS[(2022-12-09 16:48:02) 25ae440721156fa24b225c841dec48184c218033]:
 #+begin_example
     pnr       date eGFR
  1:   2 2016-10-09   36
@@ -175,7 +174,6 @@ pop <- labka[pop,roll=TRUE]
 pop
 #+END_SRC
 
-#+RESULTS[(2022-12-09 16:48:42) c6ceb82e9a299740c50a818c1f3e9e4af442e202]:
 :    pnr       date eGFR
 : 1:   1 2022-04-01   NA
 : 2:   2 2022-08-17   47
@@ -191,7 +189,6 @@ pop <- labka[pop,roll=60]
 pop
 #+END_SRC
 
-#+RESULTS[(2022-12-09 16:49:34) 9f719e7f2a1a389d542234cbb34616f3d905f9e1]:
 :    pnr       date eGFR
 : 1:   1 2022-04-01   NA
 : 2:   2 2022-08-17   NA
