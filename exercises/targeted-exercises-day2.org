@@ -1,14 +1,229 @@
-* Roadmap
+#+TITLE: PhD course: Targeted Register Analysis: Day 2
+#+setupfile:~/emacs-genome/snps/org-templates/setup-basic-stats-homepage.org
 
-Learning targets.
+* Objectives
 
-Search in register data. 
+The learning targets of this exercise are:
 
-Study pop
-Exposure
-Covariates
-Outcome
+- Writing functions in R
+- Search in register data using the R-package =data.table= 
+  and the R-functions =grep= and =grepl=
+- Survival analysis: descriptive statistics
+- Average treatment effect: G-formula and TMLE
+
+----------------------------------------------------------------------
+
+* Exercise 1 
 
 
+** The R-package =data.table=
 
-G-formula
+It is unlikely that you become a happy user of =data.table= in one
+week. So, be patient if you have never used =data.table= before. 
+
+*** Changing data without copying
+
+Note that whenever you use the assigment operator =<-=, e.g., to
+define a new variable in a =data.frame= the whole =data.frame= is
+copied internally in R. In large registry data copying takes time. The
+=set.xxx= functions of =data.table= avoid copying:
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+library(data.table)
+d <- data.frame(pnr=c(19,9,27,45,3),sex=c(1,0,0,1,0),age=c(70,86,54,66,71))
+# adding a variable to a data.frame: object d is copied!
+d$new_id <- 1:nrow(d)
+# switch from data.frame to data.table
+setDT(d)
+# adding a variable to a data.table: object d is not copied!
+d[,new_id:=1:nrow(d)]
+# data.table shortcut: .N is the number of rows (in the current subset)
+d[,new_id:=1:.N]
+# data.table longcut:
+set(d,j="new_id",value=1:nrow(d))
+#+END_SRC
+
+*** Sorting
+
+In =data.table= syntax sorting of the rows of a data set is done
+with the =setkey()= function.
+
+#+BEGIN_SRC R  :results output :exports both  :session *R* :cache yes  
+print(d)
+#+END_SRC
+
+#+RESULTS[(2022-12-09 10:00:58) 5f790ff0d7b9c3d437784f9cadfb12c132ba388e]:
+:    pnr sex age new_id
+: 1:  19   1  70      1
+: 2:   9   0  86      2
+: 3:  27   0  54      3
+: 4:  45   1  66      4
+: 5:   3   0  71      5
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+setkey(d,pnr)
+print(d)
+#+END_SRC
+
+#+RESULTS[(2022-12-09 10:02:01) ba8f087b0c4c5bc4cdea6b15e02cc0738f01cb5b]:
+   pnr sex age new_id
+1:   3   0  71      5
+2:   9   0  86      2
+3:  19   1  70      1
+4:  27   0  54      3
+5:  45   1  66      4
+
+*** Referring to variables inside the data.table
+
+Inside a =data.table= we can refer to the variable names
+without noting the name of the data.table all the time:
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+# data.frame: 
+sub <- d[d$age<70]
+table(d[d$age<70,"sex"])
+# data.table
+sub <- d[age<70]
+d[age<70,table(sex)]
+#+END_SRC
+
+*** Referring to variables inside a function
+
+Inside a function or loop variables are often given as characters,
+i.e., the names of the variables. 
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+library(data.table)
+vars <- c("age","sex")
+d <- data.table(pnr=c(19,9,27,45,3),sex=c(1,0,0,1,0),age=c(70,86,54,66,71))
+# Tip 1:
+# when setting with = FALSE data.table behaves exactly as data.frame after
+# the first comma:
+d[,vars,with=FALSE]
+# Tip 2:
+# a data.table is also a list, hence we can refer to its
+# elements (the columns) using =[[]]=
+d[["age"]]
+d[["sex"]]
+for (v in vars) d[[v]]
+# Tip 3:
+# argument .SDcols
+d[,.SD,.SDcols=c("age","sex")]
+#+END_SRC
+
+** Writing functions in R
+
+In R language a function looks like this:
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes :eval never
+# f is the name of the function
+f <- function(arg1, # arg1 is the name of the first argument
+              b,    # b is the name of the second argument
+              use_this = TRUE, # use_this is the name of the third argument
+                               # the default value is TRUE
+              ...   # additional arguments that are passed on to other functions
+              ){
+  # [FUNCTION DEFINITION HERE]
+}
+#+END_SRC
+
+Here is an example:
+
+#+BEGIN_SRC R  :results output :exports both  :session *R* :cache yes  
+get_pop <- function(data,age_var="age",age_limit){
+  sub <- data[data[[age_var]] <= age_limit]
+  sub
+}
+data <- data.table(pnr=c(19,9,27,45,3),sex=c(1,0,0,1,0),age=c(70,86,54,66,71))
+sub70 <- get_pop(data=data,age_limit=70)
+sub70
+#+END_SRC
+
+#+RESULTS[(2022-12-09 10:18:26) 81849dd0602413b53dc73da13eaea837f1c37f6b]:
+:    pnr sex age
+: 1:  19   1  70
+: 2:  27   0  54
+: 3:  45   1  66
+
+** The R-functions =grep= and =grepl= 
+
+Suppose we want to extract drugs from a vector of ATC codes.
+
+#+BEGIN_SRC R  :results output   :exports both  :session *R* :cache yes  
+heaven::atccodes
+#+END_SRC
+
+#+RESULTS[(2022-12-09 10:20:23) e772194e81e3c9e7dcb4f43d06cce3bb6c1c6447]:
+#+begin_example
+          ATC
+   1: A01AA01
+   2: A01AB02
+   3: A01AB03
+   4: A01AB04
+   5: A01AB09
+  ---        
+1370: R06AX27
+1371: R06AX28
+1372: R06AX29
+1373: R07AB01
+1374: R07AB07
+#+end_example
+
+The functions =grep= and =grepl= search for matches of a /single/ (not a vector!)
+search-expression in a vector. For example, we can search for "A10"
+
+#+BEGIN_SRC R  :results output :exports both  :session *R* :cache yes  
+grep("A01",heaven::atccodes$ATC)
+grep("A01",heaven::atccodes$ATC,value=TRUE)
+grepl("A01",heaven::atccodes$ATC)
+#+END_SRC
+
+We can use that heaven::atccodes is a data.table and subset to all
+matching rows:
+
+#+BEGIN_SRC R  :results output :exports both  :session *R* :cache yes  
+heaven::atccodes[grepl("A01",heaven::atccodes$ATC)]
+#+END_SRC
+
+#+RESULTS[(2022-12-09 10:26:13) 11a7ef24dd0e30c4f22a4539ff4d5935b39b99a3]:
+#+begin_example
+         ATC
+  1: A01AA01
+  2: A01AB02
+  3: A01AB03
+  4: A01AB04
+  5: A01AB09
+ ---        
+ 99: N07BA01
+100: N07CA01
+101: R03AA01
+102: R03BA01
+103: R05DA01
+#+end_example
+
+Now, we only want ATC codes which start with "A01". Hence, we specify
+a so-called /regular expression/:
+
+#+BEGIN_SRC R  :results output :exports both  :session *R* :cache yes  
+heaven::atccodes[grepl("^A01",heaven::atccodes$ATC)]
+#+END_SRC
+
+#+RESULTS[(2022-12-09 10:28:02) 453f8bcb80f1d4fb167c4a3af3a1a0094ce1fcb0]:
+#+begin_example
+        ATC
+ 1: A01AA01
+ 2: A01AB02
+ 3: A01AB03
+ 4: A01AB04
+ 5: A01AB09
+ 6: A01AB13
+ 7: A01AB17
+ 8: A01AB22
+ 9: A01AC01
+10: A01AD01
+11: A01AD02
+12: A01AD11
+#+end_example
+
+* Exercise 2
+

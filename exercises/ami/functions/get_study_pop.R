@@ -1,15 +1,15 @@
-### get_demo.R --- 
+### get_study_pop.R --
 #----------------------------------------------------------------------
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  4 2022 (11:50) 
 ## Version: 
-## Last-Updated: Dec  6 2022 (10:08) 
+## Last-Updated: Dec  9 2022 (08:00) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 9
+##     Update #: 11
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
-## 
+## Read demographics and prepare study population
 ### Change Log:
 #----------------------------------------------------------------------
 ## 
@@ -37,4 +37,4 @@ get_study_pop <- function(pop,raw_data_path){
 
 
 ######################################################################
-### get_demo.R ends here
+### get_study_pop.R ends here

@@ -11,9 +11,9 @@ The learning targets of this exercise are:
 
 ----------------------------------------------------------------------
 
-** Exercise 1 
+* Exercise 1 
 
-*** System 
+** System 
 
 The exercises for this course were developed and tested using R
 version =4.2.1= and RStudio version =2022.07.2+576=. The versions of
@@ -41,7 +41,7 @@ this is the case can be useful knowlegde. If at some point the
 exercises do not work as expected it may be due to a different version
 of the software.
 
-**** Check your R version 
+*** Check your R version 
 
 In the R console execute the following command
 
@@ -49,14 +49,14 @@ In the R console execute the following command
 version
 #+END_SRC  
   
-**** Check your  R-studio version
+*** Check your  R-studio version
 
 #+ATTR_LATEX: :options otherkeywords={}, deletekeywords={}
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
 Rstudio -> Help -> About Rstudio
 #+END_SRC
 
-**** Install packages/check package versions
+*** Install packages/check package versions
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes
 nix <- lapply(course_packages,function(p){
   if (!do.call(require,list(package=p,quietly=TRUE))){
@@ -67,9 +67,9 @@ nix <- lapply(course_packages,function(p){
 })
 #+END_SRC
 
-*** Systemics 
+** Systemics 
 
-**** Turn off .RData
+*** Turn off .RData
 
 The .RData files if they exist contain the R-objects that you had
 loaded when you exited your previous R session. It is generally better
@@ -88,14 +88,14 @@ and
 
   [[./figures/rstudio-save-Rdata-never.png]]
 
-**** Projects
+*** Projects
 
 For the exercises, we work with RStudio projects, see section 8.4 in
 this document: https://r4ds.had.co.nz/workflow-projects.html. You
 should now read about projects and then create the specific RStudio
 projects for the exercises as explained in Exercise 2.
 
-**** OPTIONAL: Leaving humanreadible traces
+*** OPTIONAL: Leaving humanreadible traces
 
 When inspecting other peoples code it is quite useful to know who
 started the project and when. Unfortunately, no one has time to do
@@ -103,7 +103,7 @@ this. Luckily RStudio allows you to define automatic headers:
 
 https://www.rdataguy.com/2019/11/lesson-7-creating-rscript-header_11.html
 
-**** OPTIONAL: RStudio search functions
+*** OPTIONAL: RStudio search functions
 
 Sometimes it is interesting to copy a specific piece of code from a
 different project. However, it can be difficult to know where someone
@@ -116,7 +116,7 @@ has quite remarkable search/find functions, including
 See also
 https://support.posit.co/hc/en-us/articles/200710523-Navigating-Code-in-the-RStudio-IDE
 
-**** OPTIONAL: Lazy coder
+*** OPTIONAL: Lazy coder
 
 R-syntax is difficult to remember. 
 - RStudio has snippets, see =Tools -> Edit Code Snippets=
@@ -156,23 +156,23 @@ lazyDateCoding(d,pattern="date")
 
 ----------------------------------------------------------------------
 
-** Exercise 2: Targeted projects
+* Exercise 2: Targeted projects
 
-*** Download all files from github
+** Download all files from github
 
-**** Via zip file
+*** Via zip file
 
 https://github.com/tagteam/registerTargets/archive/refs/heads/main.zip
 
 Unzip the file in a good neighborhood on your computer. 
 
-**** Using git
+*** Using git
 
 If you have the program =git= installed you can clone the github repository:
 
 git clone https://github.com/tagteam/registerTargets/
 
-*** Create RStudio projects
+** Create RStudio projects
 
 Use the RStudio dialog /New project/ where you choose /Existing Directory/ 
 to create projects in the
@@ -188,7 +188,7 @@ obviously is short for /in a nutshell/.
 
 ----------------------------------------------------------------------
 
-** Exercise 3: The structure of a minimal targets project
+* Exercise 3: The structure of a minimal targets project
 
 - Switch to the RStudio project /nuts/ (e.g., via recent projects)
 - Open the file =_targets.R= (e.g., via "Control-Shift f" eller "Control .") 
@@ -260,7 +260,7 @@ tar_target(demo_table,{
   Then run =tar_make()= again ...
 ----------------------------------------------------------------------
 
-** Exercise 4: Modifying an existing targets project
+* Exercise 4: Modifying an existing targets project
 
 - switch to RStudio project /ami/
 - Open and read the file =_targets.R=
@@ -268,9 +268,6 @@ tar_target(demo_table,{
 - Open the file =_run_targets.R= and work out the exercises defined there.
 
 
-** Exercise 5 (optional)
-
-Introduce a targets pipeline into one of your own projects.
 
 
 

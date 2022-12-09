@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  7 2022 (11:31) 
 ## Version: 
-## Last-Updated: Dec  7 2022 (11:55) 
+## Last-Updated: Dec  9 2022 (08:23) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 4
+##     Update #: 6
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -33,8 +33,12 @@ t1
 
 # Open the file =functions/get_study_pop.R= (i.e., put cursor on
 # function name and press F2). Find the comment # exclusion criteria
-# and enter the following line (add a comment about what the line does):
-study_pop[index >= study_start]
+# and enter the following lines (add comments that explain what these lines do)
+# and adapt the arguments of the function =get_study_pop=  
+# such the errors that occur due to these
+study_pop <- study_pop[index >= study_start]
+study_pop <- study_pop[index <= study_end]
+study_pop[,end_fup := pmin(emigration_date,death_date,study_end)]
 
 # Save the file (Control-s)
 

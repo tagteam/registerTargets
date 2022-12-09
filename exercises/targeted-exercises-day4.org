@@ -14,7 +14,8 @@ The learning targets of this exercise are:
 - Switch to the RStudio project /statins/ (e.g., via recent projects)
 - Open the file =_targets.R= (e.g., via "Control-Shift f" eller "Control .") 
 - Read the file =_targets.R=
-- Open and work through the file =run_targets.R= then continue here  
+- Open and work through the file =run_targets.R= then continue here
+- Reports the results from the analysis conclusion sentence(s) which explain the target parameters and contain the =ltmle= estimates with 95% confidence intervals.
   
 ** Exercise 2
 
