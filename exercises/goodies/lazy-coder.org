@@ -1,0 +1,45 @@
+** Leaving humanreadible traces
+
+When inspecting other peoples code it is quite useful to know who
+started the project and when. Unfortunately, no one has time to do
+this. Luckily RStudio allows you to define automatic headers:
+
+https://www.rdataguy.com/2019/11/lesson-7-creating-rscript-header_11.html
+
+
+** Lazy coder
+
+R-syntax is difficult to remember. 
+- RStudio has snippets, see =Tools -> Edit Code Snippets=
+
+Whenever you catch yourself looking up the same cryptic code for the
+third time it is worth considering a new snippet. For example, here is
+a snippet which inserts code to select the first row per person from a
+data.table:
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+snippet first
+	${1:name}[${1}[,.I[1],by="pnr"]$V1]
+#+END_SRC
+
+Here is a reference:
+https://support.posit.co/hc/en-us/articles/204463668-Code-Snippets-in-the-RStudio-IDE
+
+- dput inserts code in R-code syntax, such as names of dataset or levels of a factor:
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+library(survival)
+dput(names(pbc))
+dput(unique(pbc$edema))
+#+END_SRC  
+  
+- Publish::lazyFactorCoding
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+d <- data.table(a=rep(1:3,4),
+                b=letters[1:2],
+                adate=paste0("15-",8:11,"-2020"),
+                bdate=paste0(8:11,"-15","-2020"))
+lazyFactorCoding(d)
+lazyDateCoding(d,pattern="date")
+#+END_SRC  

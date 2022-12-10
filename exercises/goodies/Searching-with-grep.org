@@ -1,0 +1,78 @@
+
+** The R-functions =grep= and =grepl= 
+
+Suppose we want to extract drugs from a vector of ATC codes.
+
+#+BEGIN_SRC R  :results output   :exports both  :session *R* :cache yes  
+heaven::atccodes
+#+END_SRC
+
+#+begin_example
+          ATC
+   1: A01AA01
+   2: A01AB02
+   3: A01AB03
+   4: A01AB04
+   5: A01AB09
+  ---        
+1370: R06AX27
+1371: R06AX28
+1372: R06AX29
+1373: R07AB01
+1374: R07AB07
+#+end_example
+
+The functions =grep= and =grepl= search for matches of a /single/ (not a vector!)
+search-expression in a vector. For example, we can search for "A10"
+
+#+BEGIN_SRC R  :results output :exports both  :session *R* :cache yes  
+grep("A01",heaven::atccodes$ATC)
+grep("A01",heaven::atccodes$ATC,value=TRUE)
+grepl("A01",heaven::atccodes$ATC)
+#+END_SRC
+
+Note that the object =heaven::atccodes= is a =data.table= and hence we
+can subset to all matching rows as follows:
+
+#+BEGIN_SRC R  :results output :exports both  :session *R* :cache yes  
+heaven::atccodes[grepl("A01",ATC)]
+#+END_SRC
+
+#+begin_example
+         ATC
+  1: A01AA01
+  2: A01AB02
+  3: A01AB03
+  4: A01AB04
+  5: A01AB09
+ ---        
+ 99: N07BA01
+100: N07CA01
+101: R03AA01
+102: R03BA01
+103: R05DA01
+#+end_example
+
+Now, we only want ATC codes which start with "A01". Hence, we specify
+a so-called /regular expression/ where the =^= indicates that the term
+=^A01= should occur at the beginning of the ATC code:
+
+#+BEGIN_SRC R  :results output :exports both  :session *R* :cache yes  
+heaven::atccodes[grepl("^A01",heaven::atccodes$ATC)]
+#+END_SRC
+
+#+begin_example
+        ATC
+ 1: A01AA01
+ 2: A01AB02
+ 3: A01AB03
+ 4: A01AB04
+ 5: A01AB09
+ 6: A01AB13
+ 7: A01AB17
+ 8: A01AB22
+ 9: A01AC01
+10: A01AD01
+11: A01AD02
+12: A01AD11
+#+end_example

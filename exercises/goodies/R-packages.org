@@ -1,0 +1,66 @@
+* Versions
+
+The exercises for this course were developed and tested using R
+version =4.2.1= and RStudio version =2022.07.2+576=. The versions of
+the most important R-packages are:
+
+#+BEGIN_SRC R  :results output   :exports  (exercise-with-code)  :session *R* :cache yes
+course_packages  <- c("devtools","targets","data.table","ranger","glmnet","Publish","lava","riskRegression","matrixStats","ggplot2","survival","prodlim","heaven")
+for (p in course_packages){
+  v=packageVersion(p)
+  cat(paste(p,":",v,"\n"))
+}
+#+END_SRC
+
+#+begin_example
+devtools : 2.4.5 
+targets : 0.14.1 
+data.table : 1.14.6 
+ranger : 0.14.1 
+glmnet : 4.1.4 
+Publish : 2022.4.3 
+lava : 1.7.0 
+riskRegression : 2022.11.28 
+matrixStats : 0.62.0 
+ggplot2 : 3.4.0 
+survival : 3.4.0 
+prodlim : 2022.10.13 
+heaven : 2022.7.13
+#+end_example
+
+You may have different versions installed on your computer and whether
+this is the case can be useful knowlegde. If at some point the
+exercises do not work as expected it may be due to a different version
+of the software.
+
+*** Check your R version 
+
+In the R console execute the following command
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+version
+#+END_SRC  
+  
+*** Check your R-studio version
+
+#+ATTR_LATEX: :options otherkeywords={}, deletekeywords={}
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+Rstudio -> Help -> About Rstudio
+#+END_SRC
+
+*** Install packages if necessary
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes
+if (!require("devtools",quietly=TRUE)) install.packages("devtools")
+if (!require("targets",quietly=TRUE)) install.packages("targets")
+if (!require("data.table",quietly=TRUE)) install.packages("data.table")
+if (!require("ranger",quietly=TRUE)) install.packages("ranger")
+if (!require("glmnet",quietly=TRUE)) install.packages("glmnet")
+if (!require("Publish",quietly=TRUE)) install.packages("Publish")
+if (!require("lava",quietly=TRUE)) install.packages("lava")
+if (!require("riskRegression",quietly=TRUE)) install.packages("riskRegression")
+if (!require("matrixStats",quietly=TRUE)) install.packages("matrixStats")
+if (!require("ggplot2",quietly=TRUE)) install.packages("ggplot2")
+if (!require("prodlim",quietly=TRUE)) install.packages("prodlim")
+if (!require("survival",quietly=TRUE)) install.packages("survival")
+if (!require("heaven",quietly=TRUE)) devtools::install_github("tagteam/heaven")
+#+END_SRC

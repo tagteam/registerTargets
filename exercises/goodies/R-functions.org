@@ -1,0 +1,32 @@
+** Writing functions in R
+
+In R language a function looks like this:
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes :eval never
+# f is the name of the function
+f <- function(arg1, # arg1 is the name of the first argument
+              b,    # b is the name of the second argument
+              use_this = TRUE, # use_this is the name of the third argument
+                               # the default value is TRUE
+              ...   # additional arguments that are passed on to other functions
+              ){
+  # [FUNCTION DEFINITION HERE]
+}
+#+END_SRC
+
+Here is an example:
+
+#+BEGIN_SRC R  :results output :exports both  :session *R* :cache yes  
+get_pop <- function(data,age_var="age",age_limit){
+  sub <- data[data[[age_var]] <= age_limit]
+  sub
+}
+data <- data.table(pnr=c(19,9,27,45,3),sex=c(1,0,0,1,0),age=c(70,86,54,66,71))
+sub70 <- get_pop(data=data,age_limit=70)
+sub70
+#+END_SRC
+
+:    pnr sex age
+: 1:  19   1  70
+: 2:  27   0  54
+: 3:  45   1  66
