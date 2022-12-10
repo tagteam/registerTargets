@@ -1,3 +1,5 @@
+#+TITLE: PhD course: Targeted Register Analysis: Day 3
+#+setupfile:~/emacs-genome/snps/org-templates/setup-basic-stats-homepage.org
 * Modeling
 
 
