@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  8 2022 (16:37) 
 ## Version: 
-## Last-Updated: Dec  8 2022 (18:28) 
+## Last-Updated: Dec 10 2022 (10:39) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 1
+##     Update #: 2
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -17,8 +17,11 @@
 
 library(targets)
 tar_make()
-tar_load(demo)
-demo
+tar_load_everything()
+ami_pop
+
+tmp <- demo[ami_pop,on = "pnr"]
+tmp[end_fup<index]
 
 
 

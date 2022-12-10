@@ -25,8 +25,28 @@ The learning targets of this exercise are:
 
 * Exercise 1
 
-Translate the R-codes into a new targets project as follows:
+The folder [[example-project]] contains a data set and the R-code file
+[[example-project/rate-versus-risks.R]] which loads the data, prepares the
+data and then calculates rates, rate ratios and t-year risks and
+t-year risk ratios.
 
+Translate the R-codes of the file [[example-project/rate-versus-risks.R]]  into a new targets project as follows:
+
+
+1. Create a new empty folder for the project.
+2. Create three subfolders called =data=, =functions=, =figures=
+3. Create a new RStudio project in this new folder (see exercise 2 of day 1).
+4. Create the file =_targets.R= in this new folder
+5. Copy the data that are read by [[example-project/rate-versus-risks.R]] to the new subfolder =data=
+6. Copy all functions from the file  [[example-project/rate-versus-risks.R]] to the new subfolder =functions=
+7. Create the targets pipeline in the file =_targets.R= by:
+   + writing =library(targets)=
+   + sourcing all functions from the subfolder =functions= (see 
+   copying/translating all the remaining R-codes into targets.
+   Don't do all of them at once. Do them one-by-one and check in between if 
+    =tar_make()= runs without errors.
 
 * Exercise 2
+
+
 

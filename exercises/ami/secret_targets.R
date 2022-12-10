@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  8 2022 (17:28) 
 ## Version: 
-## Last-Updated: Dec  9 2022 (08:03) 
+## Last-Updated: Dec 10 2022 (09:55) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 17
+##     Update #: 21
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -52,11 +52,16 @@ list(
         })
     }),
     # add demographics and apply exclusion
-    tar_target(study_pop,
-               secret_get_study_pop(pop = pop,
+    tar_target(study_pop,{
+               sgs = secret_get_study_pop(pop = pop,
                                     study_start = study_start,
                                     study_end = study_end,
-                                    raw_data_path = raw_data_path)),
+                                    raw_data_path = raw_data_path)
+               message("saving popamis data file")
+               fwrite(sgs,file = "~/metropolis/Teaching/targetedRegisterAnalysis/exercises/example-project/popami.csv")
+               sgs[]
+               
+    }),
     # baseline characteristics
     tar_target(table1,
                make_table1(study_pop),

@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  4 2022 (11:50) 
 ## Version: 
-## Last-Updated: Dec  9 2022 (08:03) 
+## Last-Updated: Dec 10 2022 (09:28) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 15
+##     Update #: 27
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -14,9 +14,12 @@
 #----------------------------------------------------------------------
 ## 
 ### Code:
-secret_get_study_pop <- function(pop,raw_data_path,study_start,study_end){
+secret_get_study_pop <- function(pop,
+                                 raw_data_path,
+                                 study_start,
+                                 study_end){
     demo = fread(paste0(raw_data_path,"/","cpr.csv"),
-                keepLeadingZeros = TRUE)
+                 keepLeadingZeros = TRUE)
     # sort both datasets by pnr
     setkey(pop,pnr)
     setkey(demo,pnr)
@@ -26,11 +29,11 @@ secret_get_study_pop <- function(pop,raw_data_path,study_start,study_end){
     study_pop[,birth_date:=as.Date(birth_date,format="%Y-%m-%d")]
     study_pop[,index:=as.Date(index,format="%Y-%m-%d")]
     # exclusion criteria
-    message(NROW(study_pop))
     study_pop <- study_pop[index >= study_start]
     study_pop <- study_pop[index <= study_end]
-    message(NROW(study_pop))
-    study_pop[,end_fup := pmin(emigration_date,death_date,study_end)]
+    study_pop[,death_date:=as.Date(death_date,format="%Y-%m-%d")]
+    study_pop[,emigration_date:=as.Date(emigration_date,format="%Y-%m-%d")]
+    study_pop[,end_fup := pmin(emigration_date,death_date,study_end,na.rm = TRUE)]
     # calculate age 
     study_pop[,age := round(as.numeric(index-birth_date)/365.25,2)]
     # factor coding

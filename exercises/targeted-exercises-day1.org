@@ -21,8 +21,9 @@ order:
 -  [[goodies/R-packages.org]]
 -  [[goodies/R-studio.org]]
 -  [[goodies/R-functions.org]]
+-  [[goodies/targets.org]]
+Optional
 -  [[goodies/lazy-coder.org]]
-
 
 ----------------------------------------------------------------------
 
@@ -58,7 +59,7 @@ obviously is short for /in a nutshell/.
 
 ----------------------------------------------------------------------
 
-* Exercise 3: The structure of a minimal targets project
+* Exercise 3: A minimal targets project
 
 - Switch to the RStudio project /nuts/ (e.g., via recent projects)
 - Open the file =_targets.R= (e.g., via "Control-Shift f" eller "Control .") 
@@ -132,7 +133,7 @@ tar_target(demo_table,{
 
 * Exercise 4: Modifying an existing targets project
 
-- switch to RStudio project /ami/
+- Switch to the RStudio project called /ami/ that you have created in Exercise 2.
 - Open and read the file =_targets.R=
 - Open and read the functions that are used in the pipeline.
 - Open the file =_run_targets.R= and work out the exercises defined there.
