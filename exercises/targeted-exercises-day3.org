@@ -2,7 +2,6 @@
 #+setupfile:~/emacs-genome/snps/org-templates/setup-basic-stats-homepage.org
 * Modeling
 
-
 #+ATTR_LATEX: :options otherkeywords={}, deletekeywords={}
 #+BEGIN_SRC R  :results output raw drawer  :exports both  :session *R* :cache yes
 library(targets)

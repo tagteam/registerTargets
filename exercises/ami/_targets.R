@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  4 2022 (11:02) 
 ## Version: 1
-## Last-Updated: Dec  9 2022 (06:39) 
+## Last-Updated: Dec 10 2022 (15:18) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 22
+##     Update #: 23
 #----------------------------------------------------------------------
 ## 
 ### Commentary:
@@ -46,7 +46,7 @@ list(
                              raw_data_path = raw_data_path)),
     # baseline characteristics
     tar_target(table1,
-               make_table1(study_pop),
+               make_table1(study_pop = study_pop),
                packages = "Publish")
 )
 

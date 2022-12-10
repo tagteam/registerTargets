@@ -13,16 +13,6 @@ The learning targets of this exercise are:
 
 ----------------------------------------------------------------------
 
-* Exercise 1 
-
-
-
-
-
-#+TITLE: PhD course: Targeted Register Analysis: Day 2
-#+setupfile:~/emacs-genome/snps/org-templates/setup-basic-stats-homepage.org
-
-
 * Exercise 1
 
 The folder [[example-project]] contains a data set and the R-code file
@@ -42,11 +32,17 @@ Translate the R-codes of the file [[example-project/rate-versus-risks.R]]  into 
 7. Create the targets pipeline in the file =_targets.R= by:
    + writing =library(targets)=
    + sourcing all functions from the subfolder =functions= (see 
-   copying/translating all the remaining R-codes into targets.
-   Don't do all of them at once. Do them one-by-one and check in between if 
-    =tar_make()= runs without errors.
+   copying/translating all the remaining R-codes into targets.  Don't
+   do add all of the targets at once. Add them one-by-one and check in
+   between if =tar_make()= runs without errors.
+
+----------------------------------------------------------------------
 
 * Exercise 2
+
+- Switch to the RStudio project called /ami/ that you have created in Exercise 2 of Day 1.
+- 
+
 
 
 

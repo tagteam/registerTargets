@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  8 2022 (17:34) 
 ## Version: 
-## Last-Updated: Dec  9 2022 (08:23) 
+## Last-Updated: Dec 10 2022 (15:43) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 3
+##     Update #: 4
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -17,6 +17,8 @@
 library(targets)
 tar_make(script = "secret_targets.R")
 tar_load_everything()
+setkey(lpr_pop[[1]],pnr)
+lpr_pop[[1]]
 table1
 ######################################################################
 ### run_secrets.R ends here
