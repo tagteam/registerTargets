@@ -14,7 +14,9 @@ The learning targets of this exercise are:
 * Exercise 1: Warm-up
 
 An important part of the exercises consists of reading. The reading
-material is available on github and linked here. Please read:
+material includes both general information and also instructions on
+how to prepare the remaining exercises. Please read in the following
+order:
 
 -  [[goodies/R-packages.org]]
 -  [[goodies/R-studio.org]]

@@ -1,6 +1,14 @@
-*** Turn off .RData
+** Rstudio projects
 
-The .RData files if they exist contain the R-objects that you had
+For the exercises, we work with RStudio projects. A project is simply
+a folder on your computer where the files that contain data, R-code
+and output are organized in subfolders.
+
+A good reference is here: https://r4ds.had.co.nz/workflow-projects.html.
+
+** Check options of RStudio and turn off .RData
+
+The .RData files (if they exist) contain the R-objects that you had
 loaded when you exited your previous R session. It is generally better
 to keep the R-code that produces these objects. Also, the R-package
 =targets= that we are going to work with provides a much more
@@ -16,13 +24,6 @@ and
 2. set the save workspace to .RData on exit to =Never= 
 
   [[./figures/rstudio-save-Rdata-never.png]]
-
-** Rstudio projects
-
-For the exercises, we work with RStudio projects, see section 8.4 in
-this document: https://r4ds.had.co.nz/workflow-projects.html. You
-should now read about projects and then create the specific RStudio
-projects for the exercises as explained in Exercise 2.
 
 ** RStudio search functions
 
