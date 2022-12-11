@@ -107,8 +107,6 @@ tar_meta()
 tar_meta(fields=c("type","seed","time","size","warnings"))
 #+END_SRC
 
-[[../targeted-exercises-day2.org]]
-
 ** Controlling dependencies
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
 tar_target(name,{body},cue = tar_cue(mode = "never"))
