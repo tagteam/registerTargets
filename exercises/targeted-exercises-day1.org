@@ -1,4 +1,4 @@
-#+TITLE: PhD course: Targeted Register Analysis: Day 1
+#+TITLE: PhD course: Targeted Register Analysis: Exercises: Day 1
 #+setupfile:~/emacs-genome/snps/org-templates/setup-basic-stats-homepage.org
 
 * Objectives
@@ -19,7 +19,7 @@ how to prepare the remaining exercises. Please read in the following
 order:
 
 -  [[goodies/R-packages.org]]
--  [[goodies/R-studio.org]]
+-  [[goodies/R-studio.org]]]]
 -  [[goodies/R-functions.org]]
 -  [[goodies/targets.org]]
 Optional

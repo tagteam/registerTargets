@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  4 2022 (11:50) 
 ## Version: 
-## Last-Updated: Dec 10 2022 (09:28) 
+## Last-Updated: Dec 11 2022 (09:38) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 27
+##     Update #: 28
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -15,10 +15,10 @@
 ## 
 ### Code:
 secret_get_study_pop <- function(pop,
-                                 raw_data_path,
+                                 raw_cpr_file,
                                  study_start,
                                  study_end){
-    demo = fread(paste0(raw_data_path,"/","cpr.csv"),
+    demo = fread(raw_cpr_file,
                  keepLeadingZeros = TRUE)
     # sort both datasets by pnr
     setkey(pop,pnr)

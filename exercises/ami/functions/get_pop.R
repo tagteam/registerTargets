@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  6 2022 (07:40) 
 ## Version: 
-## Last-Updated: Dec  8 2022 (17:59) 
+## Last-Updated: Dec 11 2022 (09:36) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 6
+##     Update #: 7
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -14,8 +14,8 @@
 #----------------------------------------------------------------------
 ## 
 ### Code:
-get_pop <- function(raw_data_path,icd_codes){
-    pop <- fread(paste0(raw_data_path,"/","lpr.csv"),
+get_pop <- function(raw_lpr_file,icd_codes){
+    pop <- fread(raw_lpr_file,
                  keepLeadingZeros = TRUE)
     # extract everyone with AMI
     pop <- pop[grep(paste0("^",icd_codes$MI),diag)]

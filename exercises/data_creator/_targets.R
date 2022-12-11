@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  8 2022 (16:00) 
 ## Version: 
-## Last-Updated: Dec 10 2022 (16:26) 
+## Last-Updated: Dec 11 2022 (09:32) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 88
+##     Update #: 93
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -63,16 +63,19 @@ list(
     }),
     tar_target(lmdb,{
         ## drugs <- c(c(grep("C10AA",atccodes$ATC,value = TRUE)),atccodes[sample(1:.N,size=13)]$ATC)
-        drugs <- c(c(grep("^C10AA|^C07|^C08",atccodes$ATC,value = TRUE)),atccodes[sample(1:.N,size=13)]$ATC)
+        drugs <- c(rep(c(grep("^C10AA|^C07|^C08",heaven::atccodes$ATC,value = TRUE)),10),heaven::atccodes$ATC)
         tmp_ami <- ami_pop[,.(pnr,index,M = sample(c(rep(0,10),1:20),size = NROW(ami_pop),replace = TRUE))]
         tmp_not <- not_ami_pop[,.(pnr,index = as.Date("1995-01-01"),M = sample(c(rep(0,30),1:20),size = NROW(not_ami_pop),replace = TRUE))]
         tmp_pop <- rbind(tmp_not,tmp_ami,fill = TRUE)
         setkey(demo,pnr)
         setkey(tmp_pop,pnr)
         tmp_pop <- demo[,.(pnr,end_fup)][tmp_pop]
-        tmp_pop[,range := (end_fup-index)]
+        tmp_pop[,range := as.numeric(end_fup-index)]
+        # make C10,C07,C08 protective
+        tmp_pop = demo[,.(pnr,death_date)][tmp_pop,on = "pnr"]
+        tmp_pop[is.na(death_date),M := M+sample(3:10,size = .N,replace = TRUE)]
         tmp_pop[range<0,M := 0]
-        lmdb  <- tmp_pop[,{
+        lmdb  <- tmp_pop[M>0,{
             eksd = index + rbinom(M, 1, 0.95)*runif(M,0,range)
             atc = sample(drugs,size=M,replace=TRUE)
             data.table(eksd = eksd,atc = atc)

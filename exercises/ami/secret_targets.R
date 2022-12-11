@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  8 2022 (17:28) 
 ## Version: 
-## Last-Updated: Dec 10 2022 (16:45) 
+## Last-Updated: Dec 11 2022 (09:42) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 59
+##     Update #: 69
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -24,8 +24,6 @@ list(
     # the study period
     tar_target(study_start, as.Date("2000-01-01")),
     tar_target(study_end, as.Date("2021-12-31")),
-    # where to find the (computer simulated) register data
-    tar_target(raw_data_path,"./rawdata/"),
     # hospital admissions: outcome and comorbidities
     tar_target(icd_codes, heaven::charlson.codes),
     # prescription data: exposure and comedicine 
@@ -34,12 +32,12 @@ list(
                              #calcium chanel blockers
                              ccb = c('C08'))),
     # define study population
-    tar_target(pop, get_pop(raw_data_path = raw_data_path,
+    tar_target(pop, get_pop(raw_lpr_file = "rawdata/lpr.csv",
                             icd_codes = icd_codes)),
     # lpr
     tar_target(como_list,{
         icd_codes
-        lpr <- fread(paste0(raw_data_path,"lpr.csv"),
+        lpr <- fread("rawdata/lpr.csv",
                      keepLeadingZeros = TRUE,
                      colClasses = c("character","character","Date"))
         x = lapply(names(icd_codes),function(disease){
@@ -54,7 +52,7 @@ list(
     }),
     # lmdb
     tar_target(drug_list,{
-        lmdb <- fread(paste0(raw_data_path,"lmdb.csv"),
+        lmdb <- fread("rawdata/lmdb.csv",
                      keepLeadingZeros = TRUE,
                      colClasses = c("character","Date","character"))
         x = lapply(names(atc_codes),function(drug){
@@ -72,9 +70,9 @@ list(
         sgs = secret_get_study_pop(pop = pop,
                                    study_start = study_start,
                                    study_end = study_end,
-                                   raw_data_path = raw_data_path)
+                                   raw_cpr_file = "rawdata/cpr.csv")
         message("saving popamis data file")
-        fwrite(sgs,file = "~/metropolis/Teaching/targetedRegisterAnalysis/exercises/example-project/popami.csv")
+        fwrite(sgs,file = "~/metropolis/Teaching/targetedRegisterAnalysis/exercises/spaghetti/popami.csv")
         sgs[]
                
     }),
@@ -138,10 +136,13 @@ list(
     # day 3
     # random forests
     tar_target(forest,{
-        forest = ranger(Surv(time,event)~bb+age+sex+any.malignancy+diabetes.with.complications,
-                     data = baseline_pop,num.trees = 5)
-        forest
-    }, packages = c("survival","ranger"))    
+        # pseudo value
+        km = prodlim(Hist(time,event)~1,data = baseline_pop)
+        baseline_pop[,pseudo5:= jackknife(km,times = 5)]
+        forest5 = ranger(pseudo5~bb+age+sex+any.malignancy+diabetes.with.complications,
+                     data = baseline_pop,num.trees = 50)
+        forest5
+    }, packages = c("prodlim","survival","ranger"))    
 )
 
 

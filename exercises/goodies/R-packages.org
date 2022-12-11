@@ -48,7 +48,7 @@ version
 Rstudio -> Help -> About Rstudio
 #+END_SRC
 
-*** Install packages if necessary
+*** Install packages (if necessary)
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes
 if (!require("devtools",quietly=TRUE)) install.packages("devtools")
 if (!require("targets",quietly=TRUE)) install.packages("targets")
@@ -64,3 +64,9 @@ if (!require("prodlim",quietly=TRUE)) install.packages("prodlim")
 if (!require("survival",quietly=TRUE)) install.packages("survival")
 if (!require("heaven",quietly=TRUE)) devtools::install_github("tagteam/heaven")
 #+END_SRC
+
+If you cannot install one of the packages, in particular, the package
+=heaven= from github, please ask for help. The following link provides
+some guidance:
+
+https://support.posit.co/hc/en-us/articles/200554786-Problem-Installing-Packages-in-the-RStudio-IDE
