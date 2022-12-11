@@ -1,0 +1,95 @@
+* The R-package targets
+
+** Before the pipeline
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes
+library(targets)
+for (f in list.files("functions/",
+                     pattern = "R$",
+                     recursive = TRUE,
+                     full.names = TRUE)){source(f)}
+tar_option_set(packages=c("data.table","heaven","prodlim","survival","riskRegression","ranger","ggplot2","glmnet","matrixStats","lava","Publish"))
+#+END_SRC
+
+** The targets
+
+A target is an R-object which consists of a name, a value, and other
+parameters such as =packages= which loads additional packages only for
+this target:
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  :eval never
+tar_target(name,{
+  # the body of the target
+  # can consist multiple lines
+  # the value is what the last line returns
+  # can also be the call to a function
+  value 
+},packages="dplyr")
+#+END_SRC
+
+** The pipeline
+
+The pipeline is a list of targets:
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  :eval never
+list(
+  tar_target(target1,{
+    depends on no other targets
+  }),
+  tar_target(target2,{
+    may depend on target1
+  }),
+  tar_target(target3,{
+    may depend on target1 or on target2 or on both
+  })
+)
+#+END_SRC
+
+** Commands
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  :eval never
+#
+# show the pipeline
+#
+tar_manifest()
+tar_visnetwork(targets_only=TRUE)
+tar_outdated()
+#
+# evaluate the pipeline
+#
+# run all targets of the pipeline (which need to be run)
+tar_make()
+# run target2 (if it needs to be run) and all targets on which target2 depends
+tar_make(target2)
+# run target2 directly without checking other targets
+tar_make(target2,shortcut=TRUE)
+#
+# load/read objects
+#
+tar_load(target2)
+t2 <- tar_read(target2)
+tar_load(everything)
+#
+# delete targets
+#
+tar_delete(target2)
+# delete all targets
+tar_destroy()
+# delete targets that are not in the current pipeline, i.e., obsolete
+tar_prune()
+#+END_SRC
+
+** Behind the scene
+
+When the pipeline is executed via =tar_make()= the targets are saved
+in the subfolder =_targets/objects= of the current project directory.
+The files =_targets/meta/progress=, =_targets/meta/process= and
+=_targets/meta/meta= provide information about the targets. The latter
+can be read into R as follows:
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  :eval never
+tar_meta()
+tar_meta(fields=c("type","seed","time","size","warnings"))
+#+END_SRC
+
+[[../targeted-exercises-day2.org]]
