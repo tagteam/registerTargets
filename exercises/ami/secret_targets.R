@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  8 2022 (17:28) 
 ## Version: 
-## Last-Updated: Dec 11 2022 (19:26) 
+## Last-Updated: Dec 11 2022 (19:34) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 123
+##     Update #: 124
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -74,8 +74,8 @@ list(
                                 drug_list = drug_list)
     }),
     # more baseline characteristics
-    tar_target(day3_table1,
-               day3_make_table1(baseline_pop = secret_baseline_pop),
+    tar_target(very_secret_table1,
+               secret_make_table1(baseline_pop = secret_baseline_pop),
                packages = "Publish"),
     # Cox regression
     tar_target(hazard_ratio,{
