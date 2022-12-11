@@ -13,6 +13,7 @@ The learning targets of this exercise are:
 
 - Switch to the RStudio project called /ami/ that you have created in
   Exercise 2 of Day 1.
+- Further instructions are under construction
 
 
 # Footer:
