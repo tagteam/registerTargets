@@ -94,15 +94,13 @@ tar_meta(fields=c("type","seed","time","size","warnings"))
 
 [[../targeted-exercises-day2.org]]
 
-------------------------------------------------------------------------------------------------------
 
 # Footer:
-**** Exercises
-[[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day1.org][targeted exercises day 1]]
-[[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day2.org][targeted exercises day 2]]
-[[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day3.org][targeted exercises day 3]]
-[[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day4.org][targeted exercises day 4]]
-**** Lecturenotes
-[[https://github.com/tagteam/registerTargets/blob/main/lecturenotes][lecture notes]]
-**** Goodies
-[[https://github.com/tagteam/registerTargets/blob/main/exercises/goodies][goodies]]
+------------------------------------------------------------------------------------------------------
+**** Navigation
+- [[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day1.org][targeted exercises day 1]]
+- [[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day2.org][targeted exercises day 2]]
+- [[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day3.org][targeted exercises day 3]]
+- [[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day4.org][targeted exercises day 4]]
+- [[https://github.com/tagteam/registerTargets/blob/main/lecturenotes][lecture notes]]
+- [[https://github.com/tagteam/registerTargets/blob/main/exercises/goodies][goodies]]
