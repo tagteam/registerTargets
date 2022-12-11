@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  8 2022 (16:37) 
 ## Version: 
-## Last-Updated: Dec 11 2022 (18:47) 
+## Last-Updated: Dec 11 2022 (19:27) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 15
+##     Update #: 16
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -67,6 +67,32 @@ secret_baseline_pop[,table(bb,event)]
 ## secret_baseline_pop[pnr == "99955",.(pnr,index,time,event,bb)]
 ## lmdb_plus[pnr == "99955"]
 ## lmdb[pnr == "99955"]
+
+## cheating time for day 2
+tar_make(script = "secret_targets.R")
+tar_load_everything()
+sgsmod = copy(sgs)
+sgsmod[,max := as.numeric(death_date-index)]
+sgsmod[!is.na(death_date)&1*(death_date-index)<8*365.25&sex == "Female",death_date := death_date-runif(.N,1,max)]
+sgsmod[!is.na(death_date)&1*(death_date-index)<5*365.25&sex == "Male",death_date := death_date+runif(.N,1,.6*365.25)]
+sgsmod[end_fup<death_date,end_fup := pmin(death_date,as.Date("2022-12-12"))]
+sgsmod[end_fup<death_date,death_date := NA]
+sgsmod[,time := as.numeric(end_fup-index)/365.25]
+sgsmod[,event := 0]
+sgsmod[!is.na(death_date),event := 1]
+library(prodlim)
+fit <- prodlim(Hist(time,event)~sex,data = sgsmod)
+u = summary(fit,percent = TRUE,surv = FALSE,times = c(1,5,10))[,c("time","sex","cuminc")]
+setDT(u)
+print(dcast(u,sex~time,value.var = "cuminc",fun = mean))
+sgsmod[,time := NULL]
+sgsmod[,max := NULL]
+sgsmod[,event := NULL]
+message("saving popamis data file")
+## fwrite(sgs,file = "~/metropolis/Teaching/targetedRegisterAnalysis/exercises/spaghetti/popami.csv")
+fwrite(sgsmod,file = "~/metropolis/Teaching/targetedRegisterAnalysis/exercises/spaghetti/popami.csv")
+
+
 
 fit <- coxph(Surv(time,event)~bb,data = secret_baseline_pop)
 fit

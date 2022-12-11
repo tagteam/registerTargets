@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  8 2022 (17:28) 
 ## Version: 
-## Last-Updated: Dec 11 2022 (18:32) 
+## Last-Updated: Dec 11 2022 (19:26) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 120
+##     Update #: 123
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -54,46 +54,28 @@ list(
                              raw_cpr_file = "rawdata/cpr.csv")),
     # add demographics and apply exclusion
     tar_target(secret_study_pop,{
-        sgs = secret_get_study_pop(pop = pop,
-                                   study_start = study_start,
-                                   study_end = study_end,
-                                   raw_cpr_file = "rawdata/cpr.csv")
-        ## cheating time for day 2
-        sgsmod = copy(sgs)
-        sgsmod[,max := as.numeric(death_date-index)]
-        sgsmod[!is.na(death_date)&1*(death_date-index)<8*365.25&sex == "Female",death_date := death_date-runif(.N,1,max)]
-        sgsmod[!is.na(death_date)&1*(death_date-index)<5*365.25&sex == "Male",death_date := death_date+runif(.N,1,.6*365.25)]
-        sgsmod[end_fup<death_date,end_fup := pmin(death_date,as.Date("2022-12-12"))]
-        sgsmod[end_fup<death_date,death_date := NA]
-        sgsmod[,time := as.numeric(end_fup-index)/365.25]
-        sgsmod[,event := 0]
-        sgsmod[!is.na(death_date),event := 1]
-        library(prodlim)
-        fit <- prodlim(Hist(time,event)~sex,data = sgsmod)
-        u = summary(fit,percent = TRUE,surv = FALSE,times = c(1,5,10))[,c("time","sex","cuminc")]
-        setDT(u)
-        print(dcast(u,sex~time,value.var = "cuminc",fun = mean))
-        sgsmod[,time := NULL]
-        sgsmod[,max := NULL]
-        sgsmod[,event := NULL]
-        message("saving popamis data file")
-        ## fwrite(sgs,file = "~/metropolis/Teaching/targetedRegisterAnalysis/exercises/spaghetti/popami.csv")
-        fwrite(sgsmod,file = "~/metropolis/Teaching/targetedRegisterAnalysis/exercises/spaghetti/popami.csv")
-        sgs[]
+        secret_get_study_pop(pop = pop,
+                             study_start = study_start,
+                             study_end = study_end,
+                             raw_cpr_file = "rawdata/cpr.csv")
     },cue = tar_cue(mode = "always")),
     # baseline characteristics
     tar_target(table1,
                make_table1(study_pop = study_pop),
                packages = "Publish"),
-    # day 2
+    # with exclusion
+    tar_target(secret_table1,
+               make_table1(study_pop = secret_study_pop),
+               packages = "Publish"),
+    # day 3
     tar_target(secret_baseline_pop,{
         secret_get_baseline_pop(study_pop = secret_study_pop,
                                 como_list = como_list,
                                 drug_list = drug_list)
     }),
     # more baseline characteristics
-    tar_target(day2_table1,
-               day2_make_table1(baseline_pop = secret_baseline_pop),
+    tar_target(day3_table1,
+               day3_make_table1(baseline_pop = secret_baseline_pop),
                packages = "Publish"),
     # Cox regression
     tar_target(hazard_ratio,{
