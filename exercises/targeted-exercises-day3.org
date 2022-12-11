@@ -36,3 +36,27 @@ org(glm(Statins_0~age+ldl+sex,data=d,family="binomial"))
 | ldl         |       |        2.61 | [2.56;2.65] | < 0.0001 |
 | sex         |       |        0.80 | [0.77;0.83] | < 0.0001 |
 :end:
+
+# registerTargetFooter:
+**** Exercises
+[[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day1.org][targeted exercises day 1]]
+[[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day2.org][targeted exercises day 2]]
+[[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day3.org][targeted exercises day 3]]
+[[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day4.org][targeted exercises day 4]]
+**** Lecturenotes
+[[https://github.com/tagteam/registerTargets/blob/main/lecturenotes][lecture notes]]
+**** Goodies
+[[https://github.com/tagteam/registerTargets/blob/main/exercises/goodies][goodies]]
+
+------------------------------------------------------------------------------------------------------
+
+# Footer:
+**** Exercises
+[[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day1.org][targeted exercises day 1]]
+[[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day2.org][targeted exercises day 2]]
+[[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day3.org][targeted exercises day 3]]
+[[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day4.org][targeted exercises day 4]]
+**** Lecturenotes
+[[https://github.com/tagteam/registerTargets/blob/main/lecturenotes][lecture notes]]
+**** Goodies
+[[https://github.com/tagteam/registerTargets/blob/main/exercises/goodies][goodies]]

@@ -175,3 +175,16 @@ pop
 : 1:   1 2022-04-01   NA
 : 2:   2 2022-08-17   NA
 : 3:   3 2022-03-12   45
+
+------------------------------------------------------------------------------------------------------
+
+# Footer:
+**** Exercises
+[[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day1.org][targeted exercises day 1]]
+[[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day2.org][targeted exercises day 2]]
+[[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day3.org][targeted exercises day 3]]
+[[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day4.org][targeted exercises day 4]]
+**** Lecturenotes
+[[https://github.com/tagteam/registerTargets/blob/main/lecturenotes][lecture notes]]
+**** Goodies
+[[https://github.com/tagteam/registerTargets/blob/main/exercises/goodies][goodies]]

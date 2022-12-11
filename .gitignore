@@ -2,7 +2,6 @@
 /org/
 .Rproj.user
 .Rhistory
-targets.org
 *.Rproj
 meta
 /meta
