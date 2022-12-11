@@ -1,5 +1,4 @@
 #+TITLE: PhD course: Targeted Register Analysis: Exercises: Day 1
-#+setupfile:~/emacs-genome/snps/org-templates/setup-basic-stats-homepage.org
 
 * Objectives
 
@@ -19,7 +18,7 @@ how to prepare the remaining exercises. Please read in the following
 order:
 
 -  [[goodies/R-packages.org]]
--  [[goodies/R-studio.org]]]]
+-  [[goodies/R-studio.org]]
 -  [[goodies/R-functions.org]]
 -  [[goodies/targets.org]]
 Optional
@@ -137,7 +136,6 @@ tar_target(demo_table,{
 - Open and read the file =_targets.R=
 - Open and read the functions that are used in the pipeline.
 - Open the file =_run_targets.R= and work out the exercises defined there.
-
 
 
 
