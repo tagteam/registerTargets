@@ -1,52 +1,18 @@
-#+TITLE: PhD course: Targeted Register Analysis: Day 3
-#+setupfile:~/emacs-genome/snps/org-templates/setup-basic-stats-homepage.org
-* Modeling
+#+TITLE: PhD course: Targeted Register Analysis: Exercises: Day 3
 
-#+ATTR_LATEX: :options otherkeywords={}, deletekeywords={}
-#+BEGIN_SRC R  :results output raw drawer  :exports both  :session *R* :cache yes
-library(targets)
-library(data.table)
-library(Publish)
-source("code/synthesize_statins.R")
-cc <- fread("data/statin_coeffients.txt")
-CC <- cc[1:match("ASCVD_0",cc$variable),1:match("ASCVD_0",names(cc))]
-CC <- cc[1:match("Statins_0",cc$variable),1:match("Statins_0",names(cc))]
-## CC <- cc[1:match("age",cc$variable),1:match("age",names(cc))]
-m <- synthesize_statins(CC,continuous=list("age"=list(sd=10),"ldl"=list(sd=0.5)))
-n <- 100000
-d <- setDT(lava::sim(m,n))
-org(glm(Statins_0~age+sex,data=d,family="binomial"))
-org(glm(ldl~sex,data=d,family="gaussian"))
-org(glm(Statins_0~age+ldl+sex,data=d,family="binomial"))
-#+END_SRC
+* Objectives
 
-#+RESULTS[(2022-11-30 12:33:59) b94673be17f26797f6e123ec29aeb1ba62cc3899]:
-:results:
-| Variable    | Units |   OddsRatio | CI.95       | p-value  |
-|-------------+-------+-------------+-------------+----------|
-| age         |       |        0.97 | [0.96;0.98] | <0.0001  |
-| sex         |       |        1.00 | [0.97;1.03] | 0.9597   |
-| Variable    | Units | Coefficient | CI.95       | p-value  |
-|-------------+-------+-------------+-------------+----------|
-| (Intercept) |       |        3.04 | [3.03;3.05] | < 0.0001 |
-| sex         |       |        0.23 | [0.21;0.24] | < 0.0001 |
-| Variable    | Units |   OddsRatio | CI.95       | p-value  |
-|-------------+-------+-------------+-------------+----------|
-| age         |       |        0.98 | [0.96;0.99] | 0.001379 |
-| ldl         |       |        2.61 | [2.56;2.65] | < 0.0001 |
-| sex         |       |        0.80 | [0.77;0.83] | < 0.0001 |
-:end:
+The learning targets of this exercise are:
 
-# registerTargetFooter:
-**** Exercises
-[[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day1.org][targeted exercises day 1]]
-[[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day2.org][targeted exercises day 2]]
-[[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day3.org][targeted exercises day 3]]
-[[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day4.org][targeted exercises day 4]]
-**** Lecturenotes
-[[https://github.com/tagteam/registerTargets/blob/main/lecturenotes][lecture notes]]
-**** Goodies
-[[https://github.com/tagteam/registerTargets/blob/main/exercises/goodies][goodies]]
+- Search in register data using the R-package =data.table= 
+  and the R-functions =grep= and =grepl=
+- Maintain control using the R-package targets
+- Estimation of average treatment effects of a baseline intervention with baseline covariates: G-formula vs TMLE, glm vs superlearner
+
+* Exercise 1
+
+- Switch to the RStudio project called /ami/ that you have created in
+  Exercise 2 of Day 1.
 
 
 # Footer:

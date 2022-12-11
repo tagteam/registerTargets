@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  8 2022 (17:28) 
 ## Version: 
-## Last-Updated: Dec 11 2022 (09:42) 
+## Last-Updated: Dec 11 2022 (18:32) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 69
+##     Update #: 120
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -20,6 +20,9 @@ library(heaven)
 for (f in list.files("functions/",pattern = "R$",full.names = TRUE)){
     source(f)
 }
+for (f in list.files("secrets/",pattern = "R$",full.names = TRUE)){
+    source(f)
+}
 list(
     # the study period
     tar_target(study_start, as.Date("2000-01-01")),
@@ -32,115 +35,90 @@ list(
                              #calcium chanel blockers
                              ccb = c('C08'))),
     # define study population
-    tar_target(pop, get_pop(raw_lpr_file = "rawdata/lpr.csv",
-                            icd_codes = icd_codes)),
+    tar_target(pop, {
+        get_pop(raw_lpr_file = "rawdata/lpr.csv",
+                icd_codes = icd_codes)
+    },cue = tar_cue(mode = "always")),
     # lpr
     tar_target(como_list,{
-        icd_codes
-        lpr <- fread("rawdata/lpr.csv",
-                     keepLeadingZeros = TRUE,
-                     colClasses = c("character","character","Date"))
-        x = lapply(names(icd_codes),function(disease){
-            out = lpr[grep(paste0(paste0("^",icd_codes[[disease]]),collapse = "|"),diag)]
-            # remove duplicated entries with same admission date
-            out <- out[out[,.I[1],by=c("pnr","inddto")]$V1]
-            out[,X := disease]
-            out[]
-        })
-        names(x) = names(icd_codes)
-        x
-    }),
+        get_como_list(icd_codes = icd_codes,
+                      lpr = lpr)
+    },cue = tar_cue(mode = "always")),
     # lmdb
     tar_target(drug_list,{
-        lmdb <- fread("rawdata/lmdb.csv",
-                     keepLeadingZeros = TRUE,
-                     colClasses = c("character","Date","character"))
-        x = lapply(names(atc_codes),function(drug){
-            out = lmdb[grep(paste0(paste0("^",atc_codes[[drug]]),collapse = "|"),atc)]
-            # remove duplicated entries with same admission date
-            out <- out[out[,.I[1],by=c("pnr","eksd")]$V1]
-            out[,X := drug]
-            out[]
-        })
-        names(x) = names(atc_codes)
-        x
-    }),
+        get_drug_list(atc_codes = atc_codes)
+    },cue = tar_cue(mode = "always")),
     # add demographics and apply exclusion
-    tar_target(study_pop,{
+    tar_target(study_pop,
+               get_study_pop(pop = pop,
+                             raw_cpr_file = "rawdata/cpr.csv")),
+    # add demographics and apply exclusion
+    tar_target(secret_study_pop,{
         sgs = secret_get_study_pop(pop = pop,
                                    study_start = study_start,
                                    study_end = study_end,
                                    raw_cpr_file = "rawdata/cpr.csv")
+        ## cheating time for day 2
+        sgsmod = copy(sgs)
+        sgsmod[,max := as.numeric(death_date-index)]
+        sgsmod[!is.na(death_date)&1*(death_date-index)<8*365.25&sex == "Female",death_date := death_date-runif(.N,1,max)]
+        sgsmod[!is.na(death_date)&1*(death_date-index)<5*365.25&sex == "Male",death_date := death_date+runif(.N,1,.6*365.25)]
+        sgsmod[end_fup<death_date,end_fup := pmin(death_date,as.Date("2022-12-12"))]
+        sgsmod[end_fup<death_date,death_date := NA]
+        sgsmod[,time := as.numeric(end_fup-index)/365.25]
+        sgsmod[,event := 0]
+        sgsmod[!is.na(death_date),event := 1]
+        library(prodlim)
+        fit <- prodlim(Hist(time,event)~sex,data = sgsmod)
+        u = summary(fit,percent = TRUE,surv = FALSE,times = c(1,5,10))[,c("time","sex","cuminc")]
+        setDT(u)
+        print(dcast(u,sex~time,value.var = "cuminc",fun = mean))
+        sgsmod[,time := NULL]
+        sgsmod[,max := NULL]
+        sgsmod[,event := NULL]
         message("saving popamis data file")
-        fwrite(sgs,file = "~/metropolis/Teaching/targetedRegisterAnalysis/exercises/spaghetti/popami.csv")
+        ## fwrite(sgs,file = "~/metropolis/Teaching/targetedRegisterAnalysis/exercises/spaghetti/popami.csv")
+        fwrite(sgsmod,file = "~/metropolis/Teaching/targetedRegisterAnalysis/exercises/spaghetti/popami.csv")
         sgs[]
-               
-    }),
+    },cue = tar_cue(mode = "always")),
     # baseline characteristics
     tar_target(table1,
-               make_table1(study_pop),
+               make_table1(study_pop = study_pop),
                packages = "Publish"),
     # day 2
-    tar_target(baseline_pop,{
-        # select relevant variables from study_pop
-        baseline_pop = study_pop[,.(pnr,index,sex,age,end_fup,death_date)]
-        # define event time
-        baseline_pop[,time := as.numeric(end_fup-index)/365.25]
-        baseline_pop[,event := 0]
-        baseline_pop[!is.na(death_date),event := 1]
-        setkey(baseline_pop,pnr,index)
-        # restrict to relevant variables 
-        baseline_pop = baseline_pop[,.(pnr,index,sex,age,time,event)]
-        # loop across comorbidities to extract values at index (baseline, start of followup)
-        for (como in names(como_list)){
-            como_dat = como_list[[como]]
-            # rename inddto to index in order to roll the join
-            setnames(como_dat,"inddto","index")
-            setkey(como_dat,pnr,index)
-            baseline_pop = como_dat[,.(pnr,index,X)][baseline_pop,roll = TRUE]
-            set(baseline_pop,j = como,value = ifelse(is.na(baseline_pop$X),"No","Yes"))
-            baseline_pop[,X := NULL]
-            baseline_pop
-        }
-        # loop across drugs to extract exposure 180 days before index (baseline, start of followup)
-        for (drug in names(drug_list)){
-            drug_dat = drug_list[[drug]]
-            # rename inddto to index in order to roll the join
-            setnames(drug_dat,"eksd","index")
-            setkey(drug_dat,pnr,index)
-            baseline_pop = drug_dat[,.(pnr,index,X)][baseline_pop,roll = 180]
-            set(baseline_pop,j = drug,value = ifelse(is.na(baseline_pop$X),"No","Yes"))
-            baseline_pop[,X := NULL]
-            baseline_pop
-        }
-        baseline_pop[]
+    tar_target(secret_baseline_pop,{
+        secret_get_baseline_pop(study_pop = secret_study_pop,
+                                como_list = como_list,
+                                drug_list = drug_list)
     }),
     # more baseline characteristics
     tar_target(day2_table1,
-               day2_make_table1(baseline_pop = baseline_pop),
+               day2_make_table1(baseline_pop = secret_baseline_pop),
                packages = "Publish"),
     # Cox regression
     tar_target(hazard_ratio,{
+        secret_baseline_pop[,mean(event),by = "bb"]
+        secret_baseline_pop[bb == "Yes"&event == 1,.(pnr)]
         fit = coxph(Surv(time,event)~bb+age+sex+any.malignancy+diabetes.with.complications,
-                    data = baseline_pop)
-        fit$call$data <- baseline_pop
+                    data = secret_baseline_pop)
+        fit$call$data <- secret_baseline_pop
         publish(fit)
     }, packages = c("survival","Publish")),
     # average treatment effect
     tar_target(risk_ratio,{
         fit = coxph(Surv(time,event)~bb+age+sex+any.malignancy+diabetes.with.complications,
-                    data = baseline_pop,x = TRUE)
-        x = ate(fit,data = baseline_pop,treatment = "bb",times = c(5,10,15),verbose = FALSE)
+                    data = secret_baseline_pop,x = TRUE)
+        x = ate(fit,data = secret_baseline_pop,treatment = "bb",times = c(5,10,15),verbose = FALSE)
         x$ratioRisk[]
     }, packages = c("survival","riskRegression")),
     # day 3
     # random forests
     tar_target(forest,{
         # pseudo value
-        km = prodlim(Hist(time,event)~1,data = baseline_pop)
-        baseline_pop[,pseudo5:= jackknife(km,times = 5)]
+        km = prodlim(Hist(time,event)~1,data = secret_baseline_pop)
+        secret_baseline_pop[,pseudo5:= jackknife(km,times = 5)]
         forest5 = ranger(pseudo5~bb+age+sex+any.malignancy+diabetes.with.complications,
-                     data = baseline_pop,num.trees = 50)
+                         data = secret_baseline_pop,num.trees = 50)
         forest5
     }, packages = c("prodlim","survival","ranger"))    
 )

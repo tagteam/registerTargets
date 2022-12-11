@@ -1,15 +1,12 @@
-#+TITLE: PhD course: Targeted Register Analysis: Day 2
-#+setupfile:~/emacs-genome/snps/org-templates/setup-basic-stats-homepage.org
+#+TITLE: PhD course: Targeted Register Analysis: Exercises: Day 2
 
 * Objectives
 
 The learning targets of this exercise are:
 
+- Using the R-package =targets= 
 - Writing functions in R
-- Search in register data using the R-package =data.table= 
-  and the R-functions =grep= and =grepl=
-- Register Survival Analysis: followup time, rates versus absolute risks
-- Average treatment effect: G-formula and TMLE
+- Register survival analysis: followup time, rates versus absolute risks
 
 ----------------------------------------------------------------------
 
@@ -22,8 +19,7 @@ t-year risk ratios.
 
 Translate the R-codes of the file [[spaghetti/rate-versus-risks.R]]  into a new targets project as follows:
 
-
-1. Create a new empty folder for the project.
+1. Create a new empty folder for the new project.
 2. Create three subfolders called =data=, =functions=, =figures=
 3. Create a new RStudio project in this new folder (see exercise 2 of day 1).
 4. Create the file =_targets.R= in this new folder
@@ -35,14 +31,6 @@ Translate the R-codes of the file [[spaghetti/rate-versus-risks.R]]  into a new 
    copying/translating all the remaining R-codes into targets.  Don't
    do add all of the targets at once. Add them one-by-one and check in
    between if =tar_make()= runs without errors.
-
-----------------------------------------------------------------------
-
-* Exercise 2
-
-- Switch to the RStudio project called /ami/ that you have created in Exercise 2 of Day 1.
- 
-
 
 
 # Footer:

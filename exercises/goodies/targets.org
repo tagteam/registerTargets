@@ -1,5 +1,20 @@
 * The R-package targets
 
+The R package =targets= has many features and the following potentials for register data research projects:
+
+- pipeline: from reading of raw data to tables and figures, it is made explicitly clear in which order the steps of the analysis are executed and how they depend on each other
+- reproducibility: all results are reproducible including the random ones, e.g., bootstrap or simulation
+- efficiency: it is easy to load previously run data or results  
+
+The main source of information is the online manual:
+
+https://github.com/ropensci/targets
+
+** The _targets.R file
+
+A targets project is defined by an R-script called =_targets.R=. The
+=_targets.R= file contains the pipeline.
+
 ** Before the pipeline
 
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes
@@ -93,6 +108,12 @@ tar_meta(fields=c("type","seed","time","size","warnings"))
 #+END_SRC
 
 [[../targeted-exercises-day2.org]]
+
+** Controlling dependencies
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+tar_target(name,{body},cue = tar_cue(mode = "never"))
+tar_target(name,{body},cue = tar_cue(mode = "always"))
+#+END_SRC
 
 
 # Footer:

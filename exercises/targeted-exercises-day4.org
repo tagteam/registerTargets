@@ -1,5 +1,4 @@
-#+TITLE: PhD course: Targeted Register Analysis: Day 4
-#+setupfile:~/emacs-genome/snps/org-templates/setup-basic-stats-homepage.org
+#+TITLE: PhD course: Targeted Register Analysis: Exercises: Day 4
 
 * Objectives
 
@@ -7,17 +6,18 @@ The learning targets of this exercise are:
 
 - Review a working analysis using longitudinal targeted minimum loss estimation (=ltmle=)
 - Modify the analysis according to variations of the target parameters
-- Modify the analysis to work with competing risks
 
-** Exercise 1
+------------------------------------------------------------------------------------------------------
+
+* Exercise 1
 
 - Switch to the RStudio project /statins/ (e.g., via recent projects)
 - Open the file =_targets.R= (e.g., via "Control-Shift f" eller "Control .") 
 - Read the file =_targets.R=
 - Open and work through the file =run_targets.R= then continue here
-- Reports the results from the analysis conclusion sentence(s) which explain the target parameters and contain the =ltmle= estimates with 95% confidence intervals.
+- Reports the results from the analysis in one or several conclusion sentence(s) which explain the target parameters and contain the =ltmle= estimates with 95% confidence intervals.
   
-** Exercise 2
+* Exercise 2
 
 - Change the analysis to use =glm= instead of =glmnet=
 - Subset the analysis 
