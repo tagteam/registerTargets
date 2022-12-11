@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  7 2022 (11:31) 
 ## Version: 
-## Last-Updated: Dec  9 2022 (08:23) 
+## Last-Updated: Dec 11 2022 (19:05) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 6
+##     Update #: 7
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -35,7 +35,8 @@ t1
 # function name and press F2). Find the comment # exclusion criteria
 # and enter the following lines (add comments that explain what these lines do)
 # and adapt the arguments of the function =get_study_pop=  
-# such the errors that occur due to these
+# such that the errors disappear. I.e., add two new arguments
+# 'study_start' and 'study_end'
 study_pop <- study_pop[index >= study_start]
 study_pop <- study_pop[index <= study_end]
 study_pop[,end_fup := pmin(emigration_date,death_date,study_end)]
