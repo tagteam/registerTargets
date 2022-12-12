@@ -5,7 +5,7 @@ version =4.2.1= and RStudio version =2022.07.2+576=. The versions of
 the most important R-packages are:
 
 #+BEGIN_SRC R  :results output   :exports  (exercise-with-code)  :session *R* :cache yes
-course_packages  <- c("devtools","targets","data.table","ranger","glmnet","Publish","lava","riskRegression","matrixStats","ggplot2","survival","prodlim","heaven")
+course_packages  <- c("devtools","targets","SuperLearner","tmle","data.table","ranger","glmnet","Publish","lava","riskRegression","matrixStats","ggplot2","survival","prodlim","heaven")
 for (p in course_packages){
   v=packageVersion(p)
   cat(paste(p,":",v,"\n"))
@@ -15,6 +15,8 @@ for (p in course_packages){
 #+begin_example
 devtools : 2.4.5 
 targets : 0.14.1 
+SuperLearner : 2.0.28 
+tmle : 1.5.0.2 
 data.table : 1.14.6 
 ranger : 0.14.1 
 glmnet : 4.1.4 
@@ -27,6 +29,7 @@ survival : 3.4.0
 prodlim : 2022.10.13 
 heaven : 2022.7.13
 #+end_example
+
 
 You may have different versions installed on your computer and whether
 this is the case can be useful knowlegde. If at some point the
@@ -54,6 +57,8 @@ if (!require("devtools",quietly=TRUE)) install.packages("devtools")
 if (!require("targets",quietly=TRUE)) install.packages("targets")
 if (!require("data.table",quietly=TRUE)) install.packages("data.table")
 if (!require("ranger",quietly=TRUE)) install.packages("ranger")
+if (!require("SuperLearner",quietly=TRUE)) install.packages("SuperLearner")
+if (!require("tmle",quietly=TRUE)) install.packages("tmle")
 if (!require("glmnet",quietly=TRUE)) install.packages("glmnet")
 if (!require("Publish",quietly=TRUE)) install.packages("Publish")
 if (!require("lava",quietly=TRUE)) install.packages("lava")
