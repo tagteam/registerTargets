@@ -2,6 +2,12 @@
 
 Here you find the material for our PhD course 'Targeted Register Analysis'.
 
+** Venu
+
+CSS-22-0-19, Øster Farimagsgade 5, 1014 Copenhagen. See map of CSS:
+
+https://publichealth.ku.dk/contact/
+
 ** Schedule
 
 |-----------+----------------+-------------------------------------------------------------------------------------------|
