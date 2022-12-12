@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  8 2022 (17:28) 
 ## Version: 
-## Last-Updated: Dec 11 2022 (19:34) 
+## Last-Updated: Dec 12 2022 (06:21) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 124
+##     Update #: 128
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -30,10 +30,36 @@ list(
     # hospital admissions: outcome and comorbidities
     tar_target(icd_codes, heaven::charlson.codes),
     # prescription data: exposure and comedicine 
-    tar_target(atc_codes,list(#beta blockers
+    tar_target(atc_codes,list(
+                             #beta blockers
                              bb = c('C07'),
                              #calcium chanel blockers
-                             ccb = c('C08'))),
+                             ccb = c('C08'),
+                             #RAS inhibitors
+                             rasi = c('C09'),
+                             #Thiazid
+                             thiazid = c('C03A'),
+                             #Loop diurestics
+                             loop = c('C03C', 'C03EB'),
+                             #Mineralcorticoid receptor antagonister
+                             mra = c('C03D'),
+                             #Digoxin
+                             digoxin = c('C01AA05'),
+                             #Statins
+                             statin = c('C10A', 'A10BH51', 'A10BH52'),
+                             #Acetylsalicylic acid (aspirin)
+                             asa = c('B01AC06', 'N02BA01'),
+                             #ADP receptor inhibitor
+                             adpi = c('B01AC'),
+                             #Vitamin K antagonists
+                             vka = c('B01AA'),
+                             # copd
+                             copd_med = c('R03BA', paste0('R03AK0',c(6:9)),paste0('R03AK', c(10:12)), paste0('R03AL0', c(8:9)),'R03AC', paste0('R03AK0', c(6:9)), paste0('R03AK', c(10:13)), paste0('R03AL0', c(1:9)),'R03BB'),
+                             # dementia
+                             dementia_med='N06D',
+                             #new oral anti-coagulents
+                             noac = c('B01AF')
+                         )),
     # define study population
     tar_target(pop, {
         get_pop(raw_lpr_file = "rawdata/lpr.csv",
@@ -63,7 +89,7 @@ list(
     tar_target(table1,
                make_table1(study_pop = study_pop),
                packages = "Publish"),
-    # with exclusion
+    # day1: with exclusion
     tar_target(secret_table1,
                make_table1(study_pop = secret_study_pop),
                packages = "Publish"),
@@ -79,8 +105,6 @@ list(
                packages = "Publish"),
     # Cox regression
     tar_target(hazard_ratio,{
-        secret_baseline_pop[,mean(event),by = "bb"]
-        secret_baseline_pop[bb == "Yes"&event == 1,.(pnr)]
         fit = coxph(Surv(time,event)~bb+age+sex+any.malignancy+diabetes.with.complications,
                     data = secret_baseline_pop)
         fit$call$data <- secret_baseline_pop

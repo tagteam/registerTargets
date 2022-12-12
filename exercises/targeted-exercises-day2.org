@@ -20,18 +20,31 @@ t-year risk ratios.
 Translate the R-codes of the file [[spaghetti/rate-versus-risks.R]]  into a new targets project as follows:
 
 1. Create a new empty folder for the new project.
-2. Create three subfolders called =data=, =functions=, =figures=
-3. Create a new RStudio project in this new folder (see exercise 2 of day 1).
+2. Create three subfolders called =data=, =functions=, =figures=, =tables=
+3. Create a new RStudio project in this new folder (see exercise 2 of day 1). Switch to this new project.
 4. Create the file =_targets.R= in this new folder
-5. Copy the data that are read by [[spaghetti/rate-versus-risks.R]] to the new subfolder =data=
-6. Copy all functions from the file  [[spaghetti/rate-versus-risks.R]] to the new subfolder =functions=
-7. Create the targets pipeline in the file =_targets.R= by:
+5. Create the file called =run_targets.R= in this new folder
+6. Copy the data that are read by [[spaghetti/rate-versus-risks.R]] to the new subfolder =data=
+7. Copy all functions from the file  [[spaghetti/rate-versus-risks.R]] to the new subfolder =functions=
+8. Create the targets pipeline in the file =_targets.R= by:
    + writing =library(targets)=
    + sourcing all functions from the subfolder =functions= (see 
    copying/translating all the remaining R-codes into targets.  Don't
    do add all of the targets at once. Add them one-by-one and check in
    between if =tar_make()= runs without errors.
-
+9. Copy all the leftovers (such as =str(pop)= and =table(pop$event)=)
+   into the file =run_targets.R=. The file =run_targets.R= should
+   run the following lines without errors:
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+library(targets)
+tar_make()
+tar_load(tableRR)
+fwrite(tableRR,file="tables/tableRR.csv")
+tar_load(km)
+pdf("figures/Kaplan-Meier-plot.pdf")
+plot(km)
+dev.off()
+#+END_SRC
 
 # Footer:
 ------------------------------------------------------------------------------------------------------
