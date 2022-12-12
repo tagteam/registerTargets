@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  7 2022 (11:18) 
 ## Version: 
-## Last-Updated: Dec  8 2022 (14:14) 
+## Last-Updated: Dec 12 2022 (08:02) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 8
+##     Update #: 9
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -20,7 +20,7 @@ for (f in list.files("functions/",
                      pattern = "R$",
                      recursive=TRUE,
                      full.names = TRUE)){source(f)}
-list(
+ list(
     tar_target(N,{10000}),
     tar_target(data,{
         m = sample_statins_data()

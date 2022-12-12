@@ -46,5 +46,5 @@ https://support.posit.co/hc/en-us/articles/200710523-Navigating-Code-in-the-RStu
 - [[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day2.org][targeted exercises day 2]]
 - [[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day3.org][targeted exercises day 3]]
 - [[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day4.org][targeted exercises day 4]]
-- [[https://github.com/tagteam/registerTargets/blob/main/lecturenotes][lecture notes]]
+- [[https://github.com/tagteam/registerTargets/blob/main/lecture_notes][lecture notes]]
 - [[https://github.com/tagteam/registerTargets/blob/main/exercises/goodies][goodies]]
