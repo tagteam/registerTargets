@@ -20,8 +20,8 @@ https://publichealth.ku.dk/contact/
 *** Tuesday 2022-12-13
 |----------------+-------------------------------------------------------------------+------------------------|
 | 8:15 -- 11:00  | Lectures on The Roadmap of Targeted Learning (with coffee breaks) | Andrew Mertens         |
-| 11:15 -- 11:45 | Introduction to exercises Thomas Alexander Gerds                  | Thomas Alexander Gerds |
-| 12:30 -- 14:30 | Exercises Thomas Alexander Gerds                                  |                        |
+| 11:15 -- 11:45 | Introduction to exercises                                         | Thomas Alexander Gerds |
+| 12:30 -- 14:30 | Exercises                                                         |                        |
 |----------------+-------------------------------------------------------------------+------------------------|
 
 *** Wednesday 2022-12-14
