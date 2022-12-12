@@ -11,32 +11,32 @@ https://publichealth.ku.dk/contact/
 ** Schedule
 
 *** Monday 2022-12-12
-|----------------+-------------------------------------------------------------------------------------------|
-| 8:15 -- 8:20   | introduction by Thomas Alexander Gerds                                                    |
-| 8:20 -- 11:00  | lectures by Christian Torp-Pedersen on Register Epidemiology (with coffee breaks)         |
-| 11:15 -- 11:45 | introduction to exercises Thomas Alexander Gerds                                          |
-| 12:30 -- 14:30 | exercises Thomas Alexander Gerds                                                          |
+|----------------+--------------------------------------------------------+-------------------------|
+| 8:15 -- 8:20   | Introduction to the course                             | Thomas Alexander Gerds  |
+| 8:20 -- 11:00  | Lectures on Register Epidemiology (with coffee breaks) | Christian Torp-Pedersen |
+| 11:15 -- 11:45 | Introduction to exercises                              | Thomas Alexander Gerds  |
+| 12:30 -- 14:30 | Exercises                                              |                         |
 
 *** Tuesday 2022-12-13
-|----------------+-------------------------------------------------------------------------------------------|
-| 8:15 -- 11:00  | lectures by Andrew Mertens on The Roadmap of Targeted Learning (with coffee breaks)       |
-| 11:15 -- 11:45 | introduction to exercises Thomas Alexander Gerds                                          |
-| 12:30 -- 14:30 | exercises Thomas Alexander Gerds                                                          |
-|----------------+-------------------------------------------------------------------------------------------|
+|----------------+-------------------------------------------------------------------+------------------------|
+| 8:15 -- 11:00  | Lectures on The Roadmap of Targeted Learning (with coffee breaks) | Andrew Mertens         |
+| 11:15 -- 11:45 | Introduction to exercises Thomas Alexander Gerds                  | Thomas Alexander Gerds |
+| 12:30 -- 14:30 | Exercises Thomas Alexander Gerds                                  |                        |
+|----------------+-------------------------------------------------------------------+------------------------|
 
 *** Wednesday 2022-12-14
-|----------------+-------------------------------------------------------------------------------------------|
-| 8:15 -- 11:00  | lectures by Marvin N. Wright on Machine Learning in Register Data (with coffee breaks)    |
-| 11:15 -- 11:45 | introduction to exercises Thomas Alexander Gerds                                          |
-| 12:30 -- 14:30 | exercises Thomas Alexander Gerds                                                          |
-|----------------+-------------------------------------------------------------------------------------------|
+|----------------+--------------------------------------------------------------------+------------------------|
+| 8:15 -- 11:00  | Lectures on Machine Learning in Register Data (with coffee breaks) | Marvin N. Wright       |
+| 11:15 -- 11:45 | Introduction to exercises                                          | Thomas Alexander Gerds |
+| 12:30 -- 14:30 | Exercises                                                          |                        |
+|----------------+--------------------------------------------------------------------+------------------------|
 
 *** Thursday 2022-12-15
-|----------------+-------------------------------------------------------------------------------------------|
-| 8:15 -- 11:00  | lectures by Zeyi Wang on Longitudinal Targeted Minimum Loss Learning (with coffee breaks) |
-| 11:15 -- 11:45 | introduction to exercises Thomas Alexander Gerds                                          |
-| 12:30 -- 14:30 | exercises Thomas Alexander Gerds                                                          |
-|----------------+-------------------------------------------------------------------------------------------|
+|----------------+------------------------------------------------------------------------------+------------------------|
+| 8:15 -- 11:00  | Lectures on Longitudinal Targeted Minimum Loss Learning (with coffee breaks) | Zeyi Wang              |
+| 11:15 -- 11:45 | Introduction to exercises                                                    | Thomas Alexander Gerds |
+| 12:30 -- 14:30 | Exercises                                                                    |                        |
+|----------------+------------------------------------------------------------------------------+------------------------|
 
 # Footer:
 ------------------------------------------------------------------------------------------------------
