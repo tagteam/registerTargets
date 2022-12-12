@@ -4,23 +4,24 @@ Here you find the material for our PhD course 'Targeted Register Analysis'.
 
 ** Schedule
 
-|------------+---------------------------------------------------------------------------------------------------------|
-| Monday:    | 8:15 -- 8:20 | introduction by Thomas Alexander Gerds                                                    |
-| Monday:    | 8:20 -- 11:00 | lectures by Christian Torp-Pedersen on Register Epidemiology (with coffee breaks)        |
-| Monday:    | 11:15 -- 11:45 | introduction to exercises Thomas Alexander Gerds                                        |
-| Monday:    | 12:30 -- 14:30 | exercises Thomas Alexander Gerds                                                        |
-|------------+---------------------------------------------------------------------------------------------------------|
-| Tuesday:   | 8:15 -- 11:00 | lectures by Andrew Mertens on The Roadmap of Targeted Learning (with coffee breaks)      |
-| Tuesday:   | 11:15 -- 11:45 | introduction to exercises Thomas Alexander Gerds                                        |
-| Tuesday:   | 12:30 -- 14:30 | exercises Thomas Alexander Gerds                                                        |
-|------------+---------------------------------------------------------------------------------------------------------|
-| Wednesday: | 8:15 -- 11:00 | lectures by Marvin N. Wright on Machine Learning in Register Data (with coffee breaks)   |
-| Wednesday: | 11:15 -- 11:45 | introduction to exercises Thomas Alexander Gerds                                        |
-| Wednesday: | 12:30 -- 14:30 | exercises Thomas Alexander Gerds                                                        |
-|------------+---------------------------------------------------------------------------------------------------------|
-| Thursday:  | 8:15 -- 11:00 | lectures by Zeyi Wang on Longitudinal Targeted Minimum Loss Learning (with coffee breaks) |
-| Thursday:  | 11:15 -- 11:45 | introduction to exercises Thomas Alexander Gerds                                        |
-| Thursday:  | 12:30 -- 14:30 | exercises Thomas Alexander Gerds                                                        |
+|-----------+----------------+-------------------------------------------------------------------------------------------|
+| Monday    | 8:15 -- 8:20   | introduction by Thomas Alexander Gerds                                                    |
+| Monday    | 8:20 -- 11:00  | lectures by Christian Torp-Pedersen on Register Epidemiology (with coffee breaks)         |
+| Monday    | 11:15 -- 11:45 | introduction to exercises Thomas Alexander Gerds                                          |
+| Monday    | 12:30 -- 14:30 | exercises Thomas Alexander Gerds                                                          |
+|-----------+----------------+-------------------------------------------------------------------------------------------|
+| Tuesday   | 8:15 -- 11:00  | lectures by Andrew Mertens on The Roadmap of Targeted Learning (with coffee breaks)       |
+| Tuesday   | 11:15 -- 11:45 | introduction to exercises Thomas Alexander Gerds                                          |
+| Tuesday   | 12:30 -- 14:30 | exercises Thomas Alexander Gerds                                                          |
+|-----------+----------------+-------------------------------------------------------------------------------------------|
+| Wednesday | 8:15 -- 11:00  | lectures by Marvin N. Wright on Machine Learning in Register Data (with coffee breaks)    |
+| Wednesday | 11:15 -- 11:45 | introduction to exercises Thomas Alexander Gerds                                          |
+| Wednesday | 12:30 -- 14:30 | exercises Thomas Alexander Gerds                                                          |
+|-----------+----------------+-------------------------------------------------------------------------------------------|
+| Thursday  | 8:15 -- 11:00  | lectures by Zeyi Wang on Longitudinal Targeted Minimum Loss Learning (with coffee breaks) |
+| Thursday  | 11:15 -- 11:45 | introduction to exercises Thomas Alexander Gerds                                          |
+| Thursday  | 12:30 -- 14:30 | exercises Thomas Alexander Gerds                                                          |
+|-----------+----------------+-------------------------------------------------------------------------------------------|
 
 # Footer:
 ------------------------------------------------------------------------------------------------------
