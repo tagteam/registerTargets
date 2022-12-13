@@ -7,9 +7,7 @@ The learning targets of this exercise are:
 - Search in register data using the R-package =data.table= 
   and the R-functions =grep= and =grepl=
 - Maintain control using the R-package targets
-- Estimation of average treatment effects of a baseline intervention
-  with baseline covariates: G-formula with glm learner (TMLE with
-  superlearner on day 4).
+- Extract lists of comorbidities and comedicine 
 
 * Exercise 1
 
@@ -170,16 +168,164 @@ get_como_list(icd_codes=list("MI"=c("410","DI21","DI22"),
 # lets do all of them:
 get_como_list(icd_codes=heaven::charlson.codes)
 #+END_SRC
-- Now, add the following target to the pipeline in the file [[ami/_targets.R]]:
-#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+- If this works (here in this file) and yields a list of
+  comorbidities, then You can add the following targets to
+ the pipeline in the file [[ami/_targets.R]]
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes
+ tar_target(icd_codes, heaven::charlson.codes),
 tar_target(como_list,{
   get_como_list(icd_codes = icd_codes,lpr = lpr)
-},cue = tar_cue(mode = "always"))
+})
 #+END_SRC
-  
-
-
-
+- Similarly, we extract comedicine from the prescription register. Here
+  is the function which you should save as =functions/get_drug_list.R=:
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+get_drug_list <- function(atc_codes){
+    lmdb <- fread("rawdata/lmdb.csv",
+                  keepLeadingZeros = TRUE,
+                  colClasses = c("character","Date","character"))
+    x = lapply(names(atc_codes),function(drug){
+        out = lmdb[grep(paste0(paste0("^",atc_codes[[drug]]),collapse = "|"),atc)]
+        # remove duplicated entries with same admission date
+        out <- out[out[,.I[1],by=c("pnr","eksd")]$V1]
+        out[,X := drug]
+        out[]
+    })
+    names(x) = names(atc_codes)
+    x
+}
+#+END_SRC  
+- And here are the targets that you should add to the pipeline in the file [[ami/_targets.R]]
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+tar_target(atc_codes,list(
+                       #beta blockers
+                       bb = c('C07'),
+                       #calcium chanel blockers
+                       ccb = c('C08'),
+                       #RAS inhibitors
+                       rasi = c('C09'),
+                       #Thiazid
+                       thiazid = c('C03A'),
+                       #Loop diurestics
+                       loop = c('C03C', 'C03EB'),
+                       #Mineralcorticoid receptor antagonister
+                       mra = c('C03D'),
+                       #Digoxin
+                       digoxin = c('C01AA05'),
+                       #Statins
+                       statin = c('C10A', 'A10BH51', 'A10BH52'),
+                       #Acetylsalicylic acid (aspirin)
+                       asa = c('B01AC06', 'N02BA01'),
+                       #ADP receptor inhibitor
+                       adpi = c('B01AC'),
+                       #Vitamin K antagonists
+                       vka = c('B01AA'),
+                       # copd
+                       copd_med = c('R03BA', paste0('R03AK0',c(6:9)),paste0('R03AK', c(10:12)), paste0('R03AL0', c(8:9)),'R03AC', paste0('R03AK0', c(6:9)), paste0('R03AK', c(10:13)), paste0('R03AL0', c(1:9)),'R03BB'),
+                       # dementia
+                       dementia_med='N06D',
+                       #new oral anti-coagulents
+                       noac = c('B01AF')
+                     ))
+tar_target(drug_list,{
+  get_drug_list(atc_codes = atc_codes)
+})
+#+END_SRC  
+- Next we aim to make a wide format data set to update the baseline
+  table. For all individuals in the =study_pop= we want the comorbidy
+  and comedicine status at the index date.  We have to admit that we
+  cannot look all the way back in time due to the limitations of the
+  start date of the registers, and in particular not for immigrants.
+  But, we should always look back exactly the same amount for all
+  individuals in our population. Here is how to look back in time
+  for 10 years when looking for COPD status at index:
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+tar_load(study_pop)
+setkey(study_pop,pnr,index)
+como <- get_como_list(icd_codes=list("COPD"=heaven::charlson.codes[["chronic.pulmonary.disease"]]))
+names(como$COPD)
+# rename the date variable to the same name as in the study pop: "index"
+setnames(como$COPD,"inddto","index")
+setkey(como$COPD,pnr,index)
+study_pop_wide <- como$COPD[study_pop,roll=10*365.25]
+study_pop_wide[is.na(X),X:="No COPD"]
+study_pop_wide[,table(X)]
+## COPD No COPD 
+## 13    3819
+#+END_SRC
+- This shows that 13 individuals have had a COPD diagnosis within
+  10 years before the index date.
+- Similarly, we extract the baseline status of the beta blockers    
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+tar_load(study_pop)
+setkey(study_pop,pnr,index)
+comed <- get_drug_list(atc_codes=list("bb" = c('C07')))
+names(comed$bb)
+# rename the date variable to the same name as in the study pop: "index"
+setnames(comed$bb,"eksd","index")
+setkey(comed$bb,pnr,index)
+# for drugs we look back 180 days
+study_pop_wide <- comed$bb[study_pop,roll=180]
+study_pop_wide[is.na(X),X:="No bb"]
+study_pop_wide[,table(X)]
+## COPD No COPD 
+## 1335    2497
+#+END_SRC
+- In this way we can add all comorbidities and all drugs to one big wide_format data set.
+  Save the following function as =functions/get_wide_baseline_pop.R=
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+get_wide_baseline_pop <- function(study_pop,como_list,drug_list){
+    # select relevant variables from study_pop
+    baseline_pop = study_pop[,.(pnr,index,sex,age,end_fup,death_date)]
+    # define event time
+    baseline_pop[,time := as.numeric(end_fup-index)/365.25]
+    baseline_pop[,event := 0]
+    baseline_pop[!is.na(death_date),event := 1]
+    setkey(baseline_pop,pnr,index)
+    # restrict to relevant variables 
+    baseline_pop = baseline_pop[,.(pnr,index,sex,age,time,event)]
+    # loop across comorbidities to extract values at index (baseline, start of followup)
+    for (como in names(como_list)){
+        como_dat = como_list[[como]]
+        # rename inddto to index in order to roll the join
+        setnames(como_dat,"inddto","index")
+        setkey(como_dat,pnr,index)
+        baseline_pop = como_dat[,.(pnr,index,X)][baseline_pop,roll = TRUE]
+        set(baseline_pop,j = como,value = ifelse(is.na(baseline_pop$X),"No","Yes"))
+        baseline_pop[,X := NULL]
+        baseline_pop
+    }
+    # loop across drugs to extract exposure 180 days before index (baseline, start of followup)
+    for (drug in names(drug_list)){
+        drug_dat = drug_list[[drug]]
+        # rename inddto to index in order to roll the join
+        setnames(drug_dat,"eksd","index")
+        setkey(drug_dat,pnr,index)
+        baseline_pop = drug_dat[,.(pnr,index,X)][baseline_pop,roll = 180]
+        set(baseline_pop,j = drug,value = ifelse(is.na(baseline_pop$X),"No","Yes"))
+        baseline_pop[,X := NULL]
+        baseline_pop
+    }
+    q = baseline_pop[bb == "Yes"&event == 1,.(pnr,bb,event)]
+    baseline_pop[]
+}
+#+END_SRC
+- Add the following target:
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+tar_target(wide_baseline_pop,{
+  get_wide_baseline_pop(study_pop = study_pop,
+                como_list = como_list,
+                drug_list = drug_list)
+})
+#+END_SRC
+- Finally, adapt the target for table 1 to use =wide_baseline_pop= and change the
+  function =make_table1= such that the table
+  includes several drugs and comorbidities. E.g.,
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+    t1 <- utable(sex~age+ myocardial.infarction + heart.failure + renal.disease + any.malignancy + lymphoma + bb + cbb + statins,
+                 data = wide_baseline_pop)
+    summary(t1,drop.reference = "binary")
+#+END_SRC
 
 # Footer:
 ------------------------------------------------------------------------------------------------------
