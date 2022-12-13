@@ -11,9 +11,106 @@ The learning targets of this exercise are:
 
 * Exercise 1
 
+For the R-exercises of this course we use =data.table= format for
+datasets, because =data.table= is perfectly suited for register data:
+it is fast and memory efficient. However, it is totally fine if you
+prefer to work with =tidyverse/dplyr/tibble= or ordinary =data.frame=,
+just use =as_tibble()= and =as.data.frame= to transform the
+=data.tables= after reading with =data.table::fread= when you work out
+the exercises. Please read in the following order:
+
+-  [[goodies/data.table_teaser.org]]
+-  [[goodies/Searching-with-grep.org]]
+  
+* Exercise 2
+
+It is useful to extract the information that is registered for the
+individuals of the current study population from the different
+registers. In this exercise we work with simulated prescription data
+and simulated hospital admission data. The aim is explain a concept of
+data preparation which avoids the wide data format until the very last
+moment where it is in fact required. The wide format is characterized
+by many columns that are not needed for all analyses and many missing
+values. The wide format has the obvious disadvantage of being memory
+inefficient (unused columns with many missing values) and it disables
+a clear view on the used part of the dataset. In this exercise we work
+with a concept which extracts study population values from the
+registers and saves them in many =data.tables= with as few as possible
+columns. The key is the =pnr= number which links the =data.tables=
+when this is needed.
+
 - Switch to the RStudio project called /ami/ that you have created in
   Exercise 2 of Day 1.
-- Further instructions are under construction
+- If you have succeeded to implement the exclusion criteria as part of the
+  exercises of Exercise 4 of Day 1, you should be able to load the
+  study population data with 79972 rows:
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+tar_load(study_pop)
+nrow(study_pop)
+#+END_SRC
+  If you have not succeeded, please find the solution in the files
+  + [[ami/solutions_day1.R]] and [[ami/functions/get_study_pop_1.R]].
+- Create a new R-code file called =sandbox.R= or similar. Copy-paste
+  the following R-codes to that file and work with them
+  until you understand roughly what they do:
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+#
+# Aim: learn how grep and grepl can be used to match search terms in data
+# 
+library(targets)
+library(data.table)
+#
+# We aim to extract all ICD diagnoses which correspond to myocardial infarction: 
+MI_ICD <- c("410","DI21","DI22")
+# Note that the first is the ICD-8 diagnosis whereas the latter two are
+# the first 4 letters of all ICD-10 diagnoses, i.e., DI211A shares the
+# first 4 letters with DI21 and corresponds to "Inferiort/posteriort akut myokardieinfarkt med Q-taksudv",
+# see https://www.dst.dk/da/TilSalg/Forskningsservice/Dokumentation/hoejkvalitetsvariable/sygehusbenyttelse---indlaeggelser-og-ambulante-behandlinger/adiag
+
+#
+# example vector of icd codes
+#
+sample_icd <- c("DC410", "DC410A","DI210B","DI211","410","DI211A")
+
+#
+grep("410",sample_icd)
+grep("410",sample_icd,value=TRUE)
+grepl("410",sample_icd)
+# ups, the first two are ICD-10 and wrong!
+#
+# changing the search term to ^410 solves this problem. the ^ indicates
+# the beginning of a word. Similarly $ indicates the end of the word
+#
+# match anywhere
+grep("affe",c("affe","giraffe","affektion"))
+# match at beginning of word
+grep("^affe",c("affe","giraffe","affektion"))
+# match at end of word
+grep("affe$",c("affe","giraffe","affektion"))
+# exact match
+grep("^affe$",c("affe","giraffe","affektion"))
+
+# lets try
+grep("^410",sample_icd)
+grep("^410",sample_icd,value=TRUE)
+grepl("^410",sample_icd)
+
+
+# read hospital admission data
+lpr <- fread("rawdata/lpr.csv",keepLeadingZeros = TRUE,colClasses = c("character","character","Date"))
+
+#+END_SRC
+  
+- Add the following target to the pipeline in the file [[ami/_targets.R]]:
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+tar_target(como_list,{
+  get_como_list(icd_codes = icd_codes,
+                lpr = lpr)
+},cue = tar_cue(mode = "always"))
+#+END_SRC
+  
+
+
 
 
 # Footer:

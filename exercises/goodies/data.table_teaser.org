@@ -1,12 +1,5 @@
 ** The R-package =data.table=
 
-For the exercises of this course we use =data.table= syntax, because
-=data.table= is perfectly suited for register data: it is fast and
-memory efficient. However, it is totally fine if you prefer to work
-with =tidyverse/dplyr/tibble= or ordinary =data.frame=, just use
-=as_tibble()= and =as.data.frame= to transform the =data.tables= when
-you work out the exercises.
-
 Here is the link to =data.table= introduction, tutorials
 etc. https://github.com/Rdatatable/data.table and just below are
 examples and use case examples of =data.table= syntax.
