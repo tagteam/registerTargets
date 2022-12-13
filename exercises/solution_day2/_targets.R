@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec 10 2022 (10:13) 
 ## Version: 
-## Last-Updated: Dec 13 2022 (13:15) 
+## Last-Updated: Dec 13 2022 (15:09) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 18
+##     Update #: 25
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -26,6 +26,7 @@ list(
         pop <- fread("data/popami.csv",keepLeadingZeros = TRUE,
                      colClasses = c("character","character",rep("Date",5),"numeric"))
         # define event time
+        pop[,sex:=factor(sex,levels=c("Male","Female"),labels=c("Male","Female"))]
         pop[,time := as.numeric(end_fup-index)/365.25]
         pop[,event := 0]
         pop[!is.na(death_date),event := 1]
@@ -38,10 +39,14 @@ list(
     tar_target(pop_female,{
         pop[pop$sex == "Female",c("pnr","time","event","sex","age")]
     }),
+    tar_target(rate_female,{
+        get_rates(pop_female,event_var = "event",time_var = "time")
+    }),
+    tar_target(rate_male,{
+        get_rates(pop_male,event_var = "event",time_var = "time")
+    }), 
     # calculate transplant-free mortality rates 
     tar_target(rate_ratio,{
-        rate_female = get_rates(pop_female,event_var = "event",time_var = "time")
-        rate_male = get_rates(pop_female,event_var = "event",time_var = "time")
         rate_ratio <- rate_male/rate_female
         rate_ratio
     }),
@@ -68,15 +73,21 @@ list(
         plot(km)
         dev.off()
     }),
+    tar_target(oneyear_risk,{predict(km,type = "risk",times = 1,newdata = data.table(sex = c("Male","Female")))}),
+    tar_target(fiveyear_risk,{predict(km,type = "risk",times = 5,newdata = data.table(sex = c("Male","Female")))}),
+    tar_target(tenyear_risk,{predict(km,type = "risk",times = 10,newdata = data.table(sex = c("Male","Female")))}),
+    tar_target(oneyear_risk_ratio,{
+        # calculate 1-year risk ratios
+        oneyear_risk_ratio <- oneyear_risk[['sex=Male']]/oneyear_risk[['sex=Female']]
+        oneyear_risk_ratio    
+    }),
     tar_target(fiveyear_risk_ratio,{
-        # calculate 5-year absolute risks of death and 5-year risk ratios
-        fiveyear_risk <- predict(km,times = 5,newdata = data.table(sex = c("Male","Female")))
+        # calculate 5-year risk ratios
         fiveyear_risk_ratio <- fiveyear_risk[['sex=Male']]/fiveyear_risk[['sex=Female']]
         fiveyear_risk_ratio    
     }),
     tar_target(tenyear_risk_ratio,{
-        # calculate 10-year absolute risks of death and 10-year risk ratios
-        tenyear_risk <- predict(km,times = 10,newdata = data.table(sex = c("Male","Female")))
+        # calculate 10-year risk ratios
         tenyear_risk_ratio <- tenyear_risk[['sex=Male']]/tenyear_risk[['sex=Female']]
         tenyear_risk_ratio    
     }),
@@ -84,8 +95,8 @@ list(
         tableRR <- data.table(Female = c(rate_female,oneyear_risk[["sex=Female"]],fiveyear_risk[["sex=Female"]],tenyear_risk[["sex=Female"]]),
                               Male = c(rate_male,oneyear_risk[["sex=Male"]],fiveyear_risk[["sex=Male"]],tenyear_risk[["sex=Male"]]),
                               Ratio = c(rate_ratio,oneyear_risk_ratio,fiveyear_risk_ratio,tenyear_risk_ratio))
-        fwrite(x,file = "tables/tableRR.csv")
-        x[]
+        fwrite(tableRR,file = "tables/tableRR.csv")
+        tableRR[]
     })
 )
 

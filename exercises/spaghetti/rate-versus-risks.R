@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec 10 2022 (08:52) 
 ## Version: 
-## Last-Updated: Dec 11 2022 (15:18) 
+## Last-Updated: Dec 13 2022 (15:10) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 23
+##     Update #: 24
 #----------------------------------------------------------------------
 ## 
 ### Commentary: This is a common R-script which we want to translate
@@ -24,7 +24,7 @@ library(data.table)
 # the data file is in the folder exercises/data/
 # and needs to bee copied to a new subfolder called data
 # in the new targets project folder  
- pop <- fread("popami.csv",keepLeadingZeros = TRUE,
+pop <- fread("popami.csv",keepLeadingZeros = TRUE,
              colClasses = c("character","character",rep("Date",5),"numeric"))
 str(pop)
 
