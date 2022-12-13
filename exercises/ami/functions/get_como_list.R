@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec 11 2022 (12:58) 
 ## Version: 
-## Last-Updated: Dec 11 2022 (12:58) 
+## Last-Updated: Dec 13 2022 (15:31) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 1
+##     Update #: 2
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -14,7 +14,7 @@
 #----------------------------------------------------------------------
 ## 
 ### Code:
-get_como_list <- function(icd_codes,lpr){
+get_como_list <- function(icd_codes){
     lpr <- fread("rawdata/lpr.csv",
                  keepLeadingZeros = TRUE,
                  colClasses = c("character","character","Date"))

@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  8 2022 (17:28) 
 ## Version: 
-## Last-Updated: Dec 12 2022 (15:23) 
+## Last-Updated: Dec 13 2022 (16:01) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 129
+##     Update #: 132
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -67,8 +67,7 @@ list(
     },cue = tar_cue(mode = "always")),
     # lpr
     tar_target(como_list,{
-        get_como_list(icd_codes = icd_codes,
-                      lpr = lpr)
+        get_como_list(icd_codes = icd_codes)
     },cue = tar_cue(mode = "always")),
     # lmdb
     tar_target(drug_list,{
@@ -120,7 +119,7 @@ list(
     # day 3
     # random forests
     tar_target(forest,{
-        # pseudo value
+        # pseudo value for 5-year outcome
         km = prodlim(Hist(time,event)~1,data = secret_baseline_pop)
         secret_baseline_pop[,pseudo5:= jackknife(km,times = 5)]
         forest5 = ranger(pseudo5~bb+age+sex+any.malignancy+diabetes.with.complications,

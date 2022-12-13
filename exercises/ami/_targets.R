@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  4 2022 (11:02) 
 ## Version: 1
-## Last-Updated: Dec 12 2022 (16:56) 
+## Last-Updated: Dec 13 2022 (16:00) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 25
+##     Update #: 29
 #----------------------------------------------------------------------
 ## 
 ### Commentary:
@@ -29,7 +29,7 @@ list(
     # hospital admissions: outcome and comorbidities
     tar_target(icd_codes, list(
                               # myocardial infarction
-                              "MI" = c("DI2[12]"))),
+                              "myocardial.infarction" = c("^DI2[12]"))),
     # prescription data: exposure and comedicine 
     tar_target(atc_codes,list(#beta blockers
                              bb = c('C07'),

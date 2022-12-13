@@ -7,7 +7,9 @@ The learning targets of this exercise are:
 - Search in register data using the R-package =data.table= 
   and the R-functions =grep= and =grepl=
 - Maintain control using the R-package targets
-- Estimation of average treatment effects of a baseline intervention with baseline covariates: G-formula vs TMLE, glm vs superlearner
+- Estimation of average treatment effects of a baseline intervention
+  with baseline covariates: G-formula with glm learner (TMLE with
+  superlearner on day 4).
 
 * Exercise 1
 
@@ -61,12 +63,11 @@ library(targets)
 library(data.table)
 #
 # We aim to extract all ICD diagnoses which correspond to myocardial infarction: 
-MI_ICD <- c("410","DI21","DI22")
+c("410","DI21","DI22")
 # Note that the first is the ICD-8 diagnosis whereas the latter two are
 # the first 4 letters of all ICD-10 diagnoses, i.e., DI211A shares the
 # first 4 letters with DI21 and corresponds to "Inferiort/posteriort akut myokardieinfarkt med Q-taksudv",
 # see https://www.dst.dk/da/TilSalg/Forskningsservice/Dokumentation/hoejkvalitetsvariable/sygehusbenyttelse---indlaeggelser-og-ambulante-behandlinger/adiag
-
 #
 # example vector of icd codes
 #
@@ -90,22 +91,89 @@ grep("affe$",c("affe","giraffe","affektion"))
 # exact match
 grep("^affe$",c("affe","giraffe","affektion"))
 
-# lets try
+# lets do this with the ICD codes
 grep("^410",sample_icd)
 grep("^410",sample_icd,value=TRUE)
 grepl("^410",sample_icd)
 
+# so far so good. how about the remaining ICD codes for myocardial infarction:
+grep("^410",sample_icd)
+grep(c("^410","^DI21","^DI22"),sample_icd)
+# hov: grep allows only one pattern. This should work:
+grep(c("^410|^DI21|^DI22"),sample_icd)
+grep(c("^410|^DI21|^DI22"),sample_icd,value=TRUE)
+# but when there are more than 3 codes it can be
+# boring to type everything in. Hence, we learn the
+# power of the functions paste and paste0
+MI_ICD <- c("410","DI21","DI22")
+paste0("^",MI_ICD)
+paste(paste0("^",MI_ICD),collapse="|")
+# 
+MI_pattern <- paste(paste0("^",MI_ICD),collapse="|")
+grep(MI_pattern,sample_icd,value=TRUE)
 
+# Ok, ready for the real data set
+# 
 # read hospital admission data
+# 
+# be sure to switch to project ami!
+#
 lpr <- fread("rawdata/lpr.csv",keepLeadingZeros = TRUE,colClasses = c("character","character","Date"))
+nrow(lpr) # 269882
+str(lpr)
+lpr
+# with grepl
+lpr_MI <- lpr[grepl(MI_pattern,diag)]
+# same with grep
+lpr_MI <- lpr[grep(MI_pattern,diag)]
+lpr_MI # 3892
+#+END_SRC
 
+- Now you know how to extract ICD codes. Furthermore, we can reduce the extracted
+  ICD codes to the study population. Luckily, this is relatively fast and easy with
+  the =data.table= package:
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+tar_load(study_pop)
+# sort study_pop and lpr_MI by pnr number
+# and at the same time prepare for joining (AKA merging)
+setkey(study_pop,pnr)
+setkey(lpr_MI,pnr)
+# reduce to the lines in lpr_MI which belong
+# to a person in study_pop
+lpr_MI <- study_pop[,.(pnr)][lpr_MI]
+# in this specific case we do not reduce
+# a single line, because the definition of the
+# study_pop is that they have a diagnosis of myocardial infarction.
+#
+# 
+# To see that it does reduce the extracted dataset, you should now
+# use copy-and-paste of the above codes and create a corresponding
+# extracted data set for COPD, using
+copd_ICD <- heaven::charlson.codes[["chronic.pulmonary.disease"]]
+# or if you have not succeeded installing the heaven package
+source("rawdata/charlson.codes.R")
+copd_ICD <- charlson.codes[["chronic.pulmonary.disease"]]
+# 
 #+END_SRC
   
-- Add the following target to the pipeline in the file [[ami/_targets.R]]:
+- Copy-and-paste is nice for one or two diseases. But, already the third
+  time we prefer to write a function which loops across many diseases.
+  Open the file =functions/get_como_list.R= and load the function into R.
+  The function =get_como_list= works with a list of =icd_codes=. But the list
+  can also be a single element:
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+get_como_list(icd_codes=list("MI"=c("410","DI21","DI22")))
+get_como_list(icd_codes=list("COPD"=heaven::charlson.codes[["chronic.pulmonary.disease"]]))
+# lets do both at once:
+get_como_list(icd_codes=list("MI"=c("410","DI21","DI22"),
+                             "COPD"=heaven::charlson.codes[["chronic.pulmonary.disease"]]))
+# lets do all of them:
+get_como_list(icd_codes=heaven::charlson.codes)
+#+END_SRC
+- Now, add the following target to the pipeline in the file [[ami/_targets.R]]:
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
 tar_target(como_list,{
-  get_como_list(icd_codes = icd_codes,
-                lpr = lpr)
+  get_como_list(icd_codes = icd_codes,lpr = lpr)
 },cue = tar_cue(mode = "always"))
 #+END_SRC
   
@@ -119,6 +187,7 @@ tar_target(como_list,{
 - [[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day1.org][targeted exercises day 1]]
 - [[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day2.org][targeted exercises day 2]]
 - [[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day3.org][targeted exercises day 3]]
+
 - [[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day4.org][targeted exercises day 4]]
 - [[https://github.com/tagteam/registerTargets/blob/main/lecture_notes][lecture notes]]
 - [[https://github.com/tagteam/registerTargets/blob/main/exercises/goodies][goodies]]
