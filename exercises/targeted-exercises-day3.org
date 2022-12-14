@@ -47,10 +47,10 @@ number which links the =data.tables= when this is needed.
   Exercise 2 of Day 1.
 - If you have succeeded to implement the exclusion criteria as part of the
   exercises of Exercise 4 of Day 1, you should be able to load the
-  study population data with 79972 rows:
+  study population data with 3832 rows:
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
 tar_load(study_pop)
-nrow(study_pop)
+nrow(study_pop) # 3832
 #+END_SRC
   If you have not succeeded, please find the solution in the files
   + [[ami/solutions_day1.R]] and [[ami/functions/get_study_pop_1.R]].
