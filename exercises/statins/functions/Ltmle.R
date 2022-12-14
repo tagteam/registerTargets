@@ -8,7 +8,7 @@ Ltmle <- function (data, Anodes, Cnodes = NULL, Lnodes = NULL, Ynodes,
 {
     require(matrixStats)
     if (verbose) message("Loading ltmle functions ...")
-    for (f in list.files("code/ltmle/",pattern = ".R$",full.names = TRUE)) {
+    for (f in list.files("functions/ltmle/",pattern = ".R$",full.names = TRUE)) {
         ## print(f)
         source(f)
     }
