@@ -56,7 +56,8 @@ nrow(study_pop) # 3832
   + [[ami/solutions_day1.R]] and [[ami/functions/get_study_pop_1.R]].
 - Create a new R-code file called =sandbox.R= or similar. Copy-paste
   the following R-codes to that file and work with them
-  until you understand roughly what they do:
+  until you understand roughly what they do (Hint: put the mouse in the upper right corner of the
+  code boxes to copy the code in the whole box) :
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
 #
 # Aim: learn how grep and grepl can be used to match search terms in data
@@ -152,17 +153,29 @@ lpr_MI <- study_pop[,.(pnr)][lpr_MI]
 # use copy-and-paste of the above codes and create a corresponding
 # extracted data set for COPD, using
 copd_ICD <- heaven::charlson.codes[["chronic.pulmonary.disease"]]
-# or if you have not succeeded installing the heaven package
+copd_ICD
+#+END_SRC
+
+If you have not succeeded installing the heaven package, download the
+file with the Charlson ICD codes here: [[rawdata/charlson.codes.R]] and
+save them in the subfolder =rawdata= of the /ami/ project:
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes
 source("rawdata/charlson.codes.R")
 copd_ICD <- charlson.codes[["chronic.pulmonary.disease"]]
-# 
+copd_ICD
 #+END_SRC
   
-- Copy-and-paste is nice for one or two diseases. But, already the third
-  time we prefer to write a function which loops across many diseases.
-  Open the file =functions/get_como_list.R= and load the function into R.
-  The function =get_como_list= works with a list of =icd_codes=. But the list
-  can also be a single element:
+- A copy-and-paste strategy is nice and feasible to extract one or two
+  comorbidities from the hospital admission registers. But, already
+  the second time we copy-and-paste the same code we prefer to write a
+  function which loops across many diseases. Have a look at 
+  + https://www.geeksforgeeks.org/for-loop-in-r/
+  + https://www.geeksforgeeks.org/apply-lapply-sapply-and-tapply-in-r/
+
+- Open the file =functions/get_como_list.R= and load the function
+  =get_como_list= into R, i.e., run the code in the file. The
+  function =get_como_list= works with a list of =icd_codes=. The
+  list can only have a single element:
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
 get_como_list(icd_codes=list("MI"=c("410","DI21","DI22")))
 get_como_list(icd_codes=list("COPD"=heaven::charlson.codes[["chronic.pulmonary.disease"]]))
@@ -237,12 +250,15 @@ tar_target(drug_list,{
 #+END_SRC  
 - Next we aim to make a wide format data set to update the baseline
   table. For all individuals in the =study_pop= we want the comorbidy
-  and comedicine status at the index date.  We have to admit that we
-  cannot look all the way back in time due to the limitations of the
-  start date of the registers, and in particular not for immigrants.
-  But, we should always look back exactly the same amount for all
-  individuals in our population. Here is how to look back in time
-  for 10 years when looking for COPD status at index:
+  and comedicine status at the index date. However, we have to admit
+  that we *cannot look all the way back in time* to search for
+  comorbidy/comedicine due to the limitations of the start date of the
+  registers, and in particular not for immigrants who came to Denmark
+  recently. But, from a statistical perspective, to avoid bias, we
+  should always look back exactly the same amount for all individuals
+  in our population. So, here is how to look back in time for 10 years
+  when looking for the COPD status at the person individual index
+  dates:
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
 tar_load(study_pop)
 setkey(study_pop,pnr,index)
@@ -259,7 +275,8 @@ study_pop_wide[,table(X)]
 #+END_SRC
 - This shows that 13 individuals have had a COPD diagnosis within
   10 years before the index date.
-- Similarly, we extract the baseline status of the beta blockers    
+- Similarly, we extract whether the individual had purchased beta
+  blockers within 180 days before the index date:
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
 tar_load(study_pop)
 setkey(study_pop,pnr,index)
@@ -268,15 +285,15 @@ names(comed$bb)
 # rename the date variable to the same name as in the study pop: "index"
 setnames(comed$bb,"eksd","index")
 setkey(comed$bb,pnr,index)
-# for drugs we look back 180 days
+# for drugs we look back a shorter time, e.g., 180 days
 study_pop_wide <- comed$bb[study_pop,roll=180]
 study_pop_wide[is.na(X),X:="No bb"]
 study_pop_wide[,table(X)]
 ## COPD No COPD 
 ## 1335    2497
 #+END_SRC
-- In this way we can add all comorbidities and all drugs to one big wide_format data set.
-  Save the following function as =functions/get_wide_baseline_pop.R=
+- In this way we can add comorbidity and drug usage at the index date to a =wide_format= data set.
+  To do this, save the following function as =functions/get_wide_baseline_pop.R=
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
 get_wide_baseline_pop <- function(study_pop,como_list,drug_list){
     # select relevant variables from study_pop
@@ -314,7 +331,7 @@ get_wide_baseline_pop <- function(study_pop,como_list,drug_list){
     baseline_pop[]
 }
 #+END_SRC
-- Add the following target:
+- Then, add the following target to the pipeline:
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
 tar_target(wide_baseline_pop,{
   get_wide_baseline_pop(study_pop = study_pop,
@@ -322,9 +339,10 @@ tar_target(wide_baseline_pop,{
                 drug_list = drug_list)
 })
 #+END_SRC
-- Finally, adapt the target for table 1 to use =wide_baseline_pop= and change the
-  function =make_table1= such that the table
-  includes several drugs and comorbidities. E.g.,
+- Finally, adapt the target for table 1 from the exercises from day 1
+  to use the new wide format dataset =wide_baseline_pop= instead of
+  the small =study_pop=, and then change the function =make_table1= such
+  that the produced table includes several drugs and comorbidities. E.g.,
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
     t1 <- utable(sex~age+ myocardial.infarction + heart.failure + renal.disease + any.malignancy + lymphoma + bb + cbb + statins,
                  data = wide_baseline_pop)
