@@ -193,9 +193,9 @@ get_como_list(icd_codes=heaven::charlson.codes)
   comorbidities, then You can add the following targets to
  the pipeline in the file [[ami/_targets.R]]
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes
- tar_target(icd_codes, heaven::charlson.codes),
+tar_target(icd_codes, heaven::charlson.codes),
 tar_target(como_list,{
-  get_como_list(icd_codes = icd_codes,lpr = lpr)
+  get_como_list(icd_codes = icd_codes)
 })
 #+END_SRC
 - Similarly, we extract comedicine from the prescription register. Here
