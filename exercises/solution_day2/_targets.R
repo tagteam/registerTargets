@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec 10 2022 (10:13) 
 ## Version: 
-## Last-Updated: Dec 13 2022 (15:09) 
+## Last-Updated: Dec 14 2022 (11:09) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 25
+##     Update #: 26
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -26,7 +26,7 @@ list(
         pop <- fread("data/popami.csv",keepLeadingZeros = TRUE,
                      colClasses = c("character","character",rep("Date",5),"numeric"))
         # define event time
-        pop[,sex:=factor(sex,levels=c("Male","Female"),labels=c("Male","Female"))]
+        pop[,sex:=factor(sex,levels=c("Female","Male"),labels=c("Female","Male"))]
         pop[,time := as.numeric(end_fup-index)/365.25]
         pop[,event := 0]
         pop[!is.na(death_date),event := 1]

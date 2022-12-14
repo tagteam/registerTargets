@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  8 2022 (17:34) 
 ## Version: 
-## Last-Updated: Dec 14 2022 (09:31) 
+## Last-Updated: Dec 14 2022 (11:02) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 6
+##     Update #: 7
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -20,6 +20,11 @@ tar_load_everything()
 
 library(targets)
 tar_make(script = "solutions_day3.R")
+tar_load_everything()
+
+library(targets)
+tar_make(script = "solutions_day4.R")
+tar_visnetwork(script = "solutions_day4.R",targets_only = TRUE)
 tar_load_everything()
 
 tar_make(script = "secret_targets.R")
