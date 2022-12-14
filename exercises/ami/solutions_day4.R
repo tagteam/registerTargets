@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec 14 2022 (09:47) 
 ## Version: 
-## Last-Updated: Dec 14 2022 (14:26) 
+## Last-Updated: Dec 14 2022 (16:52) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 41
+##     Update #: 75
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -17,12 +17,8 @@
 library(targets)
 library(data.table)
 library(heaven)
-for (f in list.files("functions/",pattern = "R$",full.names = TRUE)){
-    source(f)
-}
-for (f in list.files("secrets/",pattern = "R$",full.names = TRUE)){
-    source(f)
-}
+for (f in list.files("functions/",pattern = "R$",full.names = TRUE)){source(f)}
+for (f in list.files("secrets/",pattern = "R$",full.names = TRUE)){source(f)}
 list(
     # the study period
     tar_target(study_start, as.Date("2000-01-01")),
@@ -105,9 +101,32 @@ list(
         publish(fit)
     }, packages = c("survival","Publish")),
     # average treatment effect (G-formula using Cox)
-    tar_target(ate_gformula,{
-        x = ate(cox_fit,data = wide_baseline_pop,treatment = "bb",times = c(5,10,15),verbose = FALSE)
-        x$ratioRisk[]
+    tar_target(ate_gformula_cox,{
+        x = ate(cox_fit,
+                data = wide_baseline_pop,
+                treatment = "bb",
+                times = 5,
+                verbose = FALSE)
+        x
+    }, packages = c("survival","riskRegression")),
+    # forest
+    tar_target(forest,{
+        # 
+        # pseudo value for 5-year outcome 
+        km = prodlim(Hist(time,event)~1,data = wide_baseline_pop)
+        wide_baseline_pop[,pseudo5:= jackknife(km,times = 5)]
+        forest5 = ranger(pseudo5~bb+age+sex+any.malignancy+diabetes.with.complications,
+                         data = wide_baseline_pop,num.trees = 50)
+        forest5
+    },package = c("prodlim","ranger")),
+    # average treatment effect (G-formula using random forest)
+    tar_target(ate_gformula_forest,{
+        x = ate(cox_fit,
+                data = wide_baseline_pop,
+                treatment = "bb",
+                times = 5,
+                verbose = FALSE)
+        x
     }, packages = c("survival","riskRegression")),
     # propensity score model
     tar_target(propensity_fit,{
@@ -136,7 +155,7 @@ list(
                 treatment = propensity_fit,
                 censor = cens_fit,
                 data = wide_baseline_pop,
-                times = c(5,10,15),
+                times = 5,
                 se = FALSE,
                 verbose = FALSE)
         x
@@ -148,27 +167,73 @@ list(
         wide_baseline_pop[,pseudo5:= jackknife(km,times = 5)]
         wbp = wide_baseline_pop[,c("sex","age","diabetes.with.complications","any.malignancy","bb","pseudo5")]
         wbp[,bb := as.numeric(bb == "Yes")]
-        ## x = ltmle(data = wbp,Anodes = "bb",Lnodes = c("sex","age","diabetes.with.complications","any.malignancy"),Ynodes = "pseudo5",SL.library = "glm",abar = list(1,0))
-        ## summary(x)
+        x = ltmle(data = wbp,Anodes = "bb",Lnodes = c("sex","age","diabetes.with.complications","any.malignancy"),Ynodes = "pseudo5",SL.library = "glm",abar = list(1,0))
+        summary(x)
     }, packages = c("ltmle","prodlim")),
     # average treatment effect (ltmle, glm)
     tar_target(wide_discrete_data,{
         outcome_data <- wide_baseline_pop[,.(pnr,date = time,event)]
-        # approximate event time on a discrete time grid with 6 months long intervals 
-        grid <- wide_baseline_pop[,.(date = seq(0,5,.5),interval = 0:10),by = pnr]
+        outcome_data[event == 1,date := Inf]
+        cens_data <- wide_baseline_pop[,.(pnr,date = time,event)]
+        cens_data[event == 1,date := Inf]
+        # approximate event time on a discrete time grid with 6 months long intervals
+        intervals = seq(0,5,.5)
+        grid <- wide_baseline_pop[,.(date = intervals,interval = 0:(length(intervals)-1)),by = pnr]
         discrete_outcome = map_intervals(grid,data = outcome_data,name = "Death",rollforward = TRUE)
+        discrete_censored = map_intervals(grid,data = cens_data,name = "Censored",rollforward = TRUE)
         wbp = wide_baseline_pop[,c("pnr","sex","age","diabetes.with.complications","any.malignancy","bb")]
         wbp = wbp[discrete_outcome,on = "pnr"]
+        wbp = wbp[discrete_censored,on = "pnr"]
         wbp[,bb := as.numeric(bb == "Yes")]
         ## wbp[,table(Death_0)]
         wbp = wbp[Death_0 != 1]
+        wbp = wbp[Censored_0 != 1]
         wbp[,Death_0 := NULL]
+        wbp[,Censored_0 := NULL]
+        wbp[,pnr := NULL]
         wbp[]
     }),
+    ## tar_target(survtmle_fit,{
+        ## wide_baseline_pop[time>0,{survtmle(ftime = time,
+                                     ## ftype = event,
+                                     ## trt = bb,
+                                     ## adjustVars = data.frame(sex = sex,age = age),
+                                     ## glm.trt = "sex + age",
+                                     ## glm.ftime = "trt + sex + age",
+                                     ## glm.ctime = "trt + sex + age",
+                                     ## method = "mean",
+                                     ## SL.ftime = c("SL.mean"),
+                                     ## SL.ctime = c("SL.mean"),
+                                     ## t0 = 5)}]
+        
+    ## }),
     tar_target(ate_ltmle,{
-        ## x = Ltmle(data = wide_discrete_data,Anodes = "bb",Lnodes = c("sex","age","diabetes.with.complications","any.malignancy"),Ynodes = c("Death_1","Death_2","Death_3","Death_4","Death_5","Death_6","Death_7","Death_8","Death_9","Death_10"),survivalOutcome = TRUE,variance.method = "ic",SL.library = "glm",abar = list(1,0))
-        ## summary(x)
-    }, packages = c("ltmle","prodlim"))    
+        w = wide_discrete_data
+        ww <- event_node_manipulator(data=w,k=10,outcome="Death",competing=NULL,censored="Censored",outcome_is_competing=NULL)
+        x = Ltmle(data = wide_discrete_data,Anodes = "bb",Lnodes = c("sex","age","diabetes.with.complications","any.malignancy"),Cnodes = grep("Censored_",names(wide_discrete_data),value = TRUE),Ynodes = grep("Death_",names(wide_discrete_data),value = TRUE),survivalOutcome = TRUE,variance.method = "ic",SL.library = "glm",abar = list(1,0),verbose = TRUE)
+        ## SL.library = c("SL.glm","SL.ranger"),
+        summary(x)
+    }, packages = c("ltmle","prodlim","SuperLearner")),
+    tar_target(ate_ltmle_0,{
+        w = wide_discrete_data
+        w[,sex := NULL]
+        w[,age := NULL]
+        w[,diabetes.with.complications := NULL]
+        w[,any.malignancy := NULL]
+        ww <- event_node_manipulator(data=w,k=10,outcome="Death",competing=NULL,censored="Censored",outcome_is_competing=NULL)
+        x = Ltmle(data = wide_discrete_data,
+                  Anodes = "bb",
+                  ## Lnodes = c("sex","age","diabetes.with.complications","any.malignancy"),
+                  Lnodes = NULL,
+                  Cnodes = grep("Censored_",names(wide_discrete_data),value = TRUE),
+                  Ynodes = grep("Death_",names(wide_discrete_data),value = TRUE),
+                  survivalOutcome = TRUE,
+                  variance.method = "ic",
+                  SL.library = "glm",
+                  ## SL.library = c("SL.glm","SL.ranger"),
+                  abar = list(1,0),verbose = TRUE)
+        summary(x)
+    }, packages = c("ltmle","prodlim","SuperLearner"))    
 )
 
 

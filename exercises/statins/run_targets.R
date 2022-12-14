@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec 12 2022 (07:46) 
 ## Version: 
-## Last-Updated: Dec 12 2022 (08:02) 
+## Last-Updated: Dec 14 2022 (18:51) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 1
+##     Update #: 2
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -14,7 +14,11 @@
 #----------------------------------------------------------------------
 ## 
 ### Code:
-
+library(targets)
+tar_make()
+tar_load_everything()
+table_ltmle_fit_glm
+table_ltmle_fit_glmnet
 
 
 ######################################################################

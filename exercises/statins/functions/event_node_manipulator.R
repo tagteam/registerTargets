@@ -1,5 +1,6 @@
 event_node_manipulator <- function(data,k,outcome,competing="Dead",censored="Censored",outcome_is_competing="death"){
-    data <- copy(data)
+    library(data.table)
+    data <- data.table::copy(data)
     #
     # manipulation of the event nodes
     #
@@ -21,10 +22,10 @@ event_node_manipulator <- function(data,k,outcome,competing="Dead",censored="Cen
             stop(paste("Censoring variable ",Ck," has uncomfortable values: ",
                        paste(setdiff(ckvals,c(0,1,"censored","uncensored",TRUE,FALSE)),
                              collapse = ", ")))
-        if (all(ckvals)%in%c(0,1)){
+        if (all(ckvals%in%c(0,1))){
             data[[Ck]] <- factor(data[[Ck]],levels = 1:0,labels = c("censored","uncensored"))
         }else{
-            if (all(ckvals)%in%c(FALSE,TRUE)){
+            if (all(ckvals%in%c(FALSE,TRUE))){
                 data[[Ck]] <- factor(data[[Ck]],levels = c(TRUE,FALSE),labels = c("censored","uncensored"))
             }
         }
@@ -83,10 +84,13 @@ event_node_manipulator <- function(data,k,outcome,competing="Dead",censored="Cen
     for (Ck in C_nodes){
         ## later_nodes=setdiff((match(Ck,names(data))+1):NCOL(data),c(Y_nodes,D_nodes))
         later_nodes=(match(Ck,names(data))+1):NCOL(data)
-        if (any(has_censored <- (data[[Ck]]%in%c(1,"censored")))){
-            for (l in later_nodes) {
-                cat("setting ",names(data)[l]," to na after ",Ck,"\n")
-                set(data,j=l,i=which(has_censored),value=NA)
+        later_nodes = later_nodes[later_nodes<NCOL(data)]
+        if (length(later_nodes)>0){
+            if (any(has_censored <- (data[[Ck]]%in%c(1,"censored")))){
+                for (l in later_nodes) {
+                    cat("setting ",names(data)[l]," to na after ",Ck,"\n")
+                    set(data,j=l,i=which(has_censored),value=NA)
+                }
             }
         }
     }
