@@ -1,13 +1,13 @@
 ** The R-package =data.table=
 
 Here is the link to =data.table= introduction, tutorials
-etc. https://github.com/Rdatatable/data.table and just below are
+etc. https://github.com/Rdatatable/data.table and below are
 examples and use case examples of =data.table= syntax.
 
 *** Changing data without copying
 
 Note that whenever you use the assigment operator =<-=, e.g., to
-define a new variable in a =data.frame= the whole =data.frame= is
+define a new variable in a =data.frame= the *whole* =data.frame= is
 copied internally in R. In large registry data copying takes time. The
 =set.xxx= functions of =data.table= avoid copying:
 
@@ -47,18 +47,20 @@ setkey(d,pnr)
 print(d)
 #+END_SRC
 
-:    pnr sex age
-: 1:   3   0  71
-: 2:   9   0  86
-: 3:  19   1  70
-: 4:  27   0  54
-: 5:  45   1  66
+#+RESULTS:
+:    pnr sex age new_id
+: 1:   3   0  71      5
+: 2:   9   0  86      2
+: 3:  19   1  70      1
+: 4:  27   0  54      3
+: 5:  45   1  66      4
 
 
 *** Referring to variables inside the data.table
 
-Inside a =data.table= we can refer to the variable names
-without noting the name of the data.table all the time:
+Inside the square brackets of a =data.table= we can refer to the
+variables (the columns) without referring to the data.table name
+and without quotes:
 
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
 # data.frame: 

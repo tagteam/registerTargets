@@ -27,17 +27,21 @@ the exercises. Please read in the following order:
 It is useful to extract the information that is registered for the
 individuals of the current study population from the different
 registers. In this exercise we work with simulated prescription data
-and simulated hospital admission data. The aim is explain a concept of
-data preparation which avoids the wide data format until the very last
-moment where it is in fact required. The wide format is characterized
-by many columns that are not needed for all analyses and many missing
-values. The wide format has the obvious disadvantage of being memory
-inefficient (unused columns with many missing values) and it disables
-a clear view on the used part of the dataset. In this exercise we work
-with a concept which extracts study population values from the
-registers and saves them in many =data.tables= with as few as possible
-columns. The key is the =pnr= number which links the =data.tables=
-when this is needed.
+and simulated hospital admission data. The aim is to explain a concept
+of data preparation which /avoids the wide data format/ until the very
+last step where it is in fact required. The /wide format/ is
+characterized by many columns that are not needed for all analyses and
+many missing values. Compared with the /long format/, the /wide
+format/ has the obvious disadvantages:
+
+- memory inefficient (unused columns with many missing values)
+- disables a clean view on the used part of the dataset
+- ggplot2 expects long format
+
+In this exercise we work with a concept which extracts study
+population values from the registers and saves them in many
+=data.tables= with as few as possible columns. The key is the =pnr=
+number which links the =data.tables= when this is needed.
 
 - Switch to the RStudio project called /ami/ that you have created in
   Exercise 2 of Day 1.
