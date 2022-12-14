@@ -45,15 +45,19 @@ number which links the =data.tables= when this is needed.
 
 - Switch to the RStudio project called /ami/ that you have created in
   Exercise 2 of Day 1.
-- If you have succeeded to implement the exclusion criteria as part of the
-  exercises of Exercise 4 of Day 1, you should be able to load the
-  study population data with 3832 rows:
+- Download the function =get_study_pop_1= from the file [[ami/functions/get_study_pop_1.R]]
+  and save it in the subfolder functions of the /ami/ project.
+  It implements the exclusion criteria which were part of Exercise 4 of Day 1, 
+  and also defines the right censored time to death.
+- Adapt the target which defines the study population in the pipeline to use the function =get_study_pop_1= instead
+  of =get_study_pop= that we used in the exercises of day 1.
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
-tar_load(study_pop)
-nrow(study_pop) # 3832
+tar_target(study_pop,
+           get_study_pop_1(pop = pop,
+                           raw_cpr_file = "rawdata/cpr.csv",
+                           study_start = study_start,
+                           study_end = study_end)),
 #+END_SRC
-  If you have not succeeded, please find the solution in the files
-  + [[ami/solutions_day1.R]] and [[ami/functions/get_study_pop_1.R]].
 - Create a new R-code file called =sandbox.R= or similar. Copy-paste
   the following R-codes to that file and work with them
   until you understand roughly what they do (Hint: put the mouse in the upper right corner of the
@@ -344,7 +348,7 @@ tar_target(wide_baseline_pop,{
   the small =study_pop=, and then change the function =make_table1= such
   that the produced table includes several drugs and comorbidities. E.g.,
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
-    t1 <- utable(sex~age+ myocardial.infarction + heart.failure + renal.disease + any.malignancy + lymphoma + bb + cbb + statins,
+    t1 <- utable(sex~age+ myocardial.infarction + heart.failure + renal.disease + any.malignancy + lymphoma + bb + ccb + statin,
                  data = wide_baseline_pop)
     summary(t1,drop.reference = "binary")
 #+END_SRC

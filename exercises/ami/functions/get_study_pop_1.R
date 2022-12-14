@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  4 2022 (11:50) 
 ## Version: 
-## Last-Updated: Dec 12 2022 (16:50) 
+## Last-Updated: Dec 14 2022 (09:26) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 16
+##     Update #: 20
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -15,7 +15,9 @@
 ## 
 ### Code:
 get_study_pop_1 <- function(pop,raw_cpr_file,study_start,study_end){
-    demo = fread(raw_cpr_file,keepLeadingZeros = TRUE)
+    demo = fread(raw_cpr_file,keepLeadingZeros = TRUE,
+                 colClasses = c("character","character",
+                                "Date","Date","Date"))
     # sort both datasets by pnr
     setkey(pop,pnr)
     setkey(demo,pnr)
@@ -27,7 +29,7 @@ get_study_pop_1 <- function(pop,raw_cpr_file,study_start,study_end){
     # exclusion criteria
     study_pop <- study_pop[index >= study_start]
     study_pop <- study_pop[index <= study_end]
-    study_pop[,end_fup := pmin(emigration_date,death_date,study_end)]    
+    study_pop[,end_fup := pmin(emigration_date,death_date,study_end,na.rm = TRUE)]
     # calculate age 
     study_pop[,age := round(as.numeric(index-birth_date)/365.25,2)]
     # factor coding

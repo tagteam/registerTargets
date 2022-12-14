@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  8 2022 (17:28) 
 ## Version: 
-## Last-Updated: Dec 13 2022 (16:01) 
+## Last-Updated: Dec 14 2022 (08:38) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 132
+##     Update #: 133
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -116,7 +116,6 @@ list(
         x = ate(fit,data = secret_baseline_pop,treatment = "bb",times = c(5,10,15),verbose = FALSE)
         x$ratioRisk[]
     }, packages = c("survival","riskRegression")),
-    # day 3
     # random forests
     tar_target(forest,{
         # pseudo value for 5-year outcome
