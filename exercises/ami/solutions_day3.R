@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec 14 2022 (08:39) 
 ## Version: 
-## Last-Updated: Dec 14 2022 (08:49) 
+## Last-Updated: Dec 14 2022 (09:58) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 6
+##     Update #: 8
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -64,22 +64,22 @@ list(
     tar_target(pop, {
         get_pop(raw_lpr_file = "rawdata/lpr.csv",
                 icd_codes = icd_codes)
-    },cue = tar_cue(mode = "always")),
+    }),
     # lpr
     tar_target(como_list,{
         get_como_list(icd_codes = icd_codes)
-    },cue = tar_cue(mode = "always")),
+    }),
     # lmdb
     tar_target(drug_list,{
         get_drug_list(atc_codes = atc_codes)
-    },cue = tar_cue(mode = "always")),
+    }),
     # add demographics and apply exclusion
     tar_target(study_pop,{
         get_study_pop_1(pop = pop,
                         study_start = study_start,
                         study_end = study_end,
                         raw_cpr_file = "rawdata/cpr.csv")
-    },cue = tar_cue(mode = "always")),
+    }),
     # baseline characteristics
     tar_target(table1,
                make_table1(study_pop = study_pop),
@@ -97,7 +97,7 @@ list(
     # Cox regression
     tar_target(hazard_ratio,{
         fit = coxph(Surv(time,event)~bb+age+sex+any.malignancy+diabetes.with.complications,
-                    data = wide_baseline_pop)
+                    data = wide_baseline_pop,x = TRUE)
         fit$call$data <- wide_baseline_pop
         publish(fit)
     }, packages = c("survival","Publish"))
