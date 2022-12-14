@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec 14 2022 (09:47) 
 ## Version: 
-## Last-Updated: Dec 14 2022 (14:25) 
+## Last-Updated: Dec 14 2022 (14:26) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 40
+##     Update #: 41
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -166,7 +166,7 @@ list(
         wbp[]
     }),
     tar_target(ate_ltmle,{
-        x = Ltmle(data = wbp,Anodes = "bb",Lnodes = c("sex","age","diabetes.with.complications","any.malignancy"),Ynodes = c("Death_1","Death_2","Death_3","Death_4","Death_5","Death_6","Death_7","Death_8","Death_9","Death_10"),survivalOutcome = TRUE,variance.method = "ic",SL.library = "glm",abar = list(1,0))
+        ## x = Ltmle(data = wide_discrete_data,Anodes = "bb",Lnodes = c("sex","age","diabetes.with.complications","any.malignancy"),Ynodes = c("Death_1","Death_2","Death_3","Death_4","Death_5","Death_6","Death_7","Death_8","Death_9","Death_10"),survivalOutcome = TRUE,variance.method = "ic",SL.library = "glm",abar = list(1,0))
         ## summary(x)
     }, packages = c("ltmle","prodlim"))    
 )
