@@ -275,7 +275,6 @@ study_pop_wide <- como$COPD[study_pop,roll=10*365.25]
 study_pop_wide[is.na(X),X:="No COPD"]
 study_pop_wide[,table(X)]
 ## COPD No COPD 
-## 13    3819
 #+END_SRC
 - This shows that 13 individuals have had a COPD diagnosis within
   10 years before the index date.
@@ -293,8 +292,6 @@ setkey(comed$bb,pnr,index)
 study_pop_wide <- comed$bb[study_pop,roll=180]
 study_pop_wide[is.na(X),X:="No bb"]
 study_pop_wide[,table(X)]
-## COPD No COPD 
-## 1335    2497
 #+END_SRC
 - In this way we can add comorbidity and drug usage at the index date to a =wide_format= data set.
   To do this, save the following function as =functions/get_wide_baseline_pop.R=
