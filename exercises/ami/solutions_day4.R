@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec 14 2022 (09:47) 
 ## Version: 
-## Last-Updated: Dec 14 2022 (14:18) 
+## Last-Updated: Dec 14 2022 (14:25) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 39
+##     Update #: 40
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -152,7 +152,7 @@ list(
         ## summary(x)
     }, packages = c("ltmle","prodlim")),
     # average treatment effect (ltmle, glm)
-    tar_target(ate_ltmle,{
+    tar_target(wide_discrete_data,{
         outcome_data <- wide_baseline_pop[,.(pnr,date = time,event)]
         # approximate event time on a discrete time grid with 6 months long intervals 
         grid <- wide_baseline_pop[,.(date = seq(0,5,.5),interval = 0:10),by = pnr]
@@ -164,6 +164,8 @@ list(
         wbp = wbp[Death_0 != 1]
         wbp[,Death_0 := NULL]
         wbp[]
+    }),
+    tar_target(ate_ltmle,{
         x = Ltmle(data = wbp,Anodes = "bb",Lnodes = c("sex","age","diabetes.with.complications","any.malignancy"),Ynodes = c("Death_1","Death_2","Death_3","Death_4","Death_5","Death_6","Death_7","Death_8","Death_9","Death_10"),survivalOutcome = TRUE,variance.method = "ic",SL.library = "glm",abar = list(1,0))
         ## summary(x)
     }, packages = c("ltmle","prodlim"))    
