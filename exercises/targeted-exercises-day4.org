@@ -28,7 +28,6 @@ standardized risks 5-year risks.
 - Open a new R-script file and call it =ate_analysis.R=
 - Copy and paste the following R-codes into the file =ate_analysis.R=, then come back here.
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes
-library(targets)
 # Load the wide format data set with the
 # right censored time to death, age, sex, comorbidities and comedicine.
 library(targets)

@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  7 2022 (11:18) 
 ## Version: 
-## Last-Updated: Dec 14 2022 (18:50) 
+## Last-Updated: Dec 15 2022 (16:55) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 13
+##     Update #: 14
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -60,6 +60,7 @@ list(
               SL.library="glmnet",
               abar=list(c(1,1,1),c(0,0,0)),
               SL.cvControl=list(alpha=0.5,selector='undersmooth'),
+              ## SL.cvControl=list(alpha=0,selector='lambda.min'),
               verbose=TRUE)
     }),
     # user friendly output 
