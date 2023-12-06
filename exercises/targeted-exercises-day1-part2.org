@@ -1,64 +1,12 @@
-#+TITLE: PhD course Targeted Register Analysis. Exercises: Day 1
-
+#+TITLE: PhD course Targeted Register Analysis. Exercises: Day 1 part 2
 
 * Objectives
 
 The learning targets of this exercise are:
 
-- Check your R-setup.
-- Create RStudio projects.
 - Basic concept of the R-package =targets=
-- First experience with the augmented R-package =Ltmle= 
-
-----------------------------------------------------------------------
-
-* Exercise 1: Warm-up 
-
-An important part of the exercises consists of reading. The reading
-material includes both general information and also instructions on
-how to prepare the remaining exercises. Please read and perform in the
-following order:
-
--  [[goodies/R-packages.org]]
--  [[goodies/RStudio-projects.org]]
--  [[goodies/R-functions.org]]
--  [[goodies/targets.org]]
-Optional
--  [[goodies/lazy-coder.org]]
-
-----------------------------------------------------------------------
-
-* Exercise 2: Targeted projects
-
-** Download all files from github
-
-*** Via zip file
-
-https://github.com/tagteam/registerTargets/archive/refs/heads/main.zip
-
-Unzip the file in a good neighborhood on your computer. 
-
-*** Using git
-
-If you have the program =git= installed you can clone the github repository:
-
-#+BEGIN_SRC sh
-git clone https://github.com/tagteam/registerTargets/
-#+END_SRC
-
-** Create RStudio projects
-
-Use the RStudio dialog /New project/ where you choose /Existing Directory/ 
-to create a project in the subfolder:
-
-=exercises/registerTargets=
-
-Notes: The subfolder appears as a result of the previous step
-(Download all files from github). The project name /nuts/ is
-obviously is short for /in a nutshell/.
-
-You can now switch back and forth between the projects using the main menu of RStudio.
-
+- Example usage of the R-package =targets=
+  
 ----------------------------------------------------------------------
 
 * Exercise 3: A minimal targets project
