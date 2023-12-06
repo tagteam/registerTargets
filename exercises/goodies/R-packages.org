@@ -12,7 +12,6 @@ for (p in course_packages){
 }
 #+END_SRC
 
-#+RESULTS[(2023-12-06 13:29:34) 2d6b164133d6a84e162908777ce0de48fe8e2a78]:
 #+begin_example
 devtools : 2.4.5 
 targets : 0.14.1 
