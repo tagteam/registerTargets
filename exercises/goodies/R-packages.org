@@ -12,24 +12,24 @@ for (p in course_packages){
 }
 #+END_SRC
 
+#+RESULTS:
 #+begin_example
 devtools : 2.4.5 
 targets : 0.14.1 
 SuperLearner : 2.0.28 
 tmle : 1.5.0.2 
-data.table : 1.14.6 
+data.table : 1.14.8 
 ranger : 0.14.1 
-glmnet : 4.1.4 
-Publish : 2022.4.3 
-lava : 1.7.0 
-riskRegression : 2022.11.28 
+glmnet : 4.1.7 
+Publish : 2023.1.17 
+lava : 1.7.2.1 
+riskRegression : 2023.11.23 
 matrixStats : 0.62.0 
-ggplot2 : 3.4.0 
+ggplot2 : 3.4.2 
 survival : 3.4.0 
-prodlim : 2022.10.13 
+prodlim : 2023.8.28 
 heaven : 2022.7.13
 #+end_example
-
 
 You may have different versions installed on your computer and whether
 this is the case can be useful knowlegde. If at some point the

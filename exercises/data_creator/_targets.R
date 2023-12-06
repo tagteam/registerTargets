@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  8 2022 (16:00) 
 ## Version: 
-## Last-Updated: Dec 11 2022 (17:43) 
+## Last-Updated: Dec  6 2023 (12:14) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 138
+##     Update #: 160
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -16,7 +16,10 @@
 ### Code:
 library(targets)
 library(heaven)
+library(lava)
 library(data.table)
+## library(augmentedLtmle)
+setwd("~/metropolis/Teaching/targetedRegisterAnalysis/exercises/data_creator/")
 for (f in list.files("functions/",pattern = "R$",recursive = TRUE,full.names = TRUE)){source(f)}
 list(
     tar_target(N,99999),
@@ -89,6 +92,37 @@ list(
         },by = pnr]
         setkey(lmdb,pnr)
         lmdb[]
+    }),
+    # simulate data alike stroke outcome dual treatment GS analysis
+    tar_target(coefs,{
+        source("input/coefs.txt")
+        coefs
+    }),
+    tar_target(lava_model,{
+        get_lava_model(coefs,time_horizon = 10)
+    }),
+    tar_target(sim_data,{
+        sd = setDT(sim(lava_model,23149))
+        sd[,pnr := 1:.N]
+        sd[]
+    }),
+    tar_target(sim_time_covariates, {
+        sim_data
+        sim_time_covariates <- sim_data[,c("pnr",grep(paste(unique(unlist(lapply(c("mace","statin"),function(x){gsub("_[^_]*$", "", x)}))), collapse = "|"),names(sim_data),value = TRUE)), with = FALSE]
+        sim_time_covariates[,(names(sim_time_covariates)[-1]):=lapply(.SD, as.numeric), .SDcols = names(sim_time_covariates)[-1]]
+        sim_time_covariates[]
+    }),
+    tar_target(test_run,{
+        run_ltmle(name_outcome="stroke",
+                  time_horizon=c(4),
+                  outcome_data=sim_data[,grep("pnr|stroke_|Censored|Dead", names(sim_data)), with = FALSE],
+                  regimen_data=list(GS = sim_data[,grep("pnr|GS|B", names(sim_data)), with = FALSE]),
+                  baseline_data=sim_data[,c("pnr","sexMale","education","agegroups","tertile_income","index_heart_failureYes","diabetes_duration"),with=FALSE],
+                  timevar_data=sim_time_covariates,
+                  censor_others=FALSE,
+                  abar = list(rep(1,4),rep(0,4)),
+                  SL.library="glm",
+                  verbose=TRUE)
     })
 )
 

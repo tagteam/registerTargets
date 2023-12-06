@@ -1,50 +1,110 @@
 * Welcome
 
-Here you find the material for our PhD course 'Targeted Register Analysis'.
+Here you find the schedule for our PhD course 'Targeted Register
+Analysis'. Lecture notes and exercises are still under revision. Links
+to lecture notes and exercises will be available here on the first
+course day.
 
 ** Venue
 
-CSS-22-0-19, Øster Farimagsgade 5, 1014 Copenhagen. See map of CSS:
+CSS = Center for Sundhed of Samfund
+Øster Farimagsgade 5, 1014 Copenhagen.
+
+| Weekday   | Date             | Room         |
+|-----------+------------------+--------------|
+| Monday    | 11 December 2023 | CSS 18.01.11 |
+| Tuesday   | 12 December 2023 | CSS 5.0.22   |
+| Wednesday | 13 December 2023 | CSS 35.0.12  |
+| Friday    | 14 December 2023 | CSS 18.01.11 |
+
+See map of CSS:
 
 https://publichealth.ku.dk/contact/
 
 ** Schedule
 
-*** Monday 2022-12-12
-|----------------+--------------------------------------------------------+-------------------------|
-| 8:15 -- 8:20   | Introduction to the course                             | Thomas Alexander Gerds  |
-| 8:20 -- 11:00  | Lectures on Register Epidemiology (with coffee breaks) | Christian Torp-Pedersen |
-| 11:15 -- 11:45 | Introduction to exercises                              | Thomas Alexander Gerds  |
-| 12:30 -- 14:30 | Exercises                                              |                         |
+*** Monday 2023-12-11
 
-*** Tuesday 2022-12-13
-|----------------+-------------------------------------------------------------------+------------------------|
-| 8:15 -- 11:00  | Lectures on The Roadmap of Targeted Learning (with coffee breaks) | Andrew Mertens         |
-| 11:15 -- 11:45 | Introduction to exercises                                         | Thomas Alexander Gerds |
-| 12:30 -- 14:30 | Exercises                                                         |                        |
-|----------------+-------------------------------------------------------------------+------------------------|
+|----------------+----------------------------------------------+-------------------------|
+| 8:15 -- 8:20   | Introduction to the course                   | Thomas Alexander Gerds  |
+| 8:20 -- 8:45   | Lectures on Register Epidemiology (part I)   | Christian Torp-Pedersen |
+| 8:45 -- 8:55   | Coffee break                                 |                         |
+| 8:55 -- 9:25   | Exercise 1.1                                 | Thomas Alexander Gerds  |
+| 9:30 -- 9:55   | Lectures on Register Epidemiology (part II)  | Christian Torp-Pedersen |
+| 10:00 -- 10:30 | Exercise 1.2                                 | Thomas Alexander Gerds  |
+| 10:30 -- 10:40 | Coffee break                                 |                         |
+| 10:40 -- 11:05 | Lectures on Register Epidemiology (part III) | Christian Torp-Pedersen |
+| 11:10 -- 11:40 | Exercise 1.3                                 | Thomas Alexander Gerds  |
+| 11:40 -- 12:45 | Lunch                                        |                         |
+| 12:45 -- 13:10 | Lectures on Register Epidemiology (part IV)  | Christian Torp-Pedersen |
+| 13:15 -- 13:45 | Exercise 1.4                                 | Thomas Alexander Gerds  |
+| 13:45 -- 13:55 | Coffee break                                 |                         |
+| 13:55 -- 14:20 | Lectures on Register Epidemiology (part V)   | Christian Torp-Pedersen |
+| 14:25 -- 14:55 | Exercise 1.5                                 | Thomas Alexander Gerds  |
 
-*** Wednesday 2022-12-14
+
+*** Tuesday 2023-12-12
+
+|----------------+---------------------------------------------------------+------------------------|
+| 8:15 -- 8:20   | Introduction                                            | Thomas Alexander Gerds |
+| 8:20 -- 8:45   | Lectures on The Roadmap of Targeted Learning (part I)   | Andrew Mertens         |
+| 8:45 -- 8:55   | Coffee break                                            |                        |
+| 8:55 -- 9:25   | Exercise 2.1                                            | Thomas Alexander Gerds |
+| 9:30 -- 9:55   | Lectures on The Roadmap of Targeted Learning (part II)  | Andrew Mertens         |
+| 10:00 -- 10:30 | Exercise 2.2                                            | Thomas Alexander Gerds |
+| 10:30 -- 10:40 | Coffee break                                            |                        |
+| 10:40 -- 11:05 | Lectures on The Roadmap of Targeted Learning (part III) | Andrew Mertens         |
+| 11:10 -- 11:40 | Exercise 2.3                                            | Thomas Alexander Gerds |
+| 11:40 -- 12:45 | Lunch                                                   |                        |
+| 12:45 -- 13:10 | Lectures on The Roadmap of Targeted Learning (part IV)  | Andrew Mertens         |
+| 13:15 -- 13:45 | Exercise 2.4                                            | Thomas Alexander Gerds |
+| 13:45 -- 13:55 | Coffee break                                            |                        |
+| 13:55 -- 14:20 | Lectures on The Roadmap of Targeted Learning (part V)   | Andrew Mertens         |
+| 14:25 -- 14:55 | Exercise 2.5                                            | Thomas Alexander Gerds |
+
+
+*** Wednesday 2023-12-13
+
+|----------------+----------------------------------------------------------+------------------------|
+| 8:15 -- 8:20   | Introduction                                             | Thomas Alexander Gerds |
+| 8:20 -- 8:45   | Lectures on Machine Learning in Register Data (part I)   | Marvin N. Wright       |
+| 8:45 -- 8:55   | Coffee break                                             |                        |
+| 8:55 -- 9:25   | Exercise 3.1                                             | Thomas Alexander Gerds |
+| 9:30 -- 9:55   | Lectures on Machine Learning in Register Data (part II)  | Marvin N. Wright       |
+| 10:00 -- 10:30 | Exercise 3.2                                             | Thomas Alexander Gerds |
+| 10:30 -- 10:40 | Coffee break                                             |                        |
+| 10:40 -- 11:05 | Lectures on Machine Learning in Register Data (part III) | Marvin N. Wright       |
+| 11:10 -- 11:40 | Exercise 3.3                                             | Thomas Alexander Gerds |
+| 11:40 -- 12:45 | Lunch                                                    |                        |
+| 12:45 -- 13:10 | Lectures on Machine Learning in Register Data (part IV)  | Marvin N. Wright       |
+| 13:15 -- 13:45 | Exercise 3.4                                             | Thomas Alexander Gerds |
+| 13:45 -- 13:55 | Coffee break                                             |                        |
+| 13:55 -- 14:20 | Lectures on Machine Learning in Register Data (part V)   | Marvin N. Wright       |
+| 14:25 -- 14:55 | Exercise 3.5                                             | Thomas Alexander Gerds |
+
+
+*** Thursday 2023-12-14
+
 |----------------+--------------------------------------------------------------------+------------------------|
-| 8:15 -- 11:00  | Lectures on Machine Learning in Register Data (with coffee breaks) | Marvin N. Wright       |
-| 11:15 -- 11:45 | Introduction to exercises                                          | Thomas Alexander Gerds |
-| 12:30 -- 14:30 | Exercises                                                          |                        |
-|----------------+--------------------------------------------------------------------+------------------------|
-
-*** Thursday 2022-12-15
-|----------------+------------------------------------------------------------------------------+------------------------|
-| 8:15 -- 11:00  | Lectures on Longitudinal Targeted Minimum Loss Learning (with coffee breaks) | Zeyi Wang              |
-| 11:15 -- 11:45 | Introduction to exercises                                                    | Thomas Alexander Gerds |
-| 12:30 -- 14:30 | Exercises                                                                    |                        |
-|----------------+------------------------------------------------------------------------------+------------------------|
+| 8:15 -- 8:20   | Introduction                                                       | Thomas Alexander Gerds |
+| 8:20 -- 8:45   | Lectures on Longitudinal Targeted Minimum Loss Learning (part I)   | Zeyi Wang              |
+| 8:45 -- 8:55   | Coffee break                                                       |                        |
+| 8:55 -- 9:25   | Exercise 4.1                                                       | Thomas Alexander Gerds |
+| 9:30 -- 9:55   | Lectures on Longitudinal Targeted Minimum Loss Learning (part II)  | Zeyi Wang              |
+| 10:00 -- 10:30 | Exercise 4.2                                                       | Thomas Alexander Gerds |
+| 10:30 -- 10:40 | Coffee break                                                       |                        |
+| 10:40 -- 11:05 | Lectures on Longitudinal Targeted Minimum Loss Learning (part III) | Zeyi Wang              |
+| 11:10 -- 11:40 | Exercise 4.3                                                       | Thomas Alexander Gerds |
+| 11:40 -- 12:45 | Lunch                                                              |                        |
+| 12:45 -- 13:10 | Lectures on Longitudinal Targeted Minimum Loss Learning (part IV)  | Zeyi Wang              |
+| 13:15 -- 13:45 | Exercise 4.4                                                       | Thomas Alexander Gerds |
+| 13:45 -- 13:55 | Coffee break                                                       |                        |
+| 13:55 -- 14:20 | Lectures on Longitudinal Targeted Minimum Loss Learning (part V)   | Zeyi Wang              |
+| 14:25 -- 14:55 | Exercise 4.5                                                       | Thomas Alexander Gerds |
 
 # Footer:
 ------------------------------------------------------------------------------------------------------
 
 **** Navigation
-- [[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day1.org][targeted exercises day 1]]
-- [[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day2.org][targeted exercises day 2]]
-- [[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day3.org][targeted exercises day 3]]
-- [[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day4.org][targeted exercises day 4]]
-- [[https://github.com/tagteam/registerTargets/blob/main/lecture_notes][lecture notes]]
-- [[https://github.com/tagteam/registerTargets/blob/main/exercises/goodies][goodies]]
+
+Links to lecture notes and exercises will be available here

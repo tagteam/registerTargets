@@ -1,9 +1,17 @@
 name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
 ami_pop|stem|ed28329de31d5e5f|de9e0dc1c935ab90|75655dee708204d1|-534089198||t19337.6957253329s|bcc34ffe8b862279|41376|rds|local|vector|||0.026||
+coefs|stem|f6c093b710402227|553b56a7772530f5|700949601d51c337|-1662652578||t19697.3707772598s|af17560635cbbc70|16870|rds|local|vector|||0.004||
 cpr|stem|fd7d4094be25a7f8|52502e2ca7069169|7ca93889bc68cc64|-351548350||t19337.6957186201s|e9da0ca5395c7793|1871879|rds|local|vector|||0.076||
-f|object|dc54472bcca9cd97|||||||||||||||
+f|object|c79c1d7197977f95|||||||||||||||
+get_lava_model|function|fd0f37e1ab06b0c2|||||||||||||||
+lava_model|stem|7cf1e9f0ae262c6b|25f4f1538bf57ba6|86088194c191735d|-1024502408||t19697.3711071683s|12c4074c947d0f2f|310666|rds|local|vector|||10.816||
 lmdb|stem|1ecee040bf79b07e|8bc9938f39ce5764|90d2c666172e03d8|-2048781214||t19337.6966786898s|43f04116a55352c9|4063416|rds|local|vector|||3.636||
 lpr|stem|229d4979c69d660f|c0eddb4622b81783|6ba77aa6b329a301|1123485397||t19337.6957249163s|ccdfe014aa47c511|3624923|rds|local|vector|||0.169||
 make_pnr|function|12aeed2f23ece7b1|||||||||||||||
 N|stem|c349b6dfcfdf2aee|df696ce69e0b9f74|ef46db3751d8e999|-1850956989||t19337.6957157498s|c9aaea90a821e608|53|rds|local|vector|||0.001||
 not_ami_pop|stem|ce8c65a71f8dd1e3|94388ad2403e4655|1010adcf24efe584|2091299302||t19337.696629941s|77d8bb894e3aad4b|1655543|rds|local|vector|||0.026||
+run_ltmle|function|4a0ec251e1776034|||||||||||||||
+sim_data|stem|769f08475e3f28b7|466e8104f7c69721|ec06e4c76f16d550|365671976||t19697.3746910778s|6b97fbe70b8f2ba4|2247006|rds|local|vector|||0.866||
+sim_time_covariates|stem|dc056c704acd009d|20b231a61f4101c9|c52ce54b675df7db|1457187274||t19697.3802705722s|3c1b6a9e67723120|155423|rds|local|vector|||0.009||
+summary.runLtmle|function|81fec77deb7cd0f2|||||||||||||||
+test_run|stem|25ae06222af130f6|b442374d1ff6073e|fba41f33f0e9239d|120619522||t19697.4685199556s|3b6a7a0e08a75c43|2347284|rds|local|vector|||3.614|Counting regimen adherence only for first element of abar. Variance estimate is based on influence curve only, which may be significantly anticonservative because your data appears to contain positivity violations. Robust variance estimate is not currently available with deterministic.Q.function but this will be addressed in a future release.|

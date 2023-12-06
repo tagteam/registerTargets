@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec 10 2022 (08:52) 
 ## Version: 
-## Last-Updated: Dec 13 2022 (15:10) 
+## Last-Updated: Dec  5 2023 (09:12) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 24
+##     Update #: 25
 #----------------------------------------------------------------------
 ## 
 ### Commentary: This is a common R-script which we want to translate
@@ -27,7 +27,6 @@ library(data.table)
 pop <- fread("popami.csv",keepLeadingZeros = TRUE,
              colClasses = c("character","character",rep("Date",5),"numeric"))
 str(pop)
-
 
 # the R-code below should be organized in targets
 

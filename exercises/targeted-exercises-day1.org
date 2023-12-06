@@ -1,4 +1,5 @@
-#+TITLE: PhD course: Targeted Register Analysis: Exercises: Day 1
+#+TITLE: PhD course Targeted Register Analysis. Exercises: Day 1
+
 
 * Objectives
 
@@ -6,16 +7,17 @@ The learning targets of this exercise are:
 
 - Check your R-setup.
 - Create RStudio projects.
-- First experience with the R-package =targets= 
+- Basic concept of the R-package =targets=
+- First experience with the augmented R-package =Ltmle= 
 
 ----------------------------------------------------------------------
 
-* Exercise 1: Warm-up
+* Exercise 1: Warm-up 
 
 An important part of the exercises consists of reading. The reading
 material includes both general information and also instructions on
-how to prepare the remaining exercises. Please read in the following
-order:
+how to prepare the remaining exercises. Please read and perform in the
+following order:
 
 -  [[goodies/R-packages.org]]
 -  [[goodies/RStudio-projects.org]]
@@ -47,15 +49,12 @@ git clone https://github.com/tagteam/registerTargets/
 ** Create RStudio projects
 
 Use the RStudio dialog /New project/ where you choose /Existing Directory/ 
-to create projects in the
-following three subfolders:
+to create a project in the subfolder:
 
-1. =exercises/nuts=
-2. =exercises/ami=
-3. =exercises/statins=
+=exercises/registerTargets=
 
-Notes: The subfolders appear as a result of the previous step
-(Download all files from github).  The project name /nuts/ is
+Notes: The subfolder appears as a result of the previous step
+(Download all files from github). The project name /nuts/ is
 obviously is short for /in a nutshell/.
 
 You can now switch back and forth between the projects using the main menu of RStudio.
