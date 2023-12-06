@@ -1,29 +1,29 @@
 * Versions
 
 The exercises for this course were developed and tested using R
-version =4.2.1= and RStudio version =2022.07.2+576=. The versions of
+version =4.3.0= and RStudio version =2023.09.1+494=. The versions of
 the most important R-packages are:
 
 #+BEGIN_SRC R  :results output   :exports  (exercise-with-code)  :session *R* :cache yes
-course_packages  <- c("devtools","targets","SuperLearner","tmle","data.table","ranger","glmnet","Publish","lava","riskRegression","matrixStats","ggplot2","survival","prodlim","heaven")
+course_packages  <- c("devtools","targets","SuperLearner","data.table","ranger","glmnet","Publish","lava","riskRegression","Matrix1","matrixStats","ggplot2","survival","prodlim","heaven")
 for (p in course_packages){
   v=packageVersion(p)
   cat(paste(p,":",v,"\n"))
 }
 #+END_SRC
 
-#+RESULTS:
+#+RESULTS[(2023-12-06 13:29:34) 2d6b164133d6a84e162908777ce0de48fe8e2a78]:
 #+begin_example
 devtools : 2.4.5 
 targets : 0.14.1 
 SuperLearner : 2.0.28 
-tmle : 1.5.0.2 
 data.table : 1.14.8 
 ranger : 0.14.1 
 glmnet : 4.1.7 
 Publish : 2023.1.17 
 lava : 1.7.2.1 
 riskRegression : 2023.11.23 
+Matrix : 1.5.1 
 matrixStats : 0.62.0 
 ggplot2 : 3.4.2 
 survival : 3.4.0 
@@ -58,12 +58,12 @@ if (!require("targets",quietly=TRUE)) install.packages("targets")
 if (!require("data.table",quietly=TRUE)) install.packages("data.table")
 if (!require("ranger",quietly=TRUE)) install.packages("ranger")
 if (!require("SuperLearner",quietly=TRUE)) install.packages("SuperLearner")
-if (!require("tmle",quietly=TRUE)) install.packages("tmle")
 if (!require("glmnet",quietly=TRUE)) install.packages("glmnet")
 if (!require("Publish",quietly=TRUE)) install.packages("Publish")
 if (!require("lava",quietly=TRUE)) install.packages("lava")
 if (!require("riskRegression",quietly=TRUE)) install.packages("riskRegression")
 if (!require("matrixStats",quietly=TRUE)) install.packages("matrixStats")
+if (!require("Matrix",quietly=TRUE)) install.packages("Matrix")
 if (!require("ggplot2",quietly=TRUE)) install.packages("ggplot2")
 if (!require("prodlim",quietly=TRUE)) install.packages("prodlim")
 if (!require("survival",quietly=TRUE)) install.packages("survival")
@@ -77,12 +77,3 @@ some guidance:
 https://support.posit.co/hc/en-us/articles/200554786-Problem-Installing-Packages-in-the-RStudio-IDE
 
 
-# Footer:
-------------------------------------------------------------------------------------------------------
-**** Navigation
-- [[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day1.org][targeted exercises day 1]]
-- [[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day2.org][targeted exercises day 2]]
-- [[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day3.org][targeted exercises day 3]]
-- [[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day4.org][targeted exercises day 4]]
-- [[https://github.com/tagteam/registerTargets/blob/main/lecture_notes][lecture notes]]
-- [[https://github.com/tagteam/registerTargets/blob/main/exercises/goodies][goodies]]
