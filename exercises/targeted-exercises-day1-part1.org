@@ -1,0 +1,55 @@
+#+TITLE: PhD course Targeted Register Analysis. Exercises: Day 1 part 1
+
+* Objectives
+
+The learning targets of this exercise are:
+
+- Download the course material.
+- Create the RStudio project.
+
+* Exercise 1: Warm-up 
+
+An important part of the exercises consists of reading. The reading
+material includes both general information and also instructions on
+how to prepare the remaining exercises. To prepare the course you
+should readily have performed the version check:
+
+-  [[goodies/R-packages.org]]
+
+Now, please read 
+
+-  [[goodies/RStudio-projects.org]]
+
+----------------------------------------------------------------------
+
+* Exercise 2: RStudio projects for course exercises
+
+** Download all files from github
+
+*** Via zip file
+
+https://github.com/tagteam/registerTargets/archive/refs/heads/main.zip
+
+Unzip the file in a good neighborhood on your computer. 
+
+*** Using git
+
+If you have the program =git= installed you can clone the github repository:
+
+#+BEGIN_SRC sh
+git clone https://github.com/tagteam/registerTargets/
+#+END_SRC
+
+* Exercise 3: create RStudio projects
+
+You should now have a folder called /registerTargets/ in you computer.
+Use the RStudio dialog /New project/ where you choose /Existing
+Directory/ to create a project for the subfolder:
+
+=exercises/example_project=
+
+Then, also create a second RStudio project for the subfolder:
+
+=exercises/register_project=
+
+----------------------------------------------------------------------

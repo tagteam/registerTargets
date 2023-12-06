@@ -1,0 +1,6 @@
+#+TITLE: PhD course Targeted Register Analysis. Exercises: Day 1 part 4
+
+* Objectives
+
+The learning targets of this exercise is a first experience with (our
+augmented version) R-package =ltmle=

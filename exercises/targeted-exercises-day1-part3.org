@@ -1,0 +1,21 @@
+#+TITLE: PhD course Targeted Register Analysis. Exercises: Day 1 part 3
+
+* Objectives
+
+The learning targets of this exercise is an introduction to the basic
+concept of the R-package =targets=
+
+** References
+
+-  [[goodies/R-functions.org]]
+-  [[goodies/lazy-coder.org]]
+
+----------------------------------------------------------------------
+
+* Modifying an existing targets project
+
+- Switch to the RStudio project called /ami/ that you have created in Exercise 2.
+- Open and read the file =_targets.R=
+- Open and read the functions that are used in the pipeline.
+- Open the file =_run_targets.R= and work out the exercises defined there.
+
