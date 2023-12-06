@@ -40,7 +40,7 @@ https://publichealth.ku.dk/contact/
 | 13:15 -- 13:45 | Exercise 1.4                                 | Thomas Alexander Gerds  |
 | 13:45 -- 13:55 | Coffee break                                 |                         |
 | 13:55 -- 14:20 | Lectures on Register Epidemiology (part V)   | Christian Torp-Pedersen |
-| 14:25 -- 14:55 | Exercise 1.5                                 | Thomas Alexander Gerds  |
+| 14:25 -- 14:55 | Discussion and finishing Exercises           | Thomas Alexander Gerds  |
 
 
 *** Tuesday 2023-12-12
@@ -60,7 +60,7 @@ https://publichealth.ku.dk/contact/
 | 13:15 -- 13:45 | Exercise 2.4                                            | Thomas Alexander Gerds |
 | 13:45 -- 13:55 | Coffee break                                            |                        |
 | 13:55 -- 14:20 | Lectures on The Roadmap of Targeted Learning (part V)   | Andrew Mertens         |
-| 14:25 -- 14:55 | Exercise 2.5                                            | Thomas Alexander Gerds |
+| 14:25 -- 14:55 | Discussion and finishing Exercises                                              | Thomas Alexander Gerds |
 
 
 *** Wednesday 2023-12-13
@@ -80,7 +80,7 @@ https://publichealth.ku.dk/contact/
 | 13:15 -- 13:45 | Exercise 3.4                                             | Thomas Alexander Gerds |
 | 13:45 -- 13:55 | Coffee break                                             |                        |
 | 13:55 -- 14:20 | Lectures on Machine Learning in Register Data (part V)   | Marvin N. Wright       |
-| 14:25 -- 14:55 | Exercise 3.5                                             | Thomas Alexander Gerds |
+| 14:25 -- 14:55 | Discussion and finishing Exercises                                             | Thomas Alexander Gerds |
 
 
 *** Thursday 2023-12-14
@@ -100,7 +100,7 @@ https://publichealth.ku.dk/contact/
 | 13:15 -- 13:45 | Exercise 4.4                                                       | Thomas Alexander Gerds |
 | 13:45 -- 13:55 | Coffee break                                                       |                        |
 | 13:55 -- 14:20 | Lectures on Longitudinal Targeted Minimum Loss Learning (part V)   | Zeyi Wang              |
-| 14:25 -- 14:55 | Exercise 4.5                                                       | Thomas Alexander Gerds |
+| 14:25 -- 14:55 | Discussion and finishing Exercises                                                       | Thomas Alexander Gerds |
 
 # Footer:
 ------------------------------------------------------------------------------------------------------
