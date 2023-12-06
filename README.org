@@ -15,7 +15,7 @@ CSS = Center for Sundhed of Samfund
 | Monday    | 11 December 2023 | CSS 18.01.11 |
 | Tuesday   | 12 December 2023 | CSS 5.0.22   |
 | Wednesday | 13 December 2023 | CSS 35.0.12  |
-| Friday    | 14 December 2023 | CSS 18.01.11 |
+| Thursday | 14 December 2023 | CSS 18.01.11 |
 
 See map of CSS:
 
