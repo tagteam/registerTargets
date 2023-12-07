@@ -6,69 +6,20 @@ The learning targets of this exercise is an introduction to the basic
 concept of the R-package =targets=
   
 ----------------------------------------------------------------------
+** Preparation
 
 -  [[goodies/targets.org]]
 
-
-* A minimal targets project
+* An example targets project
 
 - Switch to the RStudio project /example_project/ (e.g., via recent projects)
-- Open the file =_targets.R= (e.g., via "Control-Shift f" eller "Control .") 
-- Read the file =_targets.R=
+- Open and read the file =_targets.R= (e.g., via "Control-Shift f" eller "Control .") 
 - Open and work through the file =run_targets.R= then continue here
-- Answer the following question:
-
- /What is the sum of the maximum female age and the maximum male age?/    
-
-- Trouble shooting: Using =targets= makes it generally more difficult
-  to identify why/where the error/warning is coming from. To be prepared:
-  + Note that =tar_make()= runs the file =_targets.R= by default in a fresh clean R
-    session. Hence, (syntax) errors can appear in one of the functions
-    that are sourced in the beginning of the file =_targets.R=
-  + Note that when a warning occurs you can temporarily turns warnings into
-    errors, via =options(warn=2)= such that =traceback()= can help to identify where the warning is coming from.  
-  + When an error occurs in a specific target, you can load the
-    objects that this target depends on, either manually or using
-    =tar_load_everything()=.  Once all dependencies are loaded you can
-    evaluate the target which has an error line by line. To make this an easy procedure, it
-    it recommended to match the name of the arguments of the functions with their values such that
-    the =_targets.R= looks like this 
-#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  :eval never
-    ...,
-    tar_target(como, {
-      get_como(study_pop=study_pop, icd_codes=icd_codes)
-    },
-    tar_target(table1, {
-      get_table1(study_pop=study_pop, como=como)
-    },
-    ...
-#+END_SRC    
-  It is also recommended to save a function with a specific name in a
-  file =functions/name.R=, e.g., the function =get_como= is saved in the file
-  called =get_como.R= to make it easy to find the code.
-  + Example of an error in the pipeline: Add the following line in the file =functions/this.R= inside the
-  definition =(1=2)=. Note that this is a syntax error. Then run =tar_make()= and see what happens,
-  i.e., consider the error message. You may follow the suggestion of the error message:
-  
- Tips: https://books.ropensci.org/targets/debugging.html
-
- and here in particular look into Sections 3.4 'Error messages' and 3.5 'Functions'. You will learn that
- a good place to start looking is the file =_targets/meta/meta=. It is convenient to read this file with
- R:
- #+ATTR_LATEX: :options otherkeywords={}, deletekeywords={}
- #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
-  tar_meta(fields = c("warnings","error"))
- #+END_SRC
-
 - Add the following new target to the pipeline: 
  
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
-tar_target(demo_table,{
-  data[,agegroup:=  acut(age,breaks=c(-Inf,60,65,70,75,Inf),
-                         format="%l-%u",
-                         format.low="below %u",
-                         format.high="above %l")]
-  data[,.N,keyby=c("sex","agegroup")]},
+tar_target(propensity_score_table,{
+
   packages=c("data.table","Publish"))
 #+END_SRC
 
@@ -84,87 +35,3 @@ tar_target(demo_table,{
   Then run =tar_make()= again ...
 ----------------------------------------------------------------------
 
-
-
-* Exercise 1: A minimal targets project
-
-- Switch to the RStudio project /nuts/ (e.g., via recent projects)
-- Open the file =_targets.R= (e.g., via "Control-Shift f" eller "Control .") 
-- Read the file =_targets.R=
-- Open and work through the file =run_targets.R= then continue here
-- Answer the following question:
-
- /What is the sum of the maximum female age and the maximum male age?/    
-
-- Trouble shooting: Using =targets= makes it generally more difficult
-  to identify why/where the error/warning is coming from. To be prepared:
-  + Note that =tar_make()= runs the file =_targets.R= by default in a fresh clean R
-    session. Hence, (syntax) errors can appear in one of the functions
-    that are sourced in the beginning of the file =_targets.R=
-  + Note that when a warning occurs you can temporarily turns warnings into
-    errors, via =options(warn=2)= such that =traceback()= can help to identify where the warning is coming from.  
-  + When an error occurs in a specific target, you can load the
-    objects that this target depends on, either manually or using
-    =tar_load_everything()=.  Once all dependencies are loaded you can
-    evaluate the target which has an error line by line. To make this an easy procedure, it
-    it recommended to match the name of the arguments of the functions with their values such that
-    the =_targets.R= looks like this 
-#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  :eval never
-    ...,
-    tar_target(como, {
-      get_como(study_pop=study_pop, icd_codes=icd_codes)
-    },
-    tar_target(table1, {
-      get_table1(study_pop=study_pop, como=como)
-    },
-    ...
-#+END_SRC    
-  It is also recommended to save a function with a specific name in a
-  file =functions/name.R=, e.g., the function =get_como= is saved in the file
-  called =get_como.R= to make it easy to find the code.
-  + Example of an error in the pipeline: Add the following line in the file =functions/this.R= inside the
-  definition =(1=2)=. Note that this is a syntax error. Then run =tar_make()= and see what happens,
-  i.e., consider the error message. You may follow the suggestion of the error message:
-  
- Tips: https://books.ropensci.org/targets/debugging.html
-
- and here in particular look into Sections 3.4 'Error messages' and 3.5 'Functions'. You will learn that
- a good place to start looking is the file =_targets/meta/meta=. It is convenient to read this file with
- R:
- #+ATTR_LATEX: :options otherkeywords={}, deletekeywords={}
- #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
-  tar_meta(fields = c("warnings","error"))
- #+END_SRC
-
-- Add the following new target to the pipeline: 
- 
-#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
-tar_target(demo_table,{
-  data[,agegroup:=  acut(age,breaks=c(-Inf,60,65,70,75,Inf),
-                         format="%l-%u",
-                         format.low="below %u",
-                         format.high="above %l")]
-  data[,.N,keyby=c("sex","agegroup")]},
-  packages=c("data.table","Publish"))
-#+END_SRC
-
-  Run =tar_make()= then load and print this new target:
-  =tar_load(demo_table)= followed by =print(demo_table)=
-- Extract and move the body of the just created target 'demo_table' to a new file
-  =functions/get_demo_table.R=, adapt the file =_targets.R=:
-#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
-tar_target(demo_table,{
-  get_demo_table(data)
-},packages=c("data.table","Publish"))
-#+END_SRC  
-  Then run =tar_make()= again ...
-
-# Footer:
-------------------------------------------------------------------------------------------------------
-**** Navigation
-- [[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day1.org][targeted exercises day 1]]
-- [[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day2.org][targeted exercises day 2]]
-- [[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day3.org][targeted exercises day 3]]
-- [[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day4.org][targeted exercises day 4]]
-- [[https://github.com/tagteam/registerTargets/blob/main/lecture_notes][lecture notes]]
-- [[https://github.com/tagteam/registerTargets/blob/main/exercises/goodies][goodies]]

@@ -2,20 +2,41 @@
 
 * Objectives
 
-The learning targets of this exercise is an introduction to the basic
-concept of the R-package =targets=
+The learning targets of this exercise to write a function which is
+used to create a target in the pipeline.
 
-** References
+** Preparation
 
 -  [[goodies/R-functions.org]]
 -  [[goodies/lazy-coder.org]]
 
 ----------------------------------------------------------------------
 
-* Modifying an existing targets project
+* Working with an existing targets project
 
-- Switch to the RStudio project called /ami/ that you have created in Exercise 2.
-- Open and read the file =_targets.R=
-- Open and read the functions that are used in the pipeline.
-- Open the file =_run_targets.R= and work out the exercises defined there.
+- Switch to the RStudio project called /example_project/ that you have created and worked through in previous Exercises.
+- Open the R-quarto file called "example_report.qmd"
+- Export the file to html by clicking =Render=. 
+- Use =tar_load= to load the object =table_1=. You can also use =tar_load_everything()=.
+- Add the following new target to the pipeline: 
+ 
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+tar_target(propensity_score_table,{
+  formula <- treat~sex+age+biomarker
+  ps <- glm(formula,data=data,family="binomial")
+  publish(ps)
+)
+#+END_SRC
 
+Run =tar_make()= then load and print this new target:
+=tar_load(propensity_score_table)= followed by =print(propensity_score_table)=
+- Extract and move the body of the just created target 'propensity_score_table' to a new file
+  =functions/get_propensity_score_table.R= which defines a new function called
+  =get_propensity_score_table=. Then adapt the file =_targets.R= as follows:
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+tar_target(demo_table,{
+  get_propensity_score_table(formula,data)
+},packages=c("data.table","Publish"))
+#+END_SRC  
+- Run =tar_make()= again ...
+- Add the propensity score table to the report example

@@ -52,4 +52,5 @@ Then, also create a second RStudio project for the subfolder:
 
 =exercises/register_project=
 
+You can now switch back and forth between the two projects using the main menu of RStudio.
 ----------------------------------------------------------------------
