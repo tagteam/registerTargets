@@ -29,6 +29,7 @@ tar_target(ltmle_analysis,{
 
 - Run the pipeline via =tar_make()=
 - Load the object =ltmle_analysis=
-- Find the fitted propensity score model in the object =ltmle_fit$fit$g=
-  Compare with the object =propensity_score_table=
-
+- Find the fitted propensity score model in the object =ltmle_analysis$fit$g=
+  Compare with the object =propensity_score_table= produced in the previous exercises
+- Add a new target to the pipeline which computes =summary(ltmle_analysis)=
+- Add the output of the =summary(ltmle_analysis)= to the file "example_report.qmd" 
