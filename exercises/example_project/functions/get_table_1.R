@@ -7,7 +7,7 @@
 ## 
 ### Code:
 get_table_1 <- function(data,formula){
-    # create table 1
+    # create table 1 based on formula and data
     summary(utable(formula,data))
 }
 
