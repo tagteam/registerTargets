@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  6 2023 (14:55) 
 ## Version: 
-## Last-Updated: Dec  7 2023 (14:07) 
+## Last-Updated: Dec  7 2023 (17:24) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 34
+##     Update #: 35
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -54,7 +54,7 @@ list(tar_target(sample_size,{137}),
      }),
      tar_target(table_1, {
          t1 <- get_table_1(data = data,
-                           formula = treatment~age+sex+biomarker)
+                           formula = treatment~Q(age)+sex+Q(biomarker))
          fwrite(t1,"export/table1.csv")
          t1
      }),

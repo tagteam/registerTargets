@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  7 2023 (08:37) 
 ## Version: 
-## Last-Updated: Dec  7 2023 (09:08) 
+## Last-Updated: Dec  7 2023 (17:24) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 16
+##     Update #: 20
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -17,11 +17,13 @@
 #----------------------------------------------------------------------
 ## 
 ### Code:
+
 library(targets)
+library(Publish)
 # list the targets
 tar_manifest()
 # plot the dependency graf
-tar_visnetwork()
+tar_visnetwork(targets_only = TRUE)
 # list targets that have not run yet
 tar_outdated()
 # run the targets that need running
@@ -38,7 +40,7 @@ tar_delete(table_2)
 # list targets that have not run yet
 tar_outdated()
 # plot the dependency graf
-tar_visnetwork()
+tar_visnetwork(targets_only = TRUE)
 
 # run the targets that need running using a new R process
 # in the background
@@ -57,7 +59,20 @@ tar_visnetwork()
 # run a specific target which need running
 tar_make(table_1)
 # plot the dependency graf
-tar_visnetwork()
+tar_visnetwork(targets_only = TRUE)
+# look at a specific target
+table_1
+
+# the variables age and biomarker are
+# summarized by mean and standard deviation
+# to use median and IQR instead
+# change the formula for table_1
+# in the _targets.R file to be
+# formula <- treatment~Q(age)+sex+Q(biomarker)
+# then save the file and run
+tar_make()
+tar_load(table_1)
+table_1
 
 # delete the files in subfolder 'export'
 file.remove("export/table1.csv")
@@ -69,7 +84,11 @@ tar_delete(figure_1)
 # have been created
 tar_make()
 
-# go back to exercise file and continue Exercise 3
-# https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day1-part2.org
+# load all targets
+tar_load_everything()
+# look at a specific target
+figure_1
+
+
 ######################################################################
 ### run_targets.R ends here

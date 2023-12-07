@@ -5,7 +5,7 @@
 The learning targets of this exercise to write a function which is
 used to create a target in the pipeline.
 
-** Preparation
+** Reading references 
 
 -  [[goodies/R-functions.org]]
 -  [[goodies/lazy-coder.org]]

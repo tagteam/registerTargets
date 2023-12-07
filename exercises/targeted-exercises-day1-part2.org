@@ -3,17 +3,19 @@
 * Objectives
 
 The learning targets of this exercise is an introduction to the basic
-concept of the R-package =targets=
+concept and functionality of the R-package =targets=.
   
-----------------------------------------------------------------------
-** Preparation
+** Reading references 
 
--  [[goodies/targets.org]]
+- [[goodies/targets.org]]
+- [[https://books.ropensci.org/targets/]]
+
+----------------------------------------------------------------------
 
 * An example targets project
 
 - Switch to the RStudio project /example_project/ (e.g., via recent projects)
 - Open and read the file =_targets.R= (e.g., via "Control-Shift f" eller "Control .") 
-- Open and work through the file =run_targets.R= then continue here
+- Open and work through the file =run_targets.R=
 ----------------------------------------------------------------------
 

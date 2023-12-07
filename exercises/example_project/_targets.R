@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  6 2023 (14:55) 
 ## Version: 
-## Last-Updated: Dec  7 2023 (14:08) 
+## Last-Updated: Dec  7 2023 (17:35) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 30
+##     Update #: 31
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -15,9 +15,8 @@
 ## 
 ### Code:
 #
-# The R-package targets 
-#
 # This script defines an example targets project
+#
 #
 library(targets)
 
@@ -35,12 +34,13 @@ cbPalette <- c("#999999","#E69F00","#56B4E9","#009E73","#F0E442","#0072B2","#D55
 
 #
 # The pipeline of this example project has 6 targets:
-# 1. sample_size (just a single value)
-# 2. rawdata (apply function generate_data)
-# 3. data (apply function prepare_data)
-# 4. table_1 (few lines of code inside {})
-# 5. table_2 (apply function analyse_data)
-# 5. figure_1 (apply function make_barplot, load also R-package ggplot2)
+# 
+#   1. sample_size (just a single value)
+#   2. rawdata (apply function generate_data)
+#   3. data (apply function prepare_data)
+#   4. table_1 (few lines of code inside {})
+#   5. table_2 (apply function analyse_data)
+#   6. figure_1 (apply function make_barplot, load also R-package ggplot2)
 #
 list(tar_target(sample_size,{137}),
      tar_target(rawdata,{
@@ -60,9 +60,8 @@ list(tar_target(sample_size,{137}),
                       formula = Surv(time,event)~sex+age+treatment+biomarker)
      },packages = "survival"),
      tar_target(figure_1,{
-         subset = data[age<70]
-         subset[,mycol := rep(cbPalette,length.out = .N)]
-         g = ggplot(subset,aes(x = age,fill = mycol))+geom_histogram()+facet_grid(~sex)
+         data[,mycol := factor(sex,labels=cbPalette[1:2])]
+         g = ggplot(subset,aes(x=sex,y = age,fill=sex))+geom_boxplot()+scale_fill_manual(values=cbPalette)
          ggsave(g,file = "export/figure1.pdf")
          g
      },packages = c("ggplot2"))

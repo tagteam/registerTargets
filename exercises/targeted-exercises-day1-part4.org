@@ -5,7 +5,7 @@
 The learning target of this exercise is a first experience with (our
 augmented version of) the R-package =ltmle=.
 
-** Reference
+** Reading references 
 
 - http://joshuaschwab.github.io/ltmle/articles/a02_intro.html
 

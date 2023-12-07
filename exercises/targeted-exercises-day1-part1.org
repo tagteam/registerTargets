@@ -7,7 +7,7 @@ The learning targets of this exercise are:
 - Download the course material.
 - Create the RStudio project.
 
-* Exercise 1: Warm-up 
+** Reading references 
 
 An important part of the exercises consists of reading. The reading
 material includes both general information and also instructions on
@@ -15,9 +15,6 @@ how to prepare the remaining exercises. To prepare the course you
 should readily have performed the version check:
 
 -  [[goodies/R-packages.org]]
-
-Now, please read 
-
 -  [[goodies/RStudio-projects.org]]
 
 ----------------------------------------------------------------------

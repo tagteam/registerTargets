@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  8 2022 (16:00) 
 ## Version: 
-## Last-Updated: Dec  6 2023 (12:14) 
+## Last-Updated: Dec  7 2023 (17:53) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 160
+##     Update #: 171
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -18,9 +18,11 @@ library(targets)
 library(heaven)
 library(lava)
 library(data.table)
-## library(augmentedLtmle)
 setwd("~/metropolis/Teaching/targetedRegisterAnalysis/exercises/data_creator/")
-for (f in list.files("functions/",pattern = "R$",recursive = TRUE,full.names = TRUE)){source(f)}
+## tar_source("functions")
+for (f in list.files("functions/",
+                     pattern = "R$",
+                     full.names = TRUE)){print(f);source(f)}
 list(
     tar_target(N,99999),
     tar_target(cpr,{
@@ -112,12 +114,22 @@ list(
         sim_time_covariates[,(names(sim_time_covariates)[-1]):=lapply(.SD, as.numeric), .SDcols = names(sim_time_covariates)[-1]]
         sim_time_covariates[]
     }),
+    tar_target(sim_baseline_covariates,sim_data[,c("pnr","sexMale","education","agegroups","tertile_income","index_heart_failureYes","diabetes_duration"),with=FALSE]),
+    tar_target(sim_regimen,sim_data[,grep("pnr|GS|B", names(sim_data)), with = FALSE]),
+    tar_target(sim_outcome,sim_data[,grep("pnr|stroke_|Censored|Dead", names(sim_data)), with = FALSE]),
+    tar_target(export,{
+        fwrite(sim_data,file = "../register_project/data/register_data.csv")
+        fwrite(sim_regimen,file = "../register_project/data/regimen_data.csv")
+        fwrite(sim_outcome,file = "../register_project/data/outcome_data.csv")
+        fwrite(sim_time_covariates,file = "../register_project/data/time_covariates.csv")
+        fwrite(sim_baseline_covariates,file = "../register_project/data/baseline_covariates.csv")
+    }),
     tar_target(test_run,{
         run_ltmle(name_outcome="stroke",
                   time_horizon=c(4),
-                  outcome_data=sim_data[,grep("pnr|stroke_|Censored|Dead", names(sim_data)), with = FALSE],
-                  regimen_data=list(GS = sim_data[,grep("pnr|GS|B", names(sim_data)), with = FALSE]),
-                  baseline_data=sim_data[,c("pnr","sexMale","education","agegroups","tertile_income","index_heart_failureYes","diabetes_duration"),with=FALSE],
+                  outcome_data=sim_outcome,
+                  regimen_data=list(GS = sim_regimen),
+                  baseline_data=sim_baseline_covariates,
                   timevar_data=sim_time_covariates,
                   censor_others=FALSE,
                   abar = list(rep(1,4),rep(0,4)),
