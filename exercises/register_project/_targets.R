@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  7 2023 (17:32) 
 ## Version: 
-## Last-Updated: Dec  8 2023 (07:41) 
+## Last-Updated: Dec  8 2023 (18:25) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 9
+##     Update #: 12
 #----------------------------------------------------------------------
 ## 
 ### Commentary:
@@ -30,7 +30,8 @@ list(
     tar_target(baseline_covariates, fread("data/baseline_covariates.csv")),
     tar_target(time_covariates, fread("data/time_covariates.csv")),
     tar_target(regimen_data, fread("data/regimen_data.csv")),
-    tar_target(outcome_data, fread("data/outcome_data.csv"))
+    tar_target(mace_outcome_data, fread("data/mace_outcome_data.csv")),
+    tar_target(survival_outcome_data, fread("data/survival_outcome_data.csv"))
 )
 
 

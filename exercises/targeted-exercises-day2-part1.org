@@ -25,7 +25,58 @@ structure.
 
 ** Baseline covariates
 
-- Load the pre-defined target =baseline_covariates=.
+- Load the pre-defined target =raw_baseline_covariates=
+- A a new target which prepares the baseline covariates as follows
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+tar_target(baseline_covariates,{
+  bsl <- copy(raw_baseline_covariates)
+  bsl[,sex:=factor(sex,levels=c("0","1"),labels=c("Female","Male"))]
+  bsl[,index_heart_failure:=factor(index_heart_failure,levels=c("0","1"),labels=c("No","Yes"))]
+  bsl
+})
+#+END_SRC
+  
+- Create a new target which contains table 1 based on the
+  =baseline_covariates=. Adapt the corresponding target and function =get_table_1= from
+  the =example_project= (yesterdays exercises) but now use the following formula:
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+formula <- ~ sex + education + agegroups + tertile_income + index_heart_failure + diabetes_duration
+#+END_SRC  
+  
+** Time-varying covariates
 
+- Load the pre-defined target =time_covariates=. There are two
+  variables =af= and =statin= followed over 10 time intervals. Each
+  time interval is 6 months long. There is no variable =af_0= because patients with =af= at baseline are excluded.
+- Add the variable =statin_0= to table 1 by modifying the function =get_table_1=
+  which now requires two arguments: =baseline_covariates= and =time_covariates= and uses the modified formula
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+formula <- ~ sex + education + agegroups + tertile_income + index_heart_failure + diabetes_duration + statin_0 
+#+END_SRC    
+
+** Treatment regimens
+
+- Load the pre-defined target =regimen_data=. There are two variables
+  =Drug= and =B= followed over 10 time intervals. =Drug= is the main
+  treatment variable. You can disregard =B= for now. 
+- Add the treatment variable =Drug_0= to table 1 by modifying the function =get_table_1=
+  which now requires three arguments: =baseline_covariates=, =time_covariates= and =regimen_data=
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+formula <- Drug_0 ~ sex + education + agegroups + tertile_income + index_heart_failure + diabetes_duration + statin_0 
+#+END_SRC    
+- Add the table to the file =register_report.qmd=
+
+** Outcome data
+
+- Load the pre-defined target =outcome_data=. There are three
+  variables =mace= and =Dead= and =Censored= followed over 10 time
+  intervals.  There are no variables =mace_0=, =Dead_0= and
+  =Censored_0= because those patients are excluded.  For the
+  =Censored= value 1 means "Uncensored", for =mace= and =Dead= the
+  value 1 means event has happened. Note that multiple events can
+  happen within the same 6 months long interval.
+- Calculate the rate of deaths per 1000 personyears in the first interval.
+- Calculate the probability of dying in the first interval, overall and separately for 
+  
 
 

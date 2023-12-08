@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  8 2022 (16:00) 
 ## Version: 
-## Last-Updated: Dec  8 2023 (08:10) 
+## Last-Updated: Dec  8 2023 (19:27) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 175
+##     Update #: 228
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -20,6 +20,7 @@ library(lava)
 library(data.table)
 try(setwd("~/metropolis/Teaching/targetedRegisterAnalysis/exercises/data_creator/"))
 tar_source("functions")
+tar_source("../Ltmle/")
 ## for (f in list.files("functions/",pattern = "R$",full.names = TRUE)){print(f);source(f)}
 list(
     tar_target(N,99999),
@@ -93,7 +94,7 @@ list(
         setkey(lmdb,pnr)
         lmdb[]
     }),
-    # simulate data alike stroke outcome dual treatment GS analysis
+    # simulate data alike mace outcome dual treatment Drug analysis
     tar_target(coefs,{
         source("input/coefs.txt")
         coefs
@@ -104,35 +105,68 @@ list(
     tar_target(sim_data,{
         sd = setDT(sim(lava_model,23149))
         sd[,pnr := 1:.N]
+        # remove B variables
+        for (a in grep("^B_+",names(sd),value = TRUE)) set(sd,j = a,value = NULL)        
+        # deal with dummy variables
         for (a in grep("agegroups.+",names(sd),value = TRUE)) set(sd,j = a,value = NULL)
         for (a in grep("tertile_income_",names(sd),value = TRUE)) set(sd,j = a,value = NULL)
         for (a in grep("diabetes_duration.+",names(sd),value = TRUE)) set(sd,j = a,value = NULL)
         for (a in grep("education.+",names(sd),value = TRUE)) set(sd,j = a,value = NULL)
         setnames(sd,"sexMale","sex")
         setnames(sd,"index_heart_failureYes","index_heart_failure")
+        # harmonize all time-dependent variables 
+        for (k in 2:10){
+            set(sd,i = which(sd[[paste0("af_",k-1)]] == 1),j = paste0("af_",k),value = 1)
+        }
+        for (k in 2:10){
+            set(sd,i = which(sd[[paste0("Censored_",k-1)]] == 0),j = paste0("af_",k),value = NA)
+            set(sd,i = which(sd[[paste0("Censored_",k-1)]] == 0),j = paste0("mace_",k),value = 0)
+            set(sd,i = which(sd[[paste0("Censored_",k-1)]] == 0),j = paste0("Censored_",k),value = 0)
+        }
+        for (k in 2:10){
+            set(sd,i = which(sd[[paste0("Dead_",k-1)]] == 1),j = paste0("af_",k),value = NA)
+            set(sd,i = which(sd[[paste0("Dead_",k-1)]] == 1),j = paste0("mace_",k),value = 0)
+            set(sd,i = which(sd[[paste0("Dead_",k-1)]] == 1),j = paste0("Dead_",k),value = 1)
+        }
+        for (k in 2:10){
+            set(sd,i = which(sd[[paste0("mace_",k-1)]] == 1),j = paste0("mace_",k),value = 1)
+        }
         sd[]
     }),
     tar_target(sim_time_covariates, {
-        sim_data
-        sim_time_covariates <- sim_data[,c("pnr",grep(paste(unique(unlist(lapply(c("mace","statin"),function(x){gsub("_[^_]*$", "", x)}))), collapse = "|"),names(sim_data),value = TRUE)), with = FALSE]
-        sim_time_covariates[,(names(sim_time_covariates)[-1]):=lapply(.SD, as.numeric), .SDcols = names(sim_time_covariates)[-1]]
-        sim_time_covariates[]
+        get_time_covariates(sim_data = sim_data)
     }),
-    tar_target(sim_baseline_covariates,sim_data[,c("pnr","sex","education","agegroups","tertile_income","index_heart_failure","diabetes_duration"),with=FALSE]),
-    tar_target(sim_regimen,sim_data[,grep("pnr|GS|B", names(sim_data)), with = FALSE]),
-    tar_target(sim_outcome,sim_data[,grep("pnr|stroke_|Censored|Dead", names(sim_data)), with = FALSE]),
+    tar_target(sim_baseline_covariates,{
+        get_baseline_covariates(sim_data = sim_data)
+    }),
+    tar_target(sim_regimen,get_regimen(sim_data = sim_data)),
+    tar_target(sim_mace_outcome,sim_data[,grep("pnr|mace_|Censored|Dead", names(sim_data)), with = FALSE]),
+    tar_target(sim_survival_outcome,sim_data[,grep("pnr|Censored|Dead", names(sim_data)), with = FALSE]),
     tar_target(export,{
         fwrite(sim_data,file = "../register_project/data/register_data.csv")
         fwrite(sim_regimen,file = "../register_project/data/regimen_data.csv")
-        fwrite(sim_outcome,file = "../register_project/data/outcome_data.csv")
+        fwrite(sim_survival_outcome,file = "../register_project/data/survival_outcome_data.csv")
+        fwrite(sim_mace_outcome,file = "../register_project/data/mace_outcome_data.csv")
         fwrite(sim_time_covariates,file = "../register_project/data/time_covariates.csv")
         fwrite(sim_baseline_covariates,file = "../register_project/data/baseline_covariates.csv")
-    }),
+    },cue = tar_cue(mode = "always")),
     tar_target(test_run,{
-        run_ltmle(name_outcome="stroke",
+        run_Ltmle(name_outcome="mace",
                   time_horizon=c(4),
-                  outcome_data=sim_outcome,
-                  regimen_data=list(GS = sim_regimen),
+                  outcome_data=sim_mace_outcome,
+                  regimen_data=list(Drug = sim_regimen),
+                  baseline_data=sim_baseline_covariates,
+                  timevar_data=sim_time_covariates,
+                  censor_others=FALSE,
+                  abar = list(rep(1,4),rep(0,4)),
+                  SL.library="glm",
+                  verbose=TRUE)
+    }),
+    tar_target(test_surv_run,{
+        run_Ltmle(name_outcome="Dead",
+                  time_horizon=c(4),
+                  outcome_data=sim_survival_outcome,
+                  regimen_data=list(Drug = sim_regimen),
                   baseline_data=sim_baseline_covariates,
                   timevar_data=sim_time_covariates,
                   censor_others=FALSE,

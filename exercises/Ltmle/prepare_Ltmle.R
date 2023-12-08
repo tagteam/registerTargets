@@ -73,7 +73,6 @@ prepare_Ltmle <- function(regimen_data,
                               censored_label = censored_label,
                               name_comp.event = name_comp.event,
                               abar=abar)
-  
   formulas = get_formulas(time_horizon = time_horizon,
                           work_data = ltmle_data$data,
                           name_outcome = name_outcome,

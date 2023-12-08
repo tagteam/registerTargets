@@ -120,3 +120,4 @@ get_lava_model <- function(time_horizon,
     return(m)
 }
 
+

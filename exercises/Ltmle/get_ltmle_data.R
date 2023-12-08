@@ -11,7 +11,6 @@ get_ltmle_data <- function(work_data, time_horizon,
   time_horizon = max(time_horizon)
   time_grid = 0:time_horizon
   K = length(time_grid)
-  # browser()
   if(length(name_censoring)>0){
     for(col in sapply(time_grid[-1], function(timepoint){paste0(name_censoring,"_",timepoint)})){
       set(work_data, j = col, value=as.factor(ifelse(work_data[[col]]%in%censored_label,"censored","uncensored")))
@@ -101,7 +100,7 @@ get_ltmle_data <- function(work_data, time_horizon,
   C=0
   nreg <- length(name_regimen)
   if (is.list(abar)){
-      warning("Counting regimen adherence only for first element of abar")
+      ## warning("Counting regimen adherence only for first element of abar")
       REG=sum(work_data[[A_nodes_position[[1]]]]==abar[[1]][[1]])
   }else{
       # if A,B then B_0 is obsolete because A0=1-B0
@@ -127,10 +126,11 @@ get_ltmle_data <- function(work_data, time_horizon,
           }
       }
       E=sum(work_data[[Y_nodes_position[[s]]]]%in%1)
-      if (s<time_horizon)
-          CR=sum(work_data[[D_nodes_position[[s]]]]%in%1)
-      else
-          CR=NA
+      if (length(D_nodes_position)>0)
+          if (s<time_horizon)
+              CR=sum(work_data[[D_nodes_position[[s]]]]%in%1)
+          else
+              CR=NA
       C=sum(work_data[[C_nodes_position[[s]]]]%in%"censored")
       if (s<time_horizon)
           event_counts[time==s,nregimen:=sum(REG)]
@@ -145,9 +145,7 @@ get_ltmle_data <- function(work_data, time_horizon,
   # L_nodes = c(name_baseline_covariates, sapply(time_grid, function(k) {paste0(c(name_time_covariates, name_comp.event), "_", k)}))
   L_nodes = c(sapply(time_grid, function(k) {paste0(c(name_time_covariates), "_", k)}))
   L_nodes = L_nodes[match(L_nodes, names(work_data),nomatch = 0)!=0]
-  
   if(length(name_censoring)==0) {C_nodes = NULL}
-  
   list(data = work_data[],
        Anodes = intersect(A_nodes, names(work_data)),
        Cnodes = intersect(C_nodes, names(work_data)),
