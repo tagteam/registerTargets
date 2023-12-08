@@ -1,0 +1,75 @@
+#+TITLE: PhD course: Targeted Register Analysis: Exercises: Day 2 part 2
+
+* Objectives
+
+The learning targets of this exercise are:
+
+- applying =Ltmle= in register data
+
+** Reading references  
+  
+- https://www.jstatsoft.org/article/view/v081i01
+
+----------------------------------------------------------------------
+
+* Causal longitudinal data analysis
+
+The project in the folder "register_project" contains simulated data
+which are alike the data of the Danish nationwide registers. In this
+exercise we apply the =Ltmle= function.
+
+** Run Ltmle with a single time interval
+
+We calculate the standardized 6-months mortality risks (the
+probability of death within 6-months since index date) had everyone
+been randomized to take treatment =Drug= vs not to take the treatment.
+
+- Add the following target to the pipeline:
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes
+tar_target(ltmle_fit_death_1,
+           run_Ltmle(name_outcome="Dead",
+                     time_horizon=1,
+                     outcome_data=survival_outcome_data,
+                     regimen_data=list(Drug = regimen_data),
+                     baseline_data=baseline_covariates,
+                     timevar_data=time_covariates,
+                     abar = list(0,1),
+                     SL.library="glm",
+                     verbose=TRUE)),
+tar_target(ltmle_summary_death_1,{
+ summary(ltmle_fit_death_1)
+})
+#+END_SRC
+
+Add the resulting table to the file =register_report.qmd=
+
+** Run Ltmle with 4 time intervals
+
+We calculate the standardized 2-year mortality risks (the probability
+of death within 2-years since index date) had everyone been randomized
+to take treatment =Drug= continously for 2 years vs not to take the
+treatment for 2 years.
+
+- Add the following target to the pipeline:
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+run_Ltmle(name_outcome="Dead",
+          time_horizon=4,
+          outcome_data=survival_outcome_data,
+          regimen_data=list(Drug = regimen_data),
+          baseline_data=baseline_covariates,
+          timevar_data=time_covariates,
+          abar = list(rep(1,4),rep(0,4)),
+          SL.library="glm",
+          verbose=TRUE)
+#+END_SRC
+
+Under the usual causal assumptions, the standardized 2-year risks can
+have an interpretation of what would have been observed had all
+patients been randomized to take the drug, respectively, had all
+patients been randomized to not take the drug continously until the
+time_horizon. We then estimate the average treatment effect (ATE) as
+the difference between the standardized risks 2-year risks and the
+average treatment ratio (Ratio) as the ratio between the standardized
+risks 2-year risks.

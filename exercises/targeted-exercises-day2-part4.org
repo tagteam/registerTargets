@@ -1,0 +1,42 @@
+#+TITLE: PhD course: Targeted Register Analysis: Exercises: Day 2 part 4
+
+* Objectives
+
+The learning targets of this exercise are:
+
+- changing nuisance parameter estimators
+
+----------------------------------------------------------------------  
+
+* Nuisance parameter estimators
+
+This exercise assumes that you have succeeded with the previous exercise.
+
+- Open the file register_project/sandbox.R and load the target =ltmle_fit_death_1= into
+  R.
+- Checkout the estimated nuisance parameter models
+
+#+ATTR_LATEX: :options otherkeywords={}, deletekeywords={}
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes
+# outcome model
+ltmle_fit_death_1[[1]][[1]]$Ltmle_fit$fit$Q[[1]]
+# propensity score model
+ltmle_fit_death_1[[1]][[1]]$Ltmle_fit$fit$g[[1]]
+#+END_SRC
+
+- Note that the levels of the variables =agegroups=,
+  =diabetes_duration= and =education= are not correctly sorted. Change
+  that by adding the following lines (at an appropriate place) to the
+  pipeline and re-running the pipeline with =tar_make()=
+
+#+ATTR_LATEX: :options otherkeywords={}, deletekeywords={}
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+baseline_covariates[,sex:=factor(sex,levels=c("0","1"),labels=c("Female","Male"))]
+baseline_covariates[,education:=factor(education,levels=c("Basic","Medium","High"),labels=c("Basic","Medium","High"))]
+baseline_covariates[,agegroups:=factor(agegroups,levels=c("below 45","45-50","50-55","55-60","60-65","65-70","70-75","75-80","80-85","above 85"),labels=c("below 45","45-50","50-55","55-60","60-65","65-70","70-75","75-80","80-85","above 85"))]
+baseline_covariates[,tertile_income:=factor(tertile_income,levels=c("Income_q1","Income_q2","Income_q3"),labels=c("Income_q1","Income_q2","Income_q3"))]
+baseline_covariates[,index_heart_failure:=factor(index_heart_failure,levels=c("0","1"),labels=c("No","Yes"))]
+baseline_covariates[,diabetes_duration:=factor(diabetes_duration,levels=c("below 5","5-10","above 10"),labels=c(,"below 5","5-10","above 10"))]
+#+END_SRC
+
+ 

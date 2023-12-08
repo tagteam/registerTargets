@@ -1,0 +1,15 @@
+#+TITLE: PhD course: Targeted Register Analysis: Exercises: Day 2 part 1
+
+* Objectives
+
+The learning targets of this exercise are:
+
+- Our augmented version of =ltmle=
+- Longitudinal targeted minimum loss based estimation with competing
+  risks
+
+** Reading references
+
+- http://joshuaschwab.github.io/ltmle/articles/a02_intro.html
+
+----------------------------------------------------------------------
