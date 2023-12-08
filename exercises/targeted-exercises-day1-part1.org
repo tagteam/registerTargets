@@ -19,7 +19,7 @@ should readily have performed the version check:
 
 ----------------------------------------------------------------------
 
-* Exercise 2: RStudio projects for course exercises
+* RStudio projects for course exercises
 
 ** Download all files from github
 
@@ -37,7 +37,7 @@ If you have the program =git= installed you can clone the github repository:
 git clone https://github.com/tagteam/registerTargets/
 #+END_SRC
 
-* Exercise 3: create RStudio projects
+* Create RStudio projects
 
 You should now have a folder called /registerTargets/ in you computer.
 Use the RStudio dialog /New project/ where you choose /Existing

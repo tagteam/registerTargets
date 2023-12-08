@@ -2,7 +2,7 @@ name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iterat
 ami_pop|stem|ed28329de31d5e5f|de9e0dc1c935ab90|75655dee708204d1|-534089198||t19337.6957253329s|bcc34ffe8b862279|41376|rds|local|vector|||0.026||
 coefs|stem|f6c093b710402227|553b56a7772530f5|700949601d51c337|-1662652578||t19697.3707772598s|af17560635cbbc70|16870|rds|local|vector|||0.004||
 cpr|stem|fd7d4094be25a7f8|52502e2ca7069169|7ca93889bc68cc64|-351548350||t19337.6957186201s|e9da0ca5395c7793|1871879|rds|local|vector|||0.076||
-export|stem|d36ea1299fa8d732|8de9b772575f337b|cedf72aa485eee37|677160269||t19698.7040769198s|44e327d1ee1978d7|43|rds|local|vector|||0.054||
+export|stem|d36ea1299fa8d732|8de9b772575f337b|247053c28212fcbd|677160269||t19699.299187979s|44e327d1ee1978d7|43|rds|local|vector|||0.056||
 f|object|c79c1d7197977f95|||||||||||||||
 get_lava_model|function|fd0f37e1ab06b0c2|||||||||||||||
 lava_model|stem|7cf1e9f0ae262c6b|25f4f1538bf57ba6|86088194c191735d|-1024502408||t19697.3711071683s|12c4074c947d0f2f|310666|rds|local|vector|||10.816||
@@ -12,10 +12,10 @@ make_pnr|function|12aeed2f23ece7b1|||||||||||||||
 N|stem|c349b6dfcfdf2aee|df696ce69e0b9f74|ef46db3751d8e999|-1850956989||t19337.6957157498s|c9aaea90a821e608|53|rds|local|vector|||0.001||
 not_ami_pop|stem|ce8c65a71f8dd1e3|94388ad2403e4655|1010adcf24efe584|2091299302||t19337.696629941s|77d8bb894e3aad4b|1655543|rds|local|vector|||0.026||
 run_ltmle|function|4a0ec251e1776034|||||||||||||||
-sim_baseline_covariates|stem|69d5b7cb5858da21|ab18f09e575fb3fc|de77d2e11b71bfe4|-1239950131||t19698.7018440228s|5e1b8ebd3bdcd64a|105694|rds|local|vector|||0.001||
-sim_data|stem|769f08475e3f28b7|466e8104f7c69721|ec06e4c76f16d550|365671976||t19697.3746910778s|6b97fbe70b8f2ba4|2247006|rds|local|vector|||0.866||
-sim_outcome|stem|6ab485b57de1a2dd|fc2e4f8efc8bc2d1|28ab39d37580b94f|232905177||t19698.7018436061s|bab9e2e42ea98077|142603|rds|local|vector|||0.006||
-sim_regimen|stem|00a8c775b08d4886|eaddee5029295324|28ab39d37580b94f|542081516||t19698.7018454118s|094a1ae717a3446a|1902661|rds|local|vector|||0.002||
-sim_time_covariates|stem|dc056c704acd009d|20b231a61f4101c9|c52ce54b675df7db|1457187274||t19697.3802705722s|3c1b6a9e67723120|155423|rds|local|vector|||0.009||
+sim_baseline_covariates|stem|b46f3142db0ec6a0|3a02ed966ca28d3c|d722dda4c19618cb|-1239950131||t19699.299185016s|5c6c0c95d2d367d9|105685|rds|local|vector|||0.001||
+sim_data|stem|d43780b07b974d0a|13315ceaa49667dd|db2ac9d982fe6c0e|365671976||t19699.2991838586s|3d369c3c44b6e772|2171134|rds|local|vector|||0.858||
+sim_outcome|stem|6ab485b57de1a2dd|fc2e4f8efc8bc2d1|aaaa365464279075|232905177||t19699.2991845531s|bab9e2e42ea98077|142603|rds|local|vector|||0.001||
+sim_regimen|stem|bb0c9f42b0a2048f|eaddee5029295324|aaaa365464279075|542081516||t19699.2991864512s|c0f4bb37c780ec6d|1895041|rds|local|vector|||0.001||
+sim_time_covariates|stem|dc056c704acd009d|20b231a61f4101c9|4e65da10b51bfca9|1457187274||t19699.2991872382s|3c1b6a9e67723120|155423|rds|local|vector|||0.002||
 summary.runLtmle|function|81fec77deb7cd0f2|||||||||||||||
-test_run|stem|25ae06222af130f6|eea39f2279ac31af|434e16b61ca8a87c|120619522||t19698.7018874521s|3b6a7a0e08a75c43|2347284|rds|local|vector|||3.321|Counting regimen adherence only for first element of abar|
+test_run|stem|4721e516c0ae7f9b|eea39f2279ac31af|2dcb5bbe8a24d32e|120619522||t19699.2992315433s|be3e261cf30d9b83|2347262|rds|local|vector|||3.49|Counting regimen adherence only for first element of abar|

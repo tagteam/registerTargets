@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  7 2023 (17:32) 
 ## Version: 
-## Last-Updated: Dec  7 2023 (17:54) 
+## Last-Updated: Dec  8 2023 (07:41) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 7
+##     Update #: 9
 #----------------------------------------------------------------------
 ## 
 ### Commentary:
@@ -23,7 +23,7 @@ tar_option_set(packages=c("prodlim","foreach","riskRegression","data.table","lav
 
 # Definition of project functions
 tar_source("functions")
-tar_source("../Ltmle")
+source("../Ltmle/Ltmle.R")
 
 list(
     tar_target(register_data, fread("data/register_data.csv")),

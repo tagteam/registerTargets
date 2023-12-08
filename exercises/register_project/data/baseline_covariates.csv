@@ -1,4 +1,4 @@
-pnr,sexMale,education,agegroups,tertile_income,index_heart_failureYes,diabetes_duration
+pnr,sex,education,agegroups,tertile_income,index_heart_failure,diabetes_duration
 1,0,Medium,60-65,Income_q1,0,above 10
 2,1,Basic,70-75,Income_q1,0,below 5
 3,1,Basic,55-60,Income_q3,0,below 5

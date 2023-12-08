@@ -25,22 +25,28 @@ https://publichealth.ku.dk/contact/
 
 *** Monday 2023-12-11
 
-|----------------+----------------------------------------------+-------------------------|
-| 8:15 -- 8:20   | Introduction to the course                   | Thomas Alexander Gerds  |
-| 8:20 -- 8:45   | Lectures on Register Epidemiology (part I)   | Christian Torp-Pedersen |
-| 8:45 -- 8:55   | Coffee break                                 |                         |
-| 8:55 -- 9:25   | Exercise 1.1                                 | Thomas Alexander Gerds  |
-| 9:30 -- 9:55   | Lectures on Register Epidemiology (part II)  | Christian Torp-Pedersen |
-| 10:00 -- 10:30 | Exercise 1.2                                 | Thomas Alexander Gerds  |
-| 10:30 -- 10:40 | Coffee break                                 |                         |
-| 10:40 -- 11:05 | Lectures on Register Epidemiology (part III) | Christian Torp-Pedersen |
-| 11:10 -- 11:40 | Exercise 1.3                                 | Thomas Alexander Gerds  |
-| 11:40 -- 12:45 | Lunch                                        |                         |
-| 12:45 -- 13:10 | Lectures on Register Epidemiology (part IV)  | Christian Torp-Pedersen |
-| 13:15 -- 13:45 | Exercise 1.4                                 | Thomas Alexander Gerds  |
-| 13:45 -- 13:55 | Coffee break                                 |                         |
-| 13:55 -- 14:20 | Lectures on Register Epidemiology (part V)   | Christian Torp-Pedersen |
-| 14:25 -- 14:55 | Discussion and finishing Exercises           | Thomas Alexander Gerds  |
+1. Epidemiological designs
+2. Risk, rate and counterfactuals
+3. Exposure versus outcome adjustment
+4. Bias and Confounding
+5. Putting things together: The Analysis plan
+
+|----------------+-------------------------------------------------+-------------------------|
+| 8:15 -- 8:20   | Introduction to the course                      | Thomas Alexander Gerds  |
+| 8:20 -- 8:45   | Lectures on Register Epidemiology: study design | Christian Torp-Pedersen |
+| 8:45 -- 8:55   | Coffee break                                    |                         |
+| 8:55 -- 9:25   | Exercise 1.1                                    | Thomas Alexander Gerds  |
+| 9:30 -- 9:55   | Lectures on risks, rates, counterfactuals       | Christian Torp-Pedersen |
+| 10:00 -- 10:30 | Exercise 1.2                                    | Thomas Alexander Gerds  |
+| 10:30 -- 10:40 | Coffee break                                    |                         |
+| 10:40 -- 11:05 | Lectures on exposure versus outcome adjustment  | Christian Torp-Pedersen |
+| 11:10 -- 11:40 | Exercise 1.3                                    | Thomas Alexander Gerds  |
+| 11:40 -- 12:45 | Lunch                                           |                         |
+| 12:45 -- 13:10 | Lectures on bias and confounding                | Christian Torp-Pedersen |
+| 13:15 -- 13:45 | Exercise 1.4                                    | Thomas Alexander Gerds  |
+| 13:45 -- 13:55 | Coffee break                                    |                         |
+| 13:55 -- 14:20 | Lectures on The Analysis Plan                   | Christian Torp-Pedersen |
+| 14:25 -- 14:55 | Discussion and finishing Exercises              | Thomas Alexander Gerds  |
 
 
 *** Tuesday 2023-12-12
@@ -60,7 +66,7 @@ https://publichealth.ku.dk/contact/
 | 13:15 -- 13:45 | Exercise 2.4                                            | Thomas Alexander Gerds |
 | 13:45 -- 13:55 | Coffee break                                            |                        |
 | 13:55 -- 14:20 | Lectures on The Roadmap of Targeted Learning (part V)   | Andrew Mertens         |
-| 14:25 -- 14:55 | Discussion and finishing Exercises                                              | Thomas Alexander Gerds |
+| 14:25 -- 14:55 | Discussion and finishing Exercises                      | Thomas Alexander Gerds |
 
 
 *** Wednesday 2023-12-13
@@ -85,22 +91,23 @@ https://publichealth.ku.dk/contact/
 
 *** Thursday 2023-12-14
 
-|----------------+--------------------------------------------------------------------+------------------------|
-| 8:15 -- 8:20   | Introduction                                                       | Thomas Alexander Gerds |
-| 8:20 -- 8:45   | Lectures on Longitudinal Targeted Minimum Loss Learning (part I)   | Zeyi Wang              |
-| 8:45 -- 8:55   | Coffee break                                                       |                        |
-| 8:55 -- 9:25   | Exercise 4.1                                                       | Thomas Alexander Gerds |
-| 9:30 -- 9:55   | Lectures on Longitudinal Targeted Minimum Loss Learning (part II)  | Zeyi Wang              |
-| 10:00 -- 10:30 | Exercise 4.2                                                       | Thomas Alexander Gerds |
-| 10:30 -- 10:40 | Coffee break                                                       |                        |
-| 10:40 -- 11:05 | Lectures on Longitudinal Targeted Minimum Loss Learning (part III) | Zeyi Wang              |
-| 11:10 -- 11:40 | Exercise 4.3                                                       | Thomas Alexander Gerds |
-| 11:40 -- 12:45 | Lunch                                                              |                        |
-| 12:45 -- 13:10 | Lectures on Longitudinal Targeted Minimum Loss Learning (part IV)  | Zeyi Wang              |
-| 13:15 -- 13:45 | Exercise 4.4                                                       | Thomas Alexander Gerds |
-| 13:45 -- 13:55 | Coffee break                                                       |                        |
-| 13:55 -- 14:20 | Lectures on Longitudinal Targeted Minimum Loss Learning (part V)   | Zeyi Wang              |
-| 14:25 -- 14:55 | Discussion and finishing Exercises                                                       | Thomas Alexander Gerds |
+
+|----------------+------------------------------------------------------------------+------------------------|
+| 8:15 -- 8:20   | Introduction                                                     | Thomas Alexander Gerds |
+| 8:20 -- 8:45   | Lectures on time zero in hypothetical trials and registry data   | Zeyi Wang              |
+| 8:45 -- 8:55   | Coffee break                                                     |                        |
+| 8:55 -- 9:25   | Exercise 4.1                                                     | Thomas Alexander Gerds |
+| 9:30 -- 9:55   | Lectures on longitudinal data structure and g-computation        | Zeyi Wang              |
+| 10:00 -- 10:30 | Exercise 4.2                                                     | Thomas Alexander Gerds |
+| 10:30 -- 10:40 | Coffee break                                                     |                        |
+| 10:40 -- 11:05 | Lectures on censoring, missingness, confounding, competing risks | Zeyi Wang              |
+| 11:10 -- 11:40 | Exercise 4.3                                                     | Thomas Alexander Gerds |
+| 11:40 -- 12:45 | Lunch                                                            |                        |
+| 12:45 -- 13:10 | Lectures on time discretization and positivity                   | Zeyi Wang              |
+| 13:15 -- 13:45 | Exercise 4.4                                                     | Thomas Alexander Gerds |
+| 13:45 -- 13:55 | Coffee break                                                     |                        |
+| 13:55 -- 14:20 | Course evaluation                                                | Thomas Alexander Gerds |
+| 14:25 -- 14:55 | Discussion and finishing Exercises                               | Thomas Alexander Gerds |
 
 # Footer:
 ------------------------------------------------------------------------------------------------------

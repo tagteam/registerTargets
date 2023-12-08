@@ -1,7 +1,19 @@
 #+TITLE: PhD course Targeted Register Analysis. Exercises: Day 2 part 3
 
-Please read in the paper: State-Level Masking Mandates and COVID-19
-Outcomes in the United States A Demonstration of the Causal Roadmap,
-by Angus K. Wong and Laura B. Balzer. Here is a link to the pdf:
+* Objectives
+
+The learning target of this exercise is to prepare the next lecture.
+
+** Reading references
 
 [[../lecture_notes/Day2/State_Level_Masking_Mandates_and_COVID_19_Outcomes.10.pdf]]
+
+----------------------------------------------------------------------
+
+* Causal roadmap
+
+Please read in the paper: State-Level Masking Mandates and COVID-19
+Outcomes in the United States A Demonstration of the Causal Roadmap,
+by Angus K. Wong and Laura B. Balzer.
+
+

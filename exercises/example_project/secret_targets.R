@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  6 2023 (14:55) 
 ## Version: 
-## Last-Updated: Dec  7 2023 (17:24) 
+## Last-Updated: Dec  8 2023 (07:41) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 35
+##     Update #: 36
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -28,7 +28,7 @@ tar_option_set(packages=c("prodlim","foreach","riskRegression","data.table","lav
 tar_source("functions")
 
 # Definition of augmented Ltmle functions
-tar_source("../Ltmle")
+source("../Ltmle/Ltmle.R")
 
 # Constants which are not saved as targets
 # can be defined here

@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  6 2023 (14:55) 
 ## Version: 
-## Last-Updated: Dec  7 2023 (17:35) 
+## Last-Updated: Dec  8 2023 (07:41) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 31
+##     Update #: 34
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -25,7 +25,8 @@ tar_option_set(packages=c("prodlim","foreach","riskRegression","data.table","lav
 
 # Definition of project functions
 tar_source("functions")
-tar_source("../Ltmle")
+# Modified R-package ltmle
+source("../Ltmle/Ltmle.R")
 
 # Constants which are not saved as targets
 # can be defined here
