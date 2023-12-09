@@ -1,0 +1,6 @@
+#+TITLE: PhD course: Targeted Register Analysis: Exercises: Day 4 part 3
+
+* Objectives
+
+The learning targets of this exercise are:
+

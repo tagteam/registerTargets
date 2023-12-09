@@ -1,0 +1,22 @@
+#+TITLE: PhD course: Targeted Register Analysis: Exercises: Day 4 part 4
+
+* Objectives
+
+The learning targets of this exercise are:
+
+- clean-up and collect results of all previous exercises
+
+* Report
+
+- Go through all exercises of days 2-4, add targets to =_targets.R= if
+  needed, i.e., check if you miss anything that is in the file
+  =secret_targets.R=.
+- Destroy all targets
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+tar_destroy()
+#+END_SRC
+- Run all targets
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+tar_make()
+#+END_SRC
+- Add results in table and figure format to the file =reports/register_report.qmd=

@@ -1,0 +1,70 @@
+#+TITLE: PhD course: Targeted Register Analysis: Exercises: Day 3 part 2
+
+* Objectives
+
+The learning targets of this exercise are:
+
+- to run the SuperLearner inside Ltmle
+
+----------------------------------------------------------------------
+
+* Superlearning nuisance parameter models
+
+- Open the R-studio project =register_project= and load all targets.
+
+- Open the file =register_project/sandbox= and fit a super learner
+  which combines the logistic regression models with and without interactions.
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+library(SuperLearner)
+X=register_data[,c("sex","education","agegroups","tertile_income","index_heart_failure","diabetes_duration"),with=FALSE]
+Y=register_data[["Drug_0"]]
+sl_ps_super1 <- SuperLearner(Y=Y,X=X,SL.library=c("SL.glm","SL.glm.interaction"),family="binomial")
+#+END_SRC
+
+- Fit a second super learner which also uses the "SL.mean" and "SL.step.interaction" learners:
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+library(SuperLearner)
+X=register_data[,c("sex","education","agegroups","tertile_income","index_heart_failure","diabetes_duration"),with=FALSE]
+Y=register_data[["Drug_0"]]
+sl_ps_super2 <- SuperLearner(Y=Y,X=X,SL.library=c("SL.mean","SL.glm","SL.glm.interaction","SL.step.interaction"),family="binomial")
+#+END_SRC
+
+- Consider the coefficients of the 2 super learners: which models
+  contribute the most?
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+print(sl_ps_super1)
+print(sl_ps_super2)
+#+END_SRC  
+  
+- Compare the predicted risks of the two super learners by adapting
+  the ggplot code of the previous exercise.
+
+- Re-consider the ltmle estimates of the 6 months risk of death from
+  exercise 2 of day 2. Now, use the first superlearner to estimate the
+  nuisance parameters. To speed up you may change the superlearner
+  cross-validation algorithm from 10-fold to 2-fold (=SL.cvControl(V=2)=)
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+tar_target(ltmle_sl_death_1,
+           run_Ltmle(name_outcome="Dead",
+                     time_horizon=1,
+                     outcome_data=survival_outcome_data,
+                     regimen_data=list(Drug = regimen_data),
+                     baseline_data=baseline_covariates,
+                     timevar_data=time_covariates,
+                     abar = list(0,1),
+                     SL.library=c("glm","glm.interaction"),
+                     # SL.cvControl(V=2),
+                     verbose=TRUE)),
+tar_target(ltmle_sl_summary_death_1,{
+  summary(ltmle_sl_death_1)
+})
+#+END_SRC  
+
+- Compare the results with those from exercise 2 of day 2.
+
+- Do the same with the ltmle analysis of the 2 year risk of death
+

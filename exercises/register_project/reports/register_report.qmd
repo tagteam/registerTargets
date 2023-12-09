@@ -1,0 +1,17 @@
+---
+title: "register report"
+author: "You and Me"
+format: html
+editor: visual
+---
+
+# Results of register project
+
+## Table 1
+
+```{r}
+#| echo: false
+library(targets)
+tar_load(table_1)
+```
+
