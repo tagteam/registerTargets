@@ -14,14 +14,16 @@ This exercise assumes that you have succeeded with the previous exercise.
 
 - Open the file register_project/sandbox.R and load the target =ltmle_fit_death_1= into
   R.
-- Checkout the estimated nuisance parameter models
+- Consider the outcome (Q) logistic regression model, the censoring logistic regression model and the
+  propensity score (g) logistic regression model:
 
-#+ATTR_LATEX: :options otherkeywords={}, deletekeywords={}
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes
 # outcome model
 ltmle_fit_death_1[[1]][[1]]$Ltmle_fit$fit$Q[[1]]
+# censoring model
+ltmle_fit_death_1[[1]][[1]]$Ltmle_fit$fit$g[[1]][["Drug_0"]]
 # propensity score model
-ltmle_fit_death_1[[1]][[1]]$Ltmle_fit$fit$g[[1]]
+ltmle_fit_death_1[[1]][[1]]$Ltmle_fit$fit$g[[1]][["Drug_0"]]
 #+END_SRC
 
 - Note that the levels of the variables =agegroups=,
@@ -39,4 +41,28 @@ baseline_covariates[,index_heart_failure:=factor(index_heart_failure,levels=c("0
 baseline_covariates[,diabetes_duration:=factor(diabetes_duration,levels=c("below 5","5-10","above 10"),labels=c(,"below 5","5-10","above 10"))]
 #+END_SRC
 
+- Review the estimated beta coefficients (log-odds ratios) of the
+  nuisance parameter models regarding their sign and magnitude.
+
+- Do the same with the two year horizon analysis. Here we have 4
+  logistic regression models for the outcome, 3 censoring logistic
+  regression models and 3 propensity score models
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes
+# 4 outcome model
+ltmle_fit_death_2[[1]][[1]]$Ltmle_fit$fit$Q[[1]][["Dead_4"]]
+ltmle_fit_death_2[[1]][[1]]$Ltmle_fit$fit$Q[[1]][["Dead_3"]]
+ltmle_fit_death_2[[1]][[1]]$Ltmle_fit$fit$Q[[1]][["Dead_2"]]
+ltmle_fit_death_2[[1]][[1]]$Ltmle_fit$fit$Q[[1]][["Dead_1"]]
+# 3 censoring models
+ltmle_fit_death_2[[1]][[1]]$Ltmle_fit$fit$g[[1]][["Censored_3"]]
+ltmle_fit_death_2[[1]][[1]]$Ltmle_fit$fit$g[[1]][["Censored_2"]]
+ltmle_fit_death_2[[1]][[1]]$Ltmle_fit$fit$g[[1]][["Censored_1"]]
+# 3 propensity score models
+ltmle_fit_death_2[[1]][[1]]$Ltmle_fit$fit$g[[1]][["Drug_3"]]
+ltmle_fit_death_2[[1]][[1]]$Ltmle_fit$fit$g[[1]][["Drug_2"]]
+ltmle_fit_death_2[[1]][[1]]$Ltmle_fit$fit$g[[1]][["Drug_1"]]
+#+END_SRC  
  
+- There are missing values for the log-odds ratios for age group
+  "above 85" after time point 1. Consider what to do about this.

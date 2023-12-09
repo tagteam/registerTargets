@@ -1,4 +1,7 @@
 run_Ltmle <- function(name_outcome,
+                      name_competing_risk = "Dead",
+                      name_censoring = "Censored",
+                      censored_label = "censored",
                       time_horizon,
                       sub_set=NULL,
                       censor_others=FALSE,
@@ -8,12 +11,18 @@ run_Ltmle <- function(name_outcome,
                       timevar_data,
                       abar,
                       Markov=NULL,
-                      SL.library="glmnet",
-                      SL.cvControl=list(selector="undersmooth",alpha=0.5),
+                      SL.library,
+                      SL.cvControl,
                       verbose=FALSE,
                       reduce=TRUE){
     require(foreach,quietly=TRUE)
     require(data.table,quietly=TRUE)
+    if (missing(SL.cvControl)){
+        if (GetLibrary(SL.library,"Q") == "glmnet")
+            SL.cvControl = list(selector="undersmooth",alpha=0.5)
+        else
+            SL.cvControl = NULL
+    }
     ## loading augmentedLtmle
     tar_source("../Ltmle")
     result <- foreach(tk=time_horizon)%do%{
@@ -65,10 +74,10 @@ run_Ltmle <- function(name_outcome,
                                  outcome_data=outcome_data,
                                  name_outcome=name_outcome,
                                  name_regimen=regimens,
-                                 name_censoring = "Censored",
-                                 name_comp.event = NULL,
+                                 name_censoring = name_censoring,
+                                 name_competing_risk = NULL,
                                  survivalOutcome = TRUE,
-                                 censored_label = "censored",
+                                 censored_label = censored_label,
                                  baseline_data=bsl_covariates,
                                  timevar_data=timevar_data,
                                  time_horizon=tk,
@@ -81,9 +90,9 @@ run_Ltmle <- function(name_outcome,
                                  outcome_data=outcome_data,
                                  name_outcome=name_outcome,
                                  name_regimen=regimens,
-                                 name_censoring = "Censored",
-                                 censored_label = "censored",
-                                 name_comp.event = "Dead",
+                                 name_censoring = name_censoring,
+                                 censored_label = censored_label,
+                                 name_competing_risk = name_competing_risk,
                                  survivalOutcome = TRUE,
                                  baseline_data=bsl_covariates,
                                  timevar_data=timevar_data,

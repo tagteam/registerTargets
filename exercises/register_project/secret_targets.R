@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  8 2023 (08:01) 
 ## Version: 
-## Last-Updated: Dec  8 2023 (19:25) 
+## Last-Updated: Dec  9 2023 (08:22) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 40
+##     Update #: 59
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -18,13 +18,12 @@ try(setwd("~/metropolis/Teaching/targetedRegisterAnalysis/exercises/register_pro
 library(targets)
 
 # R-package dependencies
-tar_option_set(packages=c("prodlim","foreach","riskRegression","data.table","lava","Publish"))
+tar_option_set(packages=c("prodlim","foreach","riskRegression","SuperLearner","ranger","glmnet","data.table","lava","Publish"))
 
 # Definition of project functions
 tar_source("functions")
 tar_source("secret_functions")
-source("../Ltmle/Ltmle.R")
-source("../Ltmle/run_Ltmle.R")
+tar_source("../Ltmle/")
 
 list(
     # pre-defined targets
@@ -34,7 +33,7 @@ list(
     tar_target(regimen_data, fread("data/regimen_data.csv")),
     tar_target(survival_outcome_data, fread("data/survival_outcome_data.csv")),
     tar_target(mace_outcome_data, fread("data/mace_outcome_data.csv")),
-    # part 1
+    # day 2 part 1
     tar_target(baseline_covariates,{
         bsl <- copy(raw_baseline_covariates)
         bsl[,sex:=factor(sex,levels=c("0","1"),labels=c("Female","Male"))]
@@ -48,9 +47,11 @@ list(
     tar_target(table_1, {
         get_table_1(baseline_covariates,time_covariates,regimen_data)
     }),
-    # part 2
+    # day 2 parts 2 and 4
     tar_target(ltmle_fit_death_1,
                run_Ltmle(name_outcome="Dead",
+                         name_censoring = "Censored",
+                         censored_label = 0,
                          time_horizon=1,
                          outcome_data=survival_outcome_data,
                          regimen_data=list(Drug = regimen_data),
@@ -61,6 +62,8 @@ list(
                          verbose=TRUE)),
     tar_target(ltmle_fit_death_2,{
         run_Ltmle(name_outcome="Dead",
+                  name_censoring = "Censored",
+                  censored_label = 0,
                   time_horizon=4,
                   outcome_data=survival_outcome_data,
                   regimen_data=list(Drug = regimen_data),
@@ -69,7 +72,33 @@ list(
                   abar = list(rep(1,4),rep(0,4)),
                   SL.library="glm",
                   verbose=TRUE)
-    })
+    }),
+    # day 3 part 1
+    tar_target(ltmle_SL_death_1,
+               run_Ltmle(name_outcome="Dead",
+                         name_censoring = "Censored",
+                         censored_label = 0,
+                         time_horizon=1,
+                         outcome_data=survival_outcome_data,
+                         regimen_data=list(Drug = regimen_data),
+                         baseline_data=baseline_covariates,
+                         timevar_data=time_covariates,
+                         abar = list(0,1),
+                         SL.library=list(g = c("SL.glm","SL.ranger2"),Q = "glm"),
+                         verbose=TRUE)),
+    tar_target(ltmle_SL_death_1,
+               run_Ltmle(name_outcome="Dead",
+                         name_censoring = "Censored",
+                         censored_label = 0,
+                         time_horizon=1,
+                         outcome_data=survival_outcome_data,
+                         regimen_data=list(Drug = regimen_data),
+                         baseline_data=baseline_covariates,
+                         timevar_data=time_covariates,
+                         abar = list(0,1),
+                         SL.library=c("SL.glm","SL.ranger2"),
+                         verbose=TRUE)
+               )
 )
 
 

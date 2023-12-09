@@ -99,14 +99,14 @@ Ltmle <- function(data, Anodes, Cnodes = NULL, Dnodes = NULL, Lnodes = NULL, Yno
                   estimate.time = FALSE, gcomp = FALSE, iptw.only = FALSE, 
                   variance.method = "ic", observation.weights = NULL, id = NULL,info = NULL,verbose=FALSE,...){
     targets::tar_source("../Ltmle/")
-    if (SL.library=="glmnet")
+    if (GetLibrary(SL.library,"Q") == "glmnet")
         if (length(SL.cvControl)==0)
             SL.cvControl=list(selector="undersmooth",alpha=0.5)
     requireNamespace("matrixStats")
     requireNamespace("foreach")
     requireNamespace("data.table")
     if(length(Dnodes)>0){
-        name_comp.event = gsub("_[^_]*$", "", Dnodes[[1]])
+        name_competing_risk = gsub("_[^_]*$", "", Dnodes[[1]])
         survivalOutcome=TRUE
     }else{
         if(length(Cnodes)>0) survivalOutcome <- TRUE

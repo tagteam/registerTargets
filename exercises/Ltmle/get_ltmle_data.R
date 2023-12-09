@@ -6,7 +6,7 @@ get_ltmle_data <- function(work_data, time_horizon,
                            name_regimen,
                            name_censoring,
                            censored_label,
-                           name_comp.event,
+                           name_competing_risk,
                            abar){
   time_horizon = max(time_horizon)
   time_grid = 0:time_horizon
@@ -20,7 +20,7 @@ get_ltmle_data <- function(work_data, time_horizon,
   ## Manipulation of the event nodes
   A_nodes = unlist(lapply(time_grid[-K], function(time){paste0(name_regimen, "_", time)}))
   Y_nodes = unlist(lapply(time_grid[-1], function(time){paste0(name_outcome, "_", time)}))
-  D_nodes = unlist(lapply(time_grid[-c(1,K)], function(time){paste0(name_comp.event, "_", time)}))
+  D_nodes = unlist(lapply(time_grid[-c(1,K)], function(time){paste0(name_competing_risk, "_", time)}))
   C_nodes = unlist(lapply(time_grid[-1], function(time){paste0(name_censoring, "_", time)}))
   A_nodes_position = match(A_nodes, names(work_data))
   Y_nodes_position = match(Y_nodes, names(work_data))
@@ -56,7 +56,7 @@ get_ltmle_data <- function(work_data, time_horizon,
               # for(l in later_D_nodes) {set(work_data,j=l,i=which(has_outcome),value=0)}
           }
       }
-      if(length(name_comp.event)>0){
+      if(length(name_competing_risk)>0){
           for(k in D_nodes_position){
               later_nodes=setdiff((k+1):NCOL(work_data),Y_nodes_position)
               # Later outcome event nodes are set to 0
@@ -142,7 +142,7 @@ get_ltmle_data <- function(work_data, time_horizon,
       N=N-E-CR-C
       event_counts[time==s,atrisk:=N]
   }
-  # L_nodes = c(name_baseline_covariates, sapply(time_grid, function(k) {paste0(c(name_time_covariates, name_comp.event), "_", k)}))
+  # L_nodes = c(name_baseline_covariates, sapply(time_grid, function(k) {paste0(c(name_time_covariates, name_competing_risk), "_", k)}))
   L_nodes = c(sapply(time_grid, function(k) {paste0(c(name_time_covariates), "_", k)}))
   L_nodes = L_nodes[match(L_nodes, names(work_data),nomatch = 0)!=0]
   if(length(name_censoring)==0) {C_nodes = NULL}

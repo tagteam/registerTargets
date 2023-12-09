@@ -15,7 +15,7 @@
 ##' @param name_censor_others name of additional treatment variables
 ##' @param name_censoring name of censoring variables
 ##' @param censored_label label of censoring variables
-##' @param name_comp.event name of competing risk variables
+##' @param name_competing_risk name of competing risk variables
 ##' @param Markov if \code{TRUE}  the history of the timevarying covariates is not included
 ##' @param abar treatment regimens
 ##' @param independent_regimens set to ?
@@ -33,7 +33,7 @@ prepare_Ltmle <- function(regimen_data,
                           name_censor_others = NULL,
                           name_censoring = "Censored",
                           censored_label = "censored",
-                          name_comp.event = "Dead",
+                          name_competing_risk = "Dead",
                           Markov = NULL,
                           abar,
                           independent_regimens = FALSE,
@@ -52,7 +52,7 @@ prepare_Ltmle <- function(regimen_data,
                                       name_regimen = unlist(name_regimen),
                                       name_censoring = name_censoring,
                                       censored_label = censored_label,
-                                      name_comp.event = name_comp.event)
+                                      name_competing_risk = name_competing_risk)
   
   ## Subsetting the data; This returns data in correct order according to time and without constant nodes
   subset_data = get_subset_data(work_data = merged_data$data,
@@ -71,7 +71,7 @@ prepare_Ltmle <- function(regimen_data,
                               name_regimen = unlist(name_regimen),
                               name_censoring = name_censoring,
                               censored_label = censored_label,
-                              name_comp.event = name_comp.event,
+                              name_competing_risk = name_competing_risk,
                               abar=abar)
   formulas = get_formulas(time_horizon = time_horizon,
                           work_data = ltmle_data$data,
@@ -80,7 +80,7 @@ prepare_Ltmle <- function(regimen_data,
                           name_time_covariates = merged_data$name_time_covariates,
                           name_regimen = name_regimen,
                           name_censoring = name_censoring,
-                          name_comp.event = name_comp.event,
+                          name_competing_risk = name_competing_risk,
                           Markov = Markov,
                           independent_regimens = independent_regimens,
                           constant_variables = subset_data$constant_variables)
