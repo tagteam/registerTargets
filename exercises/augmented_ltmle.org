@@ -1,0 +1,12 @@
+Our augmented version of =ltmle= uses the functions =Ltmle= and
+=run_Ltmle= as user interface. The documentation is not implemented in
+form of help pages. The following list covers the most important
+augmentations:
+
+* Ltmle
+- Dnodes can be specified to deal with competing risks
+- Argument gbounds default value is c(0,1) instead of c(0.01,1)
+  
+* run_Ltmle
+- The argument reduce removes the memory heavy part of the objects
+- Information about the call is added
