@@ -9,6 +9,62 @@ The learning targets of this exercise are:
 
 ** Reading references
 
-
+- https://www.jstatsoft.org/article/view/v077i01
 
 ----------------------------------------------------------------------
+
+* Random forests
+
+- In the file =sandbox.R=, run a random forest which predicts the
+  propensity of treatment and another which predicts the risk of death
+  within 6 months.
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes
+tar_load_everything()
+library(ranger)
+library(riskRegression)
+register_data[,Drug_0:=factor(Drug_0)]
+ps1_ranger <- ranger(Drug_0~ sex + education + agegroups + tertile_income + index_heart_failure + diabetes_duration,
+                     data = register_data,
+                     classification = TRUE)
+propensity1_ranger <- predictRisk(ps1_ranger,newdata=register_data)
+head(propensity1_ranger)
+#+END_SRC  
+
+- Adapt the codes from the exercises part 1 and plot the predicted
+  propensity scores of ranger against those of logistic regression.
+  
+- There is a problem with the official implementation of the function
+  =SL.ranger= when it is applied within =ltmle= to estimate the
+  iterative regression formula.  To circumvent this problem and to be
+  able to change hyper parameters, copy the file
+  =secret_functions/SL.ranger2= to the folder =functions= and open it.
+  Add the following targets to the pipeline:
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+    tar_target(ltmle_SL_ranger_death_1,
+               run_Ltmle(name_outcome="Dead",
+                         name_censoring = "Censored",
+                         censored_label = 0,
+                         time_horizon=1,
+                         outcome_data=survival_outcome_data,
+                         regimen_data=list(Drug = regimen_data),
+                         baseline_data=baseline_covariates,
+                         timevar_data=time_covariates,
+                         abar = list(control = 0,treat = 1),
+                         SL.library=c("SL.glm","SL.glm.interaction","SL.ranger2","SL.glmnet"),
+                         SL.cvControl = list(V = 2),
+                         verbose=TRUE)
+               ),
+    tar_target(ltmle_summary_SL_ranger_death_1,{
+        summary(ltmle_SL_ranger_death_1)
+    })
+#+END_SRC
+
+- Compare the results with those of the previous exercises
+- Change the =mtry= hyperparameter of ranger by copying the file
+  =SL.ranger2.R= to a new file =SL.ranger3.R= and then editing the
+  arguments where you change the value for =mtry= from
+  =floor(sqrt(ncol(X)))= to =floor(ncol(X)/2)=. Add new targets
+  with the SL.library=c("SL.glm","SL.glm.interaction","SL.ranger3","SL.glmnet").
+  

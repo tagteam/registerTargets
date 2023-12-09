@@ -347,11 +347,8 @@ Estimate <- function(inputs,
         else {
             if (use.glm) {
                 if (class(m)[1] %in% c("speedglm", "glm")) {
-                    fit[[regime.index]] <- 
-                        list(logistic_regression = summary(m)$coefficients,
-                             predicted=table(cut(predicted.values,
-                                                 include.lowest=TRUE,
-                                                 breaks=c(1,.75,0.5,.25,10^{-(1:8)}))))
+                    fit[[regime.index]] <- summary(m)$coefficients
+                        ## list(logistic_regression = summary(m)$coefficients,predicted=table(cut(predicted.values,include.lowest=TRUE,breaks=c(1,.75,0.5,.25,10^{-(1:8)}))))
                 }
                 else {
                     stopifnot(class(m)[1] %in% c("no.Y.variation",
@@ -361,16 +358,12 @@ Estimate <- function(inputs,
             }
             else {
                 if (inherits(m,"ltmle.glmnet")){
-                    fit[[regime.index]] <- list(beta=m$selected_beta,
-                                                predicted=table(cut(predicted.values,
-                                                                    include.lowest=TRUE,
-                                                                    breaks=c(1,.75,0.5,.25,10^{-(1:8)}))))
+                    fit[[regime.index]] <- m$selected_beta
+                    ## list(beta=m$selected_beta,predicted=table(cut(predicted.values,include.lowest=TRUE,breaks=c(1,.75,0.5,.25,10^{-(1:8)}))))
                 } else{
                     capture.output(print.m <- print(m))
-                    fit[[regime.index]] <- list(superlearner = print.m,
-                                                predicted=table(cut(predicted.values,
-                                                                    include.lowest=TRUE,
-                                                                    breaks=c(1,.75,0.5,.25,10^{-(1:8)}))))
+                    fit[[regime.index]] <- print.m
+                    ## list(superlearner = print.m, predicted=table(cut(predicted.values,include.lowest=TRUE,breaks=c(1,.75,0.5,.25,10^{-(1:8)}))))
                 }
             }
         }

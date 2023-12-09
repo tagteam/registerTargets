@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  8 2023 (08:01) 
 ## Version: 
-## Last-Updated: Dec  9 2023 (14:46) 
+## Last-Updated: Dec  9 2023 (15:46) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 98
+##     Update #: 102
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -102,7 +102,23 @@ list(
         summary(ltmle_sl_death_1)
     }),
     # day 3 part 3
-    tar_target(ltmle_glmnet_death_1,
+    tar_target(ltmle_glmnet_solo_death_1,
+               run_Ltmle(name_outcome="Dead",
+                         name_censoring = "Censored",
+                         censored_label = 0,
+                         time_horizon=1,
+                         outcome_data=survival_outcome_data,
+                         regimen_data=list(Drug = regimen_data),
+                         baseline_data=baseline_covariates,
+                         timevar_data=time_covariates,
+                         abar = list(control = 0,treat = 1),
+                         SL.library="glmnet",
+                         SL.cvControl = list(selector="optimize",alpha=0.5),
+                         verbose=TRUE)),
+    tar_target(ltmle_glmnet_solo_summary_mace_2,{
+        summary(ltmle_glmnet_solo_death_1)
+    }),
+    tar_target(ltmle_SL_glmnet_death_1,
                run_Ltmle(name_outcome="Dead",
                          name_censoring = "Censored",
                          censored_label = 0,
@@ -116,7 +132,7 @@ list(
                          SL.cvControl = list(V = 2),
                          verbose=TRUE)),
     # day 3 part 4
-    tar_target(ltmle_SL_death_2,
+    tar_target(ltmle_SL_ranger_death_1,
                run_Ltmle(name_outcome="Dead",
                          name_censoring = "Censored",
                          censored_label = 0,
@@ -130,6 +146,9 @@ list(
                          SL.cvControl = list(V = 2),
                          verbose=TRUE)
                ),
+    tar_target(ltmle_summary_SL_ranger_death_1,{
+        summary(ltmle_SL_ranger_death_1)
+    }),
     # day 4 part 1
     tar_target(ltmle_fit_glm_mace_2,
                run_Ltmle(name_outcome="mace",

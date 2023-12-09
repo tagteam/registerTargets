@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  9 2023 (07:23) 
 ## Version: 
-## Last-Updated: Dec  9 2023 (07:35) 
+## Last-Updated: Dec  9 2023 (15:44) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 7
+##     Update #: 9
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -15,13 +15,16 @@
 ## 
 ### Code:
 
-SL.ranger2 <- function (Y, X, newX, family, obsWeights, num.trees = 5, mtry = floor(sqrt(ncol(X))), 
+SL.ranger2 <- function (Y, X, newX, family, obsWeights, num.trees = 50, mtry = floor(sqrt(ncol(X))), 
                         write.forest = TRUE, probability = family$family == "binomial", 
                         min.node.size = ifelse(family$family == "gaussian", 5, 1), 
                         replace = TRUE, sample.fraction = ifelse(replace, 1, 0.632), 
                         num.threads = 1, verbose = T, ...) 
 {
     SuperLearner:::.SL.require("ranger")
+    # When the outcome Y is a predicted probability
+    # as it occurs in the iterative regression formula
+    # we do not want to fit ranger to a factor with many levels
     if (family$family == "binomial" && length(unique(Y)) == 2) {
         Y = as.factor(Y)
     }
