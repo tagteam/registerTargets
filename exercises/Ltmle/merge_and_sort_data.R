@@ -19,8 +19,8 @@ merge_and_sort_data <- function(time_horizon,
   ## }else{
   ## outcome_data <- as.data.table(outcome_data)}
   stopifnot(inherits(regimen_data,"data.table"))
-  setkey(regimen_data,pnr)
-  setkey(outcome_data,pnr)
+  data.table::setkey(regimen_data,pnr)
+  data.table::setkey(outcome_data,pnr)
   wide_data=outcome_data[regimen_data]
   # deal with outcome/death/censored at index
   Y_0 = match(paste0(name_outcome,"_",0),names(wide_data))
@@ -39,7 +39,7 @@ merge_and_sort_data <- function(time_horizon,
   # first remove outcome if overlap
   if (length((outcome_overlap <- grep(paste0(name_outcome,"_"),names(timevar_data)))>0)){
     timevar_data <- timevar_data[,-outcome_overlap, with=FALSE]}
-  setkey(timevar_data,pnr)
+  data.table::setkey(timevar_data,pnr)
   work_data=timevar_data[work_data, on = c("pnr")]
   
   name_time_covariates = unlist(lapply(grep("_0",names(timevar_data),value=TRUE),

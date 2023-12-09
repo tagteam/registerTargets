@@ -31,15 +31,25 @@ prepare_Ltmle <- function(regimen_data,
                           name_outcome,
                           name_regimen,
                           name_censor_others = NULL,
-                          name_censoring = "Censored",
-                          censored_label = "censored",
-                          name_competing_risk = "Dead",
+                          name_censoring,
+                          censored_label,
+                          name_competing_risk,
                           Markov = NULL,
                           abar,
                           independent_regimens = FALSE,
                           ...) {
     if (!inherits(outcome_data,"data.frame")) {
         stop("Argument 'outcome_data' must be a data.frame or data.table or tibble.")
+    }
+    stopifnot(length(grep(name_regimen,names(regimen_data)))>0)
+    stopifnot(length(grep(name_outcome,names(outcome_data)))>0)
+    if (length(name_competing_risk)>0)
+        stopifnot(length(grep(name_competing_risk,names(outcome_data)))>0)
+    if (length(name_censoring)>0){
+        stopifnot(length(cnodes <- grep(name_censoring,names(outcome_data)))>0)
+        if(is.na(match(censored_label,
+                       unique(c(sapply(outcome_data[,cnodes,with = FALSE],function(x)unique(x)))))))
+            stop("Censored label does not occur in Censoring nodes")
     }
     if (missing(abar))stop("abar is missing.")
     ## Merge all data and order in correct order
@@ -108,6 +118,7 @@ prepare_Ltmle <- function(regimen_data,
        time_horizon = time_horizon,
        info = list(outcome = name_outcome,
                    regimen = unlist(name_regimen),
+                   abar = abar,
                    baseline = subset_data$name_baseline_covariates,
                    timevar = merged_data$name_time_covariates,
                    subset_label = subset_data$subset_label,

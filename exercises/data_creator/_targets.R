@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  8 2022 (16:00) 
 ## Version: 
-## Last-Updated: Dec  8 2023 (19:27) 
+## Last-Updated: Dec  9 2023 (12:58) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 228
+##     Update #: 229
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -157,7 +157,7 @@ list(
                   regimen_data=list(Drug = sim_regimen),
                   baseline_data=sim_baseline_covariates,
                   timevar_data=sim_time_covariates,
-                  censor_others=FALSE,
+                  censored_label=0,
                   abar = list(rep(1,4),rep(0,4)),
                   SL.library="glm",
                   verbose=TRUE)
@@ -169,7 +169,7 @@ list(
                   regimen_data=list(Drug = sim_regimen),
                   baseline_data=sim_baseline_covariates,
                   timevar_data=sim_time_covariates,
-                  censor_others=FALSE,
+                  censored_label=0,
                   abar = list(rep(1,4),rep(0,4)),
                   SL.library="glm",
                   verbose=TRUE)

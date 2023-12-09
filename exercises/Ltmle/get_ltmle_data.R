@@ -42,7 +42,6 @@ get_ltmle_data <- function(work_data, time_horizon,
   }
   
   ## All nodes (except outcome and competing risk) should be NA after an event (outcome or death)
-
   if(time_horizon!= 1){
       for(k in Y_nodes_position[-(K-1)]){
           later_nodes=setdiff((k+1):NCOL(work_data),Y_nodes_position)

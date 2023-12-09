@@ -6,7 +6,7 @@ The learning targets of this exercise are:
 
 - clean-up and collect results of all previous exercises
 
-* Report
+* Course report
 
 - Go through all exercises of days 2-4, add targets to =_targets.R= if
   needed, i.e., check if you miss anything that is in the file

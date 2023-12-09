@@ -10,6 +10,8 @@ run_Ltmle <- function(name_outcome,
                       baseline_data,
                       timevar_data,
                       abar,
+                      gcomp = FALSE,
+                      iptw.only = FALSE,
                       Markov=NULL,
                       SL.library,
                       SL.cvControl,
@@ -37,11 +39,11 @@ run_Ltmle <- function(name_outcome,
         loop <- foreach(REG = names(regimen_data))%do%{
             ## [,.(pnr,sex,agegroups,index_heart_failure,tertile_income,education,diabetes_duration,secondline_duration,first_2ndline)]
             bsl_covariates <- copy(baseline_data)
-            setkey(bsl_covariates,pnr)
+            data.table::setkey(bsl_covariates,pnr)
             ## add baseline adjustment to subset analysis
             if (length(sub_set)>0 & length(sub_set$adj)>0){
                 sdat=sub_set$data[,c("pnr",sub_set$adj),with=FALSE]
-                setkey(sdat,pnr)
+                data.table::setkey(sdat,pnr)
                 bsl_covariates <- sdat[bsl_covariates]
             }
             if (length(sub_set)>0){
@@ -112,7 +114,12 @@ run_Ltmle <- function(name_outcome,
             if (length(SL.cvControl)>0)
                 pl$SL.cvControl <- SL.cvControl
             if (verbose)print(paste0("Fitting Ltmle"," ",REG))
+            if (gcomp) pl$gcomp <- gcomp
+            if (iptw.only) pl$iptw.only <- iptw.only
             tryfit <- try(fit <- do.call(Ltmle,pl))
+            fit$info$estimator <- "tmle"
+            if (gcomp) fit$info$estimator <- "gcomp"
+            if (iptw.only) fit$info$estimator <- "iptw"
             ## if (inherits(tryfit,"try-error"))browser()
             if (reduce){
                 fit$call <- NULL

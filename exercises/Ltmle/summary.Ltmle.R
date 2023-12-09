@@ -1,6 +1,10 @@
 summary.Ltmle <- function(object,estimator,...){
-    if (missing(estimator))
-        if (object$gcomp) estimator = "gcomp" else estimator = "tmle"
+    if (length(names(object$info$abar)) == 0)
+        regimen_names = c("Risk(A=1)","Risk(A=0)")
+    else
+        regimen_names = paste0("Risk(",names(object$info$abar),")")
+    if (missing(estimator)) estimator = object$info$estimator
+        ## if (object$gcomp) estimator = "gcomp" else estimator = "tmle"
     MySummaryLtmle <- function (object, estimator = ifelse(object$gcomp, "gcomp", "tmle"),
                                 ...)
     {
@@ -39,7 +43,7 @@ summary.Ltmle <- function(object,estimator,...){
     }
     if (length(object$estimates)>0){
         x=MySummaryLtmle(object,estimator=estimator)
-        risk = summi(x=x$treatment,"Risk(A=1)")
+        risk = summi(x=x$treatment,regimen_names[[1]])
         risk
     }else{
         x=summary.ltmleEffectMeasures(object,estimator=estimator)
@@ -48,13 +52,13 @@ summary.Ltmle <- function(object,estimator,...){
             name_treatment="estimate"
             name_control="estimate"
         } else{
-            name_treatment="Risk(A=1)"
-            name_control="Risk(A=0)"
+            name_treatment=regimen_names[[1]]
+            name_control=regimen_names[[2]]
         }
         treatment = summi(x=x$effect.measures$treatment,target=name_treatment)
-        treatment$Target_parameter="Mean(A=1)"
+        treatment$Target_parameter=regimen_names[[1]]
         control = summi(x=x$effect.measures$control,target=name_control)
-        control$Target_parameter="Mean(A=0)"
+        control$Target_parameter=regimen_names[[2]]
         ate = summi(x=x$effect.measures$ATE,"ATE")
         if ("RR"%in%names(x$effect.measures)){
             RR = summi(x=x$effect.measures$RR,"Ratio")

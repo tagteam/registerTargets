@@ -4,3 +4,17 @@
 
 The learning targets of this exercise are:
 
+- to diagnosing (near) positivity violations using the gbounds argument
+
+** Reading references
+
+- https://pubmed.ncbi.nlm.nih.gov/21030422/
+
+----------------------------------------------------------------------
+
+* Positivity violations
+
+
+
+
+

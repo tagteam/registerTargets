@@ -4,19 +4,98 @@
 
 The learning targets of this exercise are:
 
-- Our augmented version of =ltmle=
 - Longitudinal targeted minimum loss based estimation with competing
   risks
+- Our augmented version of =ltmle=
 
 ** Reading references
 
 - http://joshuaschwab.github.io/ltmle/articles/a02_intro.html
   
-The learning targets of this exercise are:
-
-- Estimate the average treatment effect without time dependent variables using =g-formula= and =ltmle=
-- Review a working analysis using longitudinal targeted minimum loss estimation (=ltmle=)
-- Modify the analysis according to variations of the target parameters
-
 ------------------------------------------------------------------------------------------------------
 
+* Ltmle with competing risks
+
+- Open the Rstudio project =register_project= and source all functions
+  and load everything:
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+library(targets)
+tar_source("functions")
+tar_source("../Ltmle/")
+tar_load_everything()
+#+END_SRC  
+
+- Consider the target =mace_outcome_data=. It contains followup data
+  for 10 time points for a MACE outcome. It also contains followup
+  data for end of followup due to censoring and due to the competing
+  risk of death without MACE.
+- Prepare the data for Ltmle analysis:
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+pl <- prepare_Ltmle(regimen_data=regimen_data,
+                    outcome_data=mace_outcome_data,
+                    name_outcome="mace",
+                    name_regimen="Drug",
+                    name_censoring = "Censored",
+                    name_competing_risk = "Dead",
+                    survivalOutcome = TRUE,
+                    censored_label = 0,
+                    baseline_data=baseline_covariates,
+                    timevar_data=time_covariates,
+                    time_horizon=10,
+                    subset_id=NULL,
+                    SL.library="glm",
+                    abar=list(drug=rep(1L,10),control=rep(0L,10)))
+#+END_SRC  
+
+- The order from left to right of the variable names determine which variables are used to predict
+  propensity, censoring and outcome. Discuss the time order of the prepared data (with your neighbor).
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+names(pl$data)
+#+END_SRC  
+
+- Discuss the special cases where in the real register data, multiple
+  events (time-covariate change, treatment change, censoring, mace
+  outcome, competing risk) happen within a 6 months interval.
+
+- Add the following targets to the pipeline:
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+tar_target(ltmle_fit_glm_mace_2,
+           run_Ltmle(name_outcome="mace",
+                     name_competing_risk = "Dead",
+                     name_censoring = "Censored",
+                     censored_label = 0,
+                     time_horizon=4,
+                     outcome_data=mace_outcome_data,
+                     regimen_data=list(Drug = regimen_data),
+                     baseline_data=baseline_covariates,
+                     timevar_data=time_covariates,
+                     abar = list(control = rep(0,4),treat = rep(1,4)),
+                     SL.library="glm",
+                     verbose=TRUE)),
+tar_target(ltmle_summary_mace_2,{
+  summary(ltmle_fit_glm_mace_2)
+})
+#+END_SRC
+
+- Run the pipeline and load the two new targets
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+tar_make()
+tar_load(ltmle_fit_glm_mace_2)
+tar_load(ltmle_summary_mace_2)
+#+END_SRC  
+
+- Write a conclusion sentence which includes the results in the summary table.
+- Load the analysis of the 2-year death outcome and discuss the
+  results for MACE in the light of the fact that a patient who lives
+  longer is longer at risk for MACE.
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+tar_load(ltmle_summary_mace_2)
+tar_load(ltmle_summary_death_2)
+#+END_SRC  
+  
