@@ -34,7 +34,7 @@ Unzip the file in a good neighborhood on your computer.
 If you have the program =git= installed you can clone the github repository:
 
 #+BEGIN_SRC sh
-git clone https://github.com/tagteam/registerTargets/
+git clone --depth=1 https://github.com/tagteam/registerTargets/
 #+END_SRC
 
 * Create RStudio projects
