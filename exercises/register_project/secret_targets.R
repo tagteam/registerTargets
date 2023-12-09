@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  8 2023 (08:01) 
 ## Version: 
-## Last-Updated: Dec  9 2023 (16:25) 
+## Last-Updated: Dec  9 2023 (16:26) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 103
+##     Update #: 104
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -14,7 +14,6 @@
 #----------------------------------------------------------------------
 ## 
 ### Code:
-## try(setwd("~/metropolis/Teaching/targetedRegisterAnalysis/exercises/register_project/"))
 library(targets)
 
 # R-package dependencies
