@@ -4,7 +4,8 @@
 
 The learning targets of this exercise are:
 
-- Comparison of the IPCW estimator, the G-computation estimator
+- Comparison of the IPW estimator (inverse probability of censoring
+  and treatment weighted estimator), the G-computation estimator
   (G-formula) and the TMLE estimator.
 
 ** Reading references
@@ -120,3 +121,11 @@ ltmle_summary_gcomp_mace_2
     })
 #+END_SRC
 
+- Compare the three estimators in the subset of subjects who have a high education
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+tar_load_everything()
+ltmle_summary_gcomp_mace_2_subset
+ltmle_summary_ipw_mace_2_subset
+ltmle_summary_glm_mace_2_subset
+#+END_SRC  
