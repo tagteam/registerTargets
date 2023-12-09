@@ -17,7 +17,7 @@ used to create a target in the pipeline.
 - Switch to the RStudio project called /example_project/ that you have created and worked through in previous Exercises.
 - Open the R-quarto file called "example_report.qmd"
 - Export the file to html by clicking =Render=. 
-- Use =tar_load= to load the object =table_1=. You can also use =tar_load_everything()=.
+- Use =tar_load= to load the object =table_1=. You can also use =tar_load_everything()= which however may require a call to =tar_prune()= first.
 - Add the following new target to the pipeline (add a comma if needed): 
  
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  

@@ -3,8 +3,12 @@ summary.Ltmle <- function(object,estimator,...){
         regimen_names = c("Risk(A=1)","Risk(A=0)")
     else
         regimen_names = paste0("Risk(",names(object$info$abar),")")
-    if (missing(estimator)) estimator = object$info$estimator
-        ## if (object$gcomp) estimator = "gcomp" else estimator = "tmle"
+    if (missing(estimator))
+        if (length(object$info$estimator)>0)
+            estimator = object$info$estimator
+        else
+            estimator = ifelse(object$gcomp, "gcomp", "tmle")
+    ## if (object$gcomp) estimator = "gcomp" else estimator = "tmle"
     MySummaryLtmle <- function (object, estimator = ifelse(object$gcomp, "gcomp", "tmle"),
                                 ...)
     {

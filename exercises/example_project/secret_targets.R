@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  6 2023 (14:55) 
 ## Version: 
-## Last-Updated: Dec  8 2023 (07:41) 
+## Last-Updated: Dec  9 2023 (16:20) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 36
+##     Update #: 41
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -76,16 +76,16 @@ list(tar_target(sample_size,{137}),
      },packages = c("ggplot2")),
      tar_target(ltmle_analysis,{
          data[,Treatment := as.numeric(treatment == "0")]
-         ltmle_fit <- Ltmle(data[,.(sex,age,Treatment,biomarker)],
-                            Anodes="Treatment",
-                            Lnodes=c("sex","age"),
-                            Ynodes=c("biomarker"),
-                            Yrange=c(0,100),
-                            abar=list(0,1),
-                            time_horizon = 1,
-                            SL.library="glm")
-         summary(ltmle_fit)
-     })
+         Ltmle(data = data[,.(sex,age,Treatment,biomarker)],
+               Anodes="Treatment",
+               Lnodes=c("sex","age"),
+               Ynodes=c("biomarker"),
+               Yrange=c(0,100),
+               abar=list(0,1),
+               time_horizon = 1,
+               SL.library="glm")
+     }),
+     tar_target(summary_ltmle,summary(ltmle_analysis))
      )
 
 

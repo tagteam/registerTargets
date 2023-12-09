@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  7 2023 (08:37) 
 ## Version: 
-## Last-Updated: Dec  7 2023 (17:24) 
+## Last-Updated: Dec  9 2023 (16:13) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 20
+##     Update #: 21
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -84,10 +84,16 @@ tar_delete(figure_1)
 # have been created
 tar_make()
 
+# remove failed and not anymore existing targets
+tar_prune()
+
 # load all targets
 tar_load_everything()
 # look at a specific target
 figure_1
+
+# look at the computation times, seeds and warnings/errors
+tar_meta()
 
 
 ######################################################################
