@@ -18,7 +18,7 @@ run_Ltmle <- function(name_outcome,
     require(foreach,quietly=TRUE)
     require(data.table,quietly=TRUE)
     if (missing(SL.cvControl)){
-        if (GetLibrary(SL.library,"Q") == "glmnet")
+        if (GetLibrary(SL.library,"Q")[[1]] == "glmnet")
             SL.cvControl = list(selector="undersmooth",alpha=0.5)
         else
             SL.cvControl = NULL

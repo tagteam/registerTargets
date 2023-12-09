@@ -26,8 +26,8 @@ been randomized to take treatment =Drug= vs not to take the treatment.
 
 - Add the following target to the pipeline:
 
-#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes
 tar_target(ltmle_fit_death_1,
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes
            run_Ltmle(name_outcome="Dead",
                      time_horizon=1,
                      outcome_data=survival_outcome_data,

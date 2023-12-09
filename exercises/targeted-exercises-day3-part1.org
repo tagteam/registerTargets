@@ -1,361 +1,102 @@
-#+TITLE: PhD course: Targeted Register Analysis: Exercises: Day 3
+#+TITLE: PhD course: Targeted Register Analysis: Exercises: Day 3 part 1
 
 * Objectives
 
 The learning targets of this exercise are:
 
-- Search in register data using the R-package =data.table= 
-  and the R-functions =grep= and =grepl=
-- Maintain control using the R-package targets
-- Extract lists of comorbidities and comedicine 
+- Super learning logistic regression models with and without interaction terms
 
-* Exercise 1
+** Reading references
 
-For the R-exercises of this course we use =data.table= format for
-datasets, because =data.table= is perfectly suited for register data:
-it is fast and memory efficient. However, it is totally fine if you
-prefer to work with =tidyverse/dplyr/tibble= or ordinary =data.frame=,
-just use =as_tibble()= and =as.data.frame= to transform the
-=data.tables= after reading with =data.table::fread= when you work out
-the exercises. Please read in the following order:
+https://cran.r-project.org/web/packages/SuperLearner/vignettes/Guide-to-SuperLearner.html
 
--  [[goodies/data.table_teaser.org]]
--  [[goodies/Searching-with-grep.org]]
-  
-* Exercise 2
+----------------------------------------------------------------------  
 
-It is useful to extract the information that is registered for the
-individuals of the current study population from the different
-registers. In this exercise we work with simulated prescription data
-and simulated hospital admission data. The aim is to explain a concept
-of data preparation which /avoids the wide data format/ until the very
-last step where it is in fact required. The /wide format/ is
-characterized by many columns that are not needed for all analyses and
-many missing values. Compared with the /long format/, the /wide
-format/ has the obvious disadvantages:
+* Super learning alternative logistic regression models
 
-- memory inefficient (unused columns with many missing values)
-- disables a clean view on the used part of the dataset
-- ggplot2 expects long format
+- Open the R-studio project =register_project= and load all targets:
 
-In this exercise we work with a concept which extracts study
-population values from the registers and saves them in many
-=data.tables= with as few as possible columns. The key is the =pnr=
-number which links the =data.tables= when this is needed.
-
-- Switch to the RStudio project called /ami/ that you have created in
-  Exercise 2 of Day 1.
-- Download the function =get_study_pop_1= from the file [[ami/functions/get_study_pop_1.R]]
-  and save it in the subfolder functions of the /ami/ project.
-  It implements the exclusion criteria which were part of Exercise 4 of Day 1, 
-  and also defines the right censored time to death.
-- Adapt the target which defines the study population in the pipeline to use the function =get_study_pop_1= instead
-  of =get_study_pop= that we used in the exercises of day 1.
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
-tar_target(study_pop,
-           get_study_pop_1(pop = pop,
-                           raw_cpr_file = "rawdata/cpr.csv",
-                           study_start = study_start,
-                           study_end = study_end)),
+tar_load_everything()
 #+END_SRC
-- Create a new R-code file called =sandbox.R= or similar. Copy-paste
-  the following R-codes to that file and work with them
-  until you understand roughly what they do (Hint: put the mouse in the upper right corner of the
-  code boxes to copy the code in the whole box) :
+
+- Open the file =register_project/sandbox= and fit a logistic
+  regression model for the propensity of treatment at time zero:
+
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
-#
-# Aim: learn how grep and grepl can be used to match search terms in data
-# 
+ps1 <- glm(Drug_0~ sex + education + agegroups + tertile_income + index_heart_failure + diabetes_duration,family = "binomial",data = register_data)
+#+END_SRC  
+
+- Create a second propensity score model where you change the formula
+  to include an interaction term between the variables =education= and
+  =tertile_income= and between the variables =sex= and
+  =agegroups=. Call this second model =ps2=.
+
+- Predict the propensity of treatment based on both models and plot
+  the results with the propensity of the first model on x-axis and the
+  propensity of the second model on the y-axis:
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+library(riskRegression)
 library(targets)
-library(data.table)
-#
-# We aim to extract all ICD diagnoses which correspond to myocardial infarction: 
-c("410","DI21","DI22")
-# Note that the first is the ICD-8 diagnosis whereas the latter two are
-# the first 4 letters of all ICD-10 diagnoses, i.e., DI211A shares the
-# first 4 letters with DI21 and corresponds to "Inferiort/posteriort akut myokardieinfarkt med Q-taksudv",
-# see https://www.dst.dk/da/TilSalg/Forskningsservice/Dokumentation/hoejkvalitetsvariable/sygehusbenyttelse---indlaeggelser-og-ambulante-behandlinger/adiag
-#
-# example vector of icd codes
-#
-sample_icd <- c("DC410", "DC410A","DI210B","DI211","410","DI211A")
-
-#
-grep("410",sample_icd)
-grep("410",sample_icd,value=TRUE)
-grepl("410",sample_icd)
-# ups, the first two are ICD-10 and wrong!
-#
-# changing the search term to ^410 solves this problem. the ^ indicates
-# the beginning of a word. Similarly $ indicates the end of the word
-#
-# match anywhere
-grep("affe",c("affe","giraffe","affektion"))
-# match at beginning of word
-grep("^affe",c("affe","giraffe","affektion"))
-# match at end of word
-grep("affe$",c("affe","giraffe","affektion"))
-# exact match
-grep("^affe$",c("affe","giraffe","affektion"))
-
-# lets do this with the ICD codes
-grep("^410",sample_icd)
-grep("^410",sample_icd,value=TRUE)
-grepl("^410",sample_icd)
-
-# so far so good. how about the remaining ICD codes for myocardial infarction:
-grep("^410",sample_icd)
-grep(c("^410","^DI21","^DI22"),sample_icd)
-# hov: grep allows only one pattern. This should work:
-grep(c("^410|^DI21|^DI22"),sample_icd)
-grep(c("^410|^DI21|^DI22"),sample_icd,value=TRUE)
-# but when there are more than 3 codes it can be
-# boring to type everything in. Hence, we learn the
-# power of the functions paste and paste0
-MI_ICD <- c("410","DI21","DI22")
-paste0("^",MI_ICD)
-paste(paste0("^",MI_ICD),collapse="|")
-# 
-MI_pattern <- paste(paste0("^",MI_ICD),collapse="|")
-grep(MI_pattern,sample_icd,value=TRUE)
-
-# Ok, ready for the real data set
-# 
-# read hospital admission data
-# 
-# be sure to switch to project ami!
-#
-lpr <- fread("rawdata/lpr.csv",keepLeadingZeros = TRUE,colClasses = c("character","character","Date"))
-nrow(lpr) # 269882
-str(lpr)
-lpr
-# with grepl
-lpr_MI <- lpr[grepl(MI_pattern,diag)]
-# same with grep
-lpr_MI <- lpr[grep(MI_pattern,diag)]
-lpr_MI # 3892
-#+END_SRC
-
-- Now you know how to extract ICD codes. Furthermore, we can reduce the extracted
-  ICD codes to the study population. Luckily, this is relatively fast and easy with
-  the =data.table= package:
-#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
-tar_load(study_pop)
-# sort study_pop and lpr_MI by pnr number
-# and at the same time prepare for joining (AKA merging)
-setkey(study_pop,pnr)
-setkey(lpr_MI,pnr)
-# reduce to the lines in lpr_MI which belong
-# to a person in study_pop
-lpr_MI <- study_pop[,.(pnr)][lpr_MI]
-# in this specific case we do not reduce
-# a single line, because the definition of the
-# study_pop is that they have a diagnosis of myocardial infarction.
-#
-# 
-# To see that it does reduce the extracted dataset, you should now
-# use copy-and-paste of the above codes and create a corresponding
-# extracted data set for COPD, using
-copd_ICD <- heaven::charlson.codes[["chronic.pulmonary.disease"]]
-copd_ICD
-#+END_SRC
-
-If you have not succeeded installing the heaven package, download the
-file with the Charlson ICD codes here: [[rawdata/charlson.codes.R]] and
-save them in the subfolder =rawdata= of the /ami/ project:
-#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes
-source("rawdata/charlson.codes.R")
-copd_ICD <- charlson.codes[["chronic.pulmonary.disease"]]
-copd_ICD
-#+END_SRC
+library(ggplot2)
+tar_load_everything()
+ps1 <- glm(Drug_0~ sex + education + agegroups + tertile_income + index_heart_failure + diabetes_duration,family = "binomial",data = register_data)
+ps2 <- glm(Drug_0~ sex * agegroups + tertile_income * education + index_heart_failure + diabetes_duration,family = "binomial",data = register_data)
+# add predicted propensity scores as variables to data.table
+register_data[,propensity_score1:=predictRisk(ps1,newdata= register_data)]
+register_data[,propensity_score2:=predictRisk(ps2,newdata= register_data)]
+ggplot(register_data,aes(x= propensity_score1, y= propensity_score2))+geom_point()+xlim(c(0,1))+ylim(c(0,1))
+#+END_SRC  
   
-- A copy-and-paste strategy is nice and feasible to extract one or two
-  comorbidities from the hospital admission registers. But, already
-  the second time we copy-and-paste the same code we prefer to write a
-  function which loops across many diseases. Have a look at 
-  + https://www.geeksforgeeks.org/for-loop-in-r/
-  + https://www.geeksforgeeks.org/apply-lapply-sapply-and-tapply-in-r/
+- Do the same with the outcome model for the variable =Dead_1=, i.e., fit models for the risk of
+  death within 6 months instead of predicting the propoensity of
+  treatment
 
-- Open the file =functions/get_como_list.R= and load the function
-  =get_como_list= into R, i.e., run the code in the file. The
-  function =get_como_list= works with a list of =icd_codes=. The
-  list can only have a single element:
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
-get_como_list(icd_codes=list("MI"=c("410","DI21","DI22")))
-get_como_list(icd_codes=list("COPD"=heaven::charlson.codes[["chronic.pulmonary.disease"]]))
-# lets do both at once:
-get_como_list(icd_codes=list("MI"=c("410","DI21","DI22"),
-                             "COPD"=heaven::charlson.codes[["chronic.pulmonary.disease"]]))
-# lets do all of them:
-get_como_list(icd_codes=heaven::charlson.codes)
+library(riskRegression)
+library(targets)
+library(ggplot2)
+tar_load_everything()
+out1 <- glm(Dead_1~ Drug_0 + sex + education + agegroups + tertile_income + index_heart_failure + diabetes_duration,family = "binomial",data = register_data)
+out2 <- glm(Dead_1~ Drug_0 + sex * agegroups + tertile_income * education + index_heart_failure + diabetes_duration,family = "binomial",data = register_data)
+# add predicted propensity scores as variables to data.table
+register_data[,risk1:=predictRisk(out1,newdata= register_data)]
+register_data[,risk2:=predictRisk(out2,newdata= register_data)]
+ggplot(register_data,aes(x= risk1, y= risk2))+geom_point()+xlim(c(0,1))+ylim(c(0,1))
+#+END_SRC    
+
+- Use the SuperLearner to fit the propensity score models with and without interaction terms
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+library(SuperLearner)
+X=register_data[,c("sex","education","agegroups","tertile_income","index_heart_failure","diabetes_duration"),with=FALSE]
+Y=register_data[["Drug_0"]]
+sl_ps1 <- SuperLearner(Y=Y,X=X,SL.library="SL.glm",family="binomial")
+sl_ps2 <- SuperLearner(Y=Y,X=X,SL.library="SL.glm.interaction",family="binomial")
+#+END_SRC  
+
+
+- Plot the predicted propensities of the models fitted with glm vs SL.glm
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+register_data[,sl_propensity1:=predict(sl_ps1,newdata=X)$pred]
+ggplot(register_data,aes(x= propensity_score1, y= sl_propensity1))+geom_point()+xlim(c(0,1))+ylim(c(0,1))
 #+END_SRC
-- If this works (here in this file) and yields a list of
-  comorbidities, then You can add the following targets to
- the pipeline in the file [[ami/_targets.R]]
+
+- Plot the predicted propensities of the models fitted with glm vs SL.glm
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+register_data[,sl_propensity2:=predict(sl_ps2,newdata=X)$pred]
+ggplot(register_data,aes(x= propensity_score2, y= sl_propensity2))+geom_point()+xlim(c(0,1))+ylim(c(0,1))
+#+END_SRC
+
+- Explain the differences. Hint: Look at the fitted SuperLearner models:
+
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes
-tar_target(icd_codes, heaven::charlson.codes),
-tar_target(como_list,{
-  get_como_list(icd_codes = icd_codes)
-})
-#+END_SRC
-- Similarly, we extract comedicine from the prescription register. Here
-  is the function which you should save as =functions/get_drug_list.R=:
-#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
-get_drug_list <- function(atc_codes){
-    lmdb <- fread("rawdata/lmdb.csv",
-                  keepLeadingZeros = TRUE,
-                  colClasses = c("character","Date","character"))
-    x = lapply(names(atc_codes),function(drug){
-        out = lmdb[grep(paste0(paste0("^",atc_codes[[drug]]),collapse = "|"),atc)]
-        # remove duplicated entries with same admission date
-        out <- out[out[,.I[1],by=c("pnr","eksd")]$V1]
-        out[,X := drug]
-        out[]
-    })
-    names(x) = names(atc_codes)
-    x
-}
+summary(ps1)
+summary(sl_ps1$fitLibrary[[1]]$object)
+summary(ps2)
+summary(sl_ps2$fitLibrary[[1]]$object)
 #+END_SRC  
-- And here are the targets that you should add to the pipeline in the file [[ami/_targets.R]]
-#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
-tar_target(atc_codes,list(
-                       #beta blockers
-                       bb = c('C07'),
-                       #calcium chanel blockers
-                       ccb = c('C08'),
-                       #RAS inhibitors
-                       rasi = c('C09'),
-                       #Thiazid
-                       thiazid = c('C03A'),
-                       #Loop diurestics
-                       loop = c('C03C', 'C03EB'),
-                       #Mineralcorticoid receptor antagonister
-                       mra = c('C03D'),
-                       #Digoxin
-                       digoxin = c('C01AA05'),
-                       #Statins
-                       statin = c('C10A', 'A10BH51', 'A10BH52'),
-                       #Acetylsalicylic acid (aspirin)
-                       asa = c('B01AC06', 'N02BA01'),
-                       #ADP receptor inhibitor
-                       adpi = c('B01AC'),
-                       #Vitamin K antagonists
-                       vka = c('B01AA'),
-                       # copd
-                       copd_med = c('R03BA', paste0('R03AK0',c(6:9)),paste0('R03AK', c(10:12)), paste0('R03AL0', c(8:9)),'R03AC', paste0('R03AK0', c(6:9)), paste0('R03AK', c(10:13)), paste0('R03AL0', c(1:9)),'R03BB'),
-                       # dementia
-                       dementia_med='N06D',
-                       #new oral anti-coagulents
-                       noac = c('B01AF')
-                     ))
-tar_target(drug_list,{
-  get_drug_list(atc_codes = atc_codes)
-})
-#+END_SRC  
-- Next we aim to make a wide format data set to update the baseline
-  table. For all individuals in the =study_pop= we want the comorbidy
-  and comedicine status at the index date. However, we have to admit
-  that we *cannot look all the way back in time* to search for
-  comorbidy/comedicine due to the limitations of the start date of the
-  registers, and in particular not for immigrants who came to Denmark
-  recently. But, from a statistical perspective, to avoid bias, we
-  should always look back exactly the same amount for all individuals
-  in our population. So, here is how to look back in time for 10 years
-  when looking for the COPD status at the person individual index
-  dates:
-#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
-tar_load(study_pop)
-setkey(study_pop,pnr,index)
-como <- get_como_list(icd_codes=list("COPD"=heaven::charlson.codes[["chronic.pulmonary.disease"]]))
-names(como$COPD)
-# rename the date variable to the same name as in the study pop: "index"
-setnames(como$COPD,"inddto","index")
-setkey(como$COPD,pnr,index)
-study_pop_wide <- como$COPD[study_pop,roll=10*365.25]
-study_pop_wide[is.na(X),X:="No COPD"]
-study_pop_wide[,table(X)]
-## COPD No COPD 
-#+END_SRC
-- This shows that 13 individuals have had a COPD diagnosis within
-  10 years before the index date.
-- Similarly, we extract whether the individual had purchased beta
-  blockers within 180 days before the index date:
-#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
-tar_load(study_pop)
-setkey(study_pop,pnr,index)
-comed <- get_drug_list(atc_codes=list("bb" = c('C07')))
-names(comed$bb)
-# rename the date variable to the same name as in the study pop: "index"
-setnames(comed$bb,"eksd","index")
-setkey(comed$bb,pnr,index)
-# for drugs we look back a shorter time, e.g., 180 days
-study_pop_wide <- comed$bb[study_pop,roll=180]
-study_pop_wide[is.na(X),X:="No bb"]
-study_pop_wide[,table(X)]
-#+END_SRC
-- In this way we can add comorbidity and drug usage at the index date to a =wide_format= data set.
-  To do this, save the following function as =functions/get_wide_baseline_pop.R=
-#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
-get_wide_baseline_pop <- function(study_pop,como_list,drug_list){
-    # select relevant variables from study_pop
-    baseline_pop = study_pop[,.(pnr,index,sex,age,end_fup,death_date)]
-    # define event time
-    baseline_pop[,time := as.numeric(end_fup-index)/365.25]
-    baseline_pop[,event := 0]
-    baseline_pop[!is.na(death_date),event := 1]
-    setkey(baseline_pop,pnr,index)
-    # restrict to relevant variables 
-    baseline_pop = baseline_pop[,.(pnr,index,sex,age,time,event)]
-    # loop across comorbidities to extract values at index (baseline, start of followup)
-    for (como in names(como_list)){
-        como_dat = como_list[[como]]
-        # rename inddto to index in order to roll the join
-        setnames(como_dat,"inddto","index")
-        setkey(como_dat,pnr,index)
-        baseline_pop = como_dat[,.(pnr,index,X)][baseline_pop,roll = TRUE]
-        set(baseline_pop,j = como,value = ifelse(is.na(baseline_pop$X),"No","Yes"))
-        baseline_pop[,X := NULL]
-        baseline_pop
-    }
-    # loop across drugs to extract exposure 180 days before index (baseline, start of followup)
-    for (drug in names(drug_list)){
-        drug_dat = drug_list[[drug]]
-        # rename inddto to index in order to roll the join
-        setnames(drug_dat,"eksd","index")
-        setkey(drug_dat,pnr,index)
-        baseline_pop = drug_dat[,.(pnr,index,X)][baseline_pop,roll = 180]
-        set(baseline_pop,j = drug,value = ifelse(is.na(baseline_pop$X),"No","Yes"))
-        baseline_pop[,X := NULL]
-        baseline_pop
-    }
-    q = baseline_pop[bb == "Yes"&event == 1,.(pnr,bb,event)]
-    baseline_pop[]
-}
-#+END_SRC
-- Then, add the following target to the pipeline:
-#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
-tar_target(wide_baseline_pop,{
-  get_wide_baseline_pop(study_pop = study_pop,
-                como_list = como_list,
-                drug_list = drug_list)
-})
-#+END_SRC
-- Finally, adapt the target for table 1 from the exercises from day 1
-  to use the new wide format dataset =wide_baseline_pop= instead of
-  the small =study_pop=, and then change the function =make_table1= such
-  that the produced table includes several drugs and comorbidities. E.g.,
-#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
-    t1 <- utable(sex~age+ myocardial.infarction + heart.failure + renal.disease + any.malignancy + lymphoma + bb + ccb + statin,
-                 data = wide_baseline_pop)
-    summary(t1,drop.reference = "binary")
-#+END_SRC
 
-# Footer:
-------------------------------------------------------------------------------------------------------
-**** Navigation
-- [[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day1.org][targeted exercises day 1]]
-- [[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day2.org][targeted exercises day 2]]
-- [[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day3.org][targeted exercises day 3]]
-- [[https://github.com/tagteam/registerTargets/blob/main/exercises/targeted-exercises-day4.org][targeted exercises day 4]]
-- [[https://github.com/tagteam/registerTargets/blob/main/lecture_notes][lecture notes]]
-- [[https://github.com/tagteam/registerTargets/blob/main/exercises/goodies][goodies]]

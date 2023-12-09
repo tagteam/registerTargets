@@ -99,7 +99,7 @@ Ltmle <- function(data, Anodes, Cnodes = NULL, Dnodes = NULL, Lnodes = NULL, Yno
                   estimate.time = FALSE, gcomp = FALSE, iptw.only = FALSE, 
                   variance.method = "ic", observation.weights = NULL, id = NULL,info = NULL,verbose=FALSE,...){
     targets::tar_source("../Ltmle/")
-    if (GetLibrary(SL.library,"Q") == "glmnet")
+    if (GetLibrary(SL.library,"Q")[[1]] == "glmnet")
         if (length(SL.cvControl)==0)
             SL.cvControl=list(selector="undersmooth",alpha=0.5)
     requireNamespace("matrixStats")

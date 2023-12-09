@@ -1,15 +1,14 @@
-#+TITLE: PhD course: Targeted Register Analysis: Exercises: Day 2 part 1
+#+TITLE: PhD course: Targeted Register Analysis: Exercises: Day 3 part 4
 
 * Objectives
 
 The learning targets of this exercise are:
 
-- Our augmented version of =ltmle=
-- Longitudinal targeted minimum loss based estimation with competing
+- to add random forest models for super learning
   risks
 
 ** Reading references
 
-- http://joshuaschwab.github.io/ltmle/articles/a02_intro.html
+
 
 ----------------------------------------------------------------------

@@ -4,7 +4,7 @@
 
 The learning targets of this exercise are:
 
-- changing nuisance parameter estimators
+- Investigating fitted nuisance parameter models
 
 ----------------------------------------------------------------------  
 
@@ -12,7 +12,7 @@ The learning targets of this exercise are:
 
 This exercise assumes that you have succeeded with the previous exercise.
 
-- Open the file register_project/sandbox.R and load the target =ltmle_fit_death_1= into
+- Open the file =register_project/sandbox.R= and load the target =ltmle_fit_death_1= into
   R.
 - Consider the outcome (Q) logistic regression model, the censoring logistic regression model and the
   propensity score (g) logistic regression model:
@@ -65,4 +65,5 @@ ltmle_fit_death_2[[1]][[1]]$Ltmle_fit$fit$g[[1]][["Drug_1"]]
 #+END_SRC  
  
 - There are missing values for the log-odds ratios for age group
-  "above 85" after time point 1. Consider what to do about this.
+  "above 85" after time point 1. Consider and discuss what to do about
+  this with your neighbor (and then do it).

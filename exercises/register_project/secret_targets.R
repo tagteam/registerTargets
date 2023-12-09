@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  8 2023 (08:01) 
 ## Version: 
-## Last-Updated: Dec  9 2023 (08:22) 
+## Last-Updated: Dec  9 2023 (10:49) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 59
+##     Update #: 66
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -74,19 +74,29 @@ list(
                   verbose=TRUE)
     }),
     # day 3 part 1
-    tar_target(ltmle_SL_death_1,
+    tar_target(ps1,
+               glm(Drug_0~ sex + education + agegroups + tertile_income + index_heart_failure + diabetes_duration,family = "binomial",data = register_data)
+               ),
+    tar_target(ps2,
+               glm(Drug_0~ sex + agegroups + tertile_income * education + index_heart_failure + diabetes_duration,family = "binomial",data = register_data)
+               ),
+    # day 3 part 2
+    tar_target(ltmle_sl_death_1,
                run_Ltmle(name_outcome="Dead",
-                         name_censoring = "Censored",
-                         censored_label = 0,
                          time_horizon=1,
                          outcome_data=survival_outcome_data,
                          regimen_data=list(Drug = regimen_data),
                          baseline_data=baseline_covariates,
                          timevar_data=time_covariates,
                          abar = list(0,1),
-                         SL.library=list(g = c("SL.glm","SL.ranger2"),Q = "glm"),
+                         SL.library=c("SL.glm","SL.glm.interaction"),
+                         SL.cvControl = list(V = 2),
                          verbose=TRUE)),
-    tar_target(ltmle_SL_death_1,
+    tar_target(ltmle_sl_summary_death_1,{
+        summary(ltmle_sl_death_1)
+    }),
+    # day 3 part 3
+    tar_target(ltmle_glmnet_death_1,
                run_Ltmle(name_outcome="Dead",
                          name_censoring = "Censored",
                          censored_label = 0,
@@ -96,7 +106,22 @@ list(
                          baseline_data=baseline_covariates,
                          timevar_data=time_covariates,
                          abar = list(0,1),
-                         SL.library=c("SL.glm","SL.ranger2"),
+                         SL.library=c("SL.glm","SL.glm.interaction","SL.glmnet"),
+                         SL.cvControl = list(V = 2),
+                         verbose=TRUE)),
+    # day 3 part 4
+    tar_target(ltmle_SL_death_2,
+               run_Ltmle(name_outcome="Dead",
+                         name_censoring = "Censored",
+                         censored_label = 0,
+                         time_horizon=1,
+                         outcome_data=survival_outcome_data,
+                         regimen_data=list(Drug = regimen_data),
+                         baseline_data=baseline_covariates,
+                         timevar_data=time_covariates,
+                         abar = list(0,1),
+                         SL.library=c("SL.glm","SL.glm.interaction","SL.ranger2","SL.glmnet"),
+                         SL.cvControl = list(V = 2),
                          verbose=TRUE)
                )
 )

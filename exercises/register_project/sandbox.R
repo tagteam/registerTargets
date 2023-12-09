@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  8 2023 (19:05) 
 ## Version: 
-## Last-Updated: Dec  8 2023 (19:27) 
+## Last-Updated: Dec  9 2023 (12:25) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 1
+##     Update #: 3
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -15,7 +15,17 @@
 ## 
 ### Code:
 library(targets)
-tar_load(ltmle_fit_death_1)
+## tar_make()
+tar_load_everything()
+
+# day 2
+
+
+# day 3
+
+
+# day 4
+
 
 
 ######################################################################
