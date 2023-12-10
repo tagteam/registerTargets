@@ -3,6 +3,9 @@ title: "example report"
 author: "You and Me"
 format: html
 editor: visual
+knitr:
+  opts_knit:
+    root.dir: ".."
 ---
 
 ## Quarto
@@ -22,6 +25,7 @@ You can embed code like this:
 ```{r}
 #| echo: false
 library(targets)
+print(getwd())
 tar_load(table_1)
 ```
 

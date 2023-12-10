@@ -7,8 +7,8 @@ used to create a target in the pipeline.
 
 ** Reading references 
 
--  [[goodies/R-functions.org]]
--  [[goodies/lazy-coder.org]]
+-  [[goodies/R-functions.org]] (skip if you know how to write R functions)
+-  [[goodies/lazy-coder.org]] (read this if time permits)
 
 ----------------------------------------------------------------------
 

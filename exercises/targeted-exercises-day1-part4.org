@@ -7,12 +7,12 @@ augmented version of) the R-package =ltmle=.
 
 ** Reading references 
 
-- http://joshuaschwab.github.io/ltmle/articles/a02_intro.html
+- http://joshuaschwab.github.io/ltmle/articles/a02_intro.html (Read here only if time permits)
 
 * The R-package ltmle
 
 - Switch to the RStudio project called /example_project/ that you have created and worked through in previous Exercises.
-- Add the following new target to the pipeline
+- Open the file =example_project/_targets.R=. Add the following new target to the pipeline (add a comma if needed):
 
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
 tar_target(ltmle_analysis,{
@@ -27,9 +27,21 @@ tar_target(ltmle_analysis,{
 })
 #+END_SRC
 
-- Run the pipeline via =tar_make()=
-- Load the object =ltmle_analysis=
-- Find the fitted propensity score model in the object =ltmle_analysis$fit$g=
-  Compare with the object =propensity_score_table= produced in the previous exercises
-- Add a new target to the pipeline which computes =summary(ltmle_analysis)=
+- Run the pipeline via =tar_make()=. If there are errors, try to debug
+  first on your own, then with the help of your neighbor, then with
+  the help of a teacher.
+- If this was successful, load the object =ltmle_analysis= with the function =tar_load()=, i.e.
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+tar_load(ltmle_analysis)
+#+END_SRC
+- Find the fitted propensity score model in the fitted targets
+  =ltmle_analysis$fit$g=.  Compare this output with the object
+  =propensity_score_table= produced in the previous exercises.
+- Add a new target to the pipeline which computes =summary(ltmle_analysis)=:
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+tar_target(summary_ltmle_analysis,{
+summary(ltmle_analysis)
+})
+#+END_SRC
+- Run =tar_make()= to produce the target.
 - Add the output of the =summary(ltmle_analysis)= to the file "example_report.qmd" 
