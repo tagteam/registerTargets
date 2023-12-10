@@ -1,7 +1,9 @@
-Our augmented version of =ltmle= uses the functions =Ltmle= and
-=run_Ltmle= as user interface. The documentation is not implemented in
-form of help pages. The following list covers the most important
-augmentations:
+Our augmented version of =ltmle= implements the functions =Ltmle= and
+=run_Ltmle= as (improved) user interface. The augmentation makes it
+user friendly in presence of competing risks. Unfortunately,
+documentation of the augmentations is not yet available in form of
+help pages. But following list covers the most important changes
+compared to ltmle::ltmle:
 
 * Ltmle
 - Dnodes can be specified to deal with competing risks
