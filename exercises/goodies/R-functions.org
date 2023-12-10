@@ -26,15 +26,15 @@ sub70 <- get_pop(data=data,age_limit=70)
 sub70
 #+END_SRC
 
-:    pnr sex age
-: 1:  19   1  70
-: 2:  27   0  54
-: 3:  45   1  66
+The function =get_pop= depends on the arguments =data, =age_var= and
+=age_limit=. However, the default value of =age_var= is set to "age"
+and which is used when the function is called without a value for
+=age_var=.
+
 
 Here is a sligthly more thorough walkthrough:
 https://www.tutorialspoint.com/r/r_functions.htm
 
-The best way to learning writing functions is /learning by doing/.
 
 
 

@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  6 2023 (14:55) 
 ## Version: 
-## Last-Updated: Dec  9 2023 (16:20) 
+## Last-Updated: Dec 10 2023 (07:47) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 41
+##     Update #: 42
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -63,9 +63,7 @@ list(tar_target(sample_size,{137}),
                       formula = Surv(time,event)~sex+age+treatment+biomarker)
      },packages = "survival"),
      tar_target(propensity_score_table,{
-         formula <- treatment~sex+age
-         ps <- glm(formula,data=data,family="binomial")
-         publish(ps,print=FALSE)
+         get_propensity_score_table(formula,data)
      }),
      tar_target(figure_1,{
          subset = data[age<70]
