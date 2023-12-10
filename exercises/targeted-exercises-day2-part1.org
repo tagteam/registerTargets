@@ -48,7 +48,7 @@ formula <- ~ sex + education + agegroups + tertile_income + index_heart_failure 
   
 ** Time-varying covariates
 
-- Load the pre-defined target =time_covariates=. There are two
+- Switch back to the file =sandbox.R=. Load the pre-defined target =time_covariates=. There are two
   variables =af= and =statin= followed over 10 time intervals. Each
   time interval is 6 months long. There is no variable =af_0= because patients with =af= at baseline are excluded.
 - Add the variable =statin_0= to table 1 by modifying the function =get_table_1=
@@ -56,13 +56,17 @@ formula <- ~ sex + education + agegroups + tertile_income + index_heart_failure 
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
 formula <- ~ sex + education + agegroups + tertile_income + index_heart_failure + diabetes_duration + statin_0 
 #+END_SRC    
-
+- Note that the function needs to merge the variable =statin_0= from
+  the data =time_covariates= to the data =baseline_covariates=. If you have trouble writing this function, see
+  =register_project/secret_functions/get_table_1.R=
+  
 ** Treatment regimens
 
-- Load the pre-defined target =regimen_data=. There are two variables
-  =Drug= and =B= followed over 10 time intervals. =Drug= is the main
-  treatment variable. You can disregard =B= for now. 
-- Add the treatment variable =Drug_0= to table 1 by modifying the function =get_table_1=
+- Load the pre-defined target =regimen_data=. The treatment variable
+  =Drug= is followed over 10 time intervals. =Drug= is the
+  treatment variable which we want to intervene upon in a hypothetical target trial. The data
+  =regimen_data= should *always be as observed* in the registries.
+- Add the observed initial treatment variable =Drug_0= to table 1 by modifying the function =get_table_1=
   which now requires three arguments: =baseline_covariates=, =time_covariates= and =regimen_data=
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
 formula <- Drug_0 ~ sex + education + agegroups + tertile_income + index_heart_failure + diabetes_duration + statin_0 
@@ -74,12 +78,15 @@ formula <- Drug_0 ~ sex + education + agegroups + tertile_income + index_heart_f
 - Load the pre-defined target =outcome_data=. There are three
   variables =mace= and =Dead= and =Censored= followed over 10 time
   intervals.  There are no variables =mace_0=, =Dead_0= and
-  =Censored_0= because those patients are excluded.  For the
-  =Censored= value 1 means "Uncensored", for =mace= and =Dead= the
-  value 1 means event has happened. Note that multiple events can
-  happen within the same 6 months long interval.
-- Calculate the rate of deaths per 1000 personyears in the first interval.
-- Calculate the probability of dying in the first interval, overall and separately for 
+  =Censored_0= because those patients are excluded.  For the variables
+  =Censored_*= the value 1 means "Uncensored", for the variables
+  =mace_*= and =Dead_*= the value 1 means that an event has
+  occurred. Note that multiple events can occur within the same 6
+  months long interval and that the analyst has to decide how to
+  arrange the data in this case.
+- Discuss with your neighbor how the data should be arranged for
+  subjects for who mace, death and censoring occur in the same
+  interval.
   
 
 

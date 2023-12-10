@@ -155,7 +155,11 @@ Using =targets= makes it generally more difficult
   It is also recommended to save a function with a specific name in a
   file =functions/name.R=, e.g., the function =get_como= is saved in the file
   called =get_como.R= to make it easy to find the code.
-  + Example of an error in the pipeline: Add the following line in the file =functions/this.R= inside the
++ tar_make() results in errors whenever
+  - there are evaluation or syntax errors in the _targets.R file
+  - there are errors while sourcing the R-files in folder "functions"
+  - or during the execution of the targets
++ Example of an error in the pipeline: Add the following line in the file =functions/this.R= inside the
   definition =(1=2)=. Note that this is a syntax error. Then run =tar_make()= and see what happens,
   i.e., consider the error message. You may follow the suggestion of the error message:
   
@@ -167,6 +171,7 @@ Using =targets= makes it generally more difficult
  #+ATTR_LATEX: :options otherkeywords={}, deletekeywords={}
  #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
   tar_meta(fields = c("warnings","error"))
+  show_warnings()
  #+END_SRC
 
 

@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  8 2023 (19:05) 
 ## Version: 
-## Last-Updated: Dec 10 2023 (08:14) 
+## Last-Updated: Dec 10 2023 (08:20) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 9
+##     Update #: 10
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -35,6 +35,9 @@ tar_make()
 tar_load(baseline_covariates)
 
 # adapt the table_1 target defined in example_project (yesterday exercise)
+
+tar_load(time_covariates)
+time_covariates
 
 #--------------------------------------------------------
 # day 3
