@@ -9,10 +9,12 @@ The learning targets of this exercise are:
 
 ----------------------------------------------------------------------
 
-* Superlearning nuisance parameter models
+* Combine learners into a SuperLearner
 
 - Open the R-studio project =register_project= and load all targets.
-- Open the file =register_project/sandbox= and fit a super learner
+  In the part 1 of todays exercises we have used SuperLearner only
+  with a single learner. Now we combine learners into a SuperLearner.
+- Open the file =register_project/sandbox.R= and fit a super learner
   which combines the logistic regression models with and without interactions:
 
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
