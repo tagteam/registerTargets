@@ -14,8 +14,8 @@ material includes both general information and also instructions on
 how to prepare the remaining exercises. To prepare the course you
 should readily have performed the version check:
 
--  [[goodies/R-packages.org]]
--  [[goodies/RStudio-projects.org]]
+- [[goodies/R-packages.org]] (read if you have not done it yet)
+- [[goodies/RStudio-projects.org]] (if you don't know about RStudio projects)
 
 ----------------------------------------------------------------------
 
@@ -51,4 +51,15 @@ Then, also create a second RStudio project for the subfolder:
 =exercises/register_project=
 
 You can now switch back and forth between the two projects using the main menu of RStudio.
+
+* Data table
+
+In large registry data, the R-package =data.table= is invaluable
+because it allows data operations without copying the (large) objects
+all the time.
+
+- [[goodies/data.table.org]] (if time permits)
+
+
 ----------------------------------------------------------------------
+
