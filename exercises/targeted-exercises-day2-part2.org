@@ -8,7 +8,7 @@ The learning targets of this exercise are:
 
 ** Reading references  
 
-- [[goodies/augmented_ltmle.org]]
+- [[goodies/augmented_ltmle.org]] (read this!)
 - https://www.jstatsoft.org/article/view/v081i01 (read in this paper if time permits)
 
 ----------------------------------------------------------------------
@@ -25,7 +25,7 @@ We calculate the standardized 6-months mortality risks (the
 probability of dying within 6-months since index date) had everyone
 been randomized to take the treatment =Drug= vs not to take the treatment.
 
-- Add the following target to the pipeline:
+- Add the following targets to the pipeline:
 
 tar_target(ltmle_fit_death_1,
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes

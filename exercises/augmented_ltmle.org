@@ -10,5 +10,12 @@ compared to ltmle::ltmle:
 - Argument gbounds default value is c(0,1) instead of c(0.01,1)
   
 * run_Ltmle
+
+- Data are submitted in chunks. This makes it relatively easy to run the analysis
+  with different outcomes and treatments. The chunks are:
+  - baseline covariates
+  - timevarying covariates
+  - treatment variables
+  - outcome (including censoring and competing risks)
 - The argument reduce removes the memory heavy part of the objects
 - Information about the call is added
