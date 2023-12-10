@@ -12,12 +12,59 @@ The learning targets of this exercise are:
 
 ----------------------------------------------------------------------  
 
-* Penalized logistic regression
+* Penalized logistic regression 
 
-- The function =glmnet= implements LASSO (alpha=1), ridge regression
-  (alpha=0) and the elastic net (alpha between 0 and 1). Add the
-  following targets to the pipeline and call =tar_make()=
+** Nuissance parameter estimation
 
+- The function =glmnet= implements penalized (logistic) regression
+  where the LASSO (alpha=1) shrinks beta coefficients (log-odds
+  ratios) and even sets some to zero (the corresponding variable is
+  removed). It also implements ridge regression (alpha=0) which only
+  shrinks beta coefficients and the elastic net (alpha between 0 and
+  1) which is a mixture of LASSO and ridge. It remains to determine
+  how much penalty and hence shrinkage is appropriate.
+
+- Open the file =register_project/sandbox.R= load all targets and fit
+  three penalized logistic regression models corresponding to
+  hyperparameter values =alpha= set to 0, 1, and 0.5, respectively.
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+library(glmnet)
+tar_load_everything()
+X=model.matrix(~ -1 + sex + education + agegroups + tertile_income + index_heart_failure + diabetes_duration,
+               data = register_data)
+Y=register_data[["Drug_0"]]
+set.seed(3)
+lasso <- cv.glmnet(x = X,y = Y,alpha = 1)
+coef(lasso)
+ridge <- cv.glmnet(x = X,y = Y,alpha = 0)
+coef(ridge)
+elnet <- cv.glmnet(x = X,y = Y,alpha = 0.5)
+coef(elnet)
+#+END_SRC
+
+- Look at and compare the resulting (remaining) coefficients.
+- Add some interaction terms by tweaking the formula of the
+  =model.matrix= and repeat:
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+# with some interactions
+XX=model.matrix(~ -1 + sex * agegroups + education * tertile_income + index_heart_failure * diabetes_duration,
+                data = register_data)
+elnet_interaction <- cv.glmnet(x = XX,y = Y,alpha = 0.5)
+coef(elnet_interaction)
+#+END_SRC  
+
+** Target parameter estimation
+- The function =cv.glmnet= uses cross-validation to determine the
+  penality hyper parameter =lambda= (penality). If we add =glmnet= to
+  the =SuperLearner=, we would essentially use nested cross-validation
+  loops, one outer for the =SuperLearner= and the inner from
+  =cv.glmnet=. If =glmnet= is the only learner this is not
+  necessary. We have therefore augmented the =Ltmle= function with the
+  possibility to bypass the crossvalidation of the =SuperLearner=. To
+  see how this works, add the following targets to the pipeline (file
+  =_targets.R=) and call =tar_make()=
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
 tar_target(ltmle_glmnet_solo_death_1,
            run_Ltmle(name_outcome="Dead",
@@ -31,17 +78,21 @@ tar_target(ltmle_glmnet_solo_death_1,
                      abar = list(control = 0,treat = 1),
                      SL.library="glmnet",
                      SL.cvControl = list(selector="optimize",alpha=0.5),
-                     verbose=TRUE))
-
+                     verbose=TRUE)),
+tar_target(table_glmnet_solo_death_1,{
+  summary(ltmle_glmnet_solo_death_1)
+})
 #+END_SRC  
 
-- Consider the log-odds ratios of the propensity score model
-
+- Consider the result table and compare the results to results from
+  previous exercises for the same target parameter.
+- Then consider the log-odds ratios of the propensity score model
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
 tar_load(ltmle_glmnet_solo_death_1)
 ltmle_glmnet_solo_death_1[[1]][[1]]$Ltmle_fit$fit$g
 #+END_SRC
 
+* Within the SuperLearner
 - Add SL.glmnet to superlearner:
 
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
@@ -58,9 +109,11 @@ tar_target(ltmle_glmnet_death_1,
                      SL.library=c("SL.glm","SL.glm.interaction","SL.glmnet"),
                      SL.cvControl = list(V=2),
                      verbose=TRUE))
-
+tar_target(table_glmnet_death_1,{
+  summary(ltmle_glmnet_death_1)
+})
 #+END_SRC    
 
-- Add targets that calculate the summary tables and compare the
-  results to the previous results of the superlearner without glmnet
+- Load the targets that calculate the summary tables and compare the
+  results to the previous exercises of the same target parameter.
 
