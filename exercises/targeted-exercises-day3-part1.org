@@ -4,8 +4,8 @@
 
 The learning targets of this exercise are:
 
-- Super learning using parametric models
-- Combine logistic regression models with and without interaction terms
+- Compare logistic regression models with and without interaction terms
+- Super learner basics (using parametric models)
 
 ** Reading references
 

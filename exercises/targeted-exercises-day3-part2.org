@@ -4,34 +4,54 @@
 
 The learning targets of this exercise are:
 
-- to run the SuperLearner inside Ltmle
+- to use the =SuperLearner= to combine different (parametric) models based on cross-validation
+- to use the =SuperLearner= to estimate nuisance parameters inside =Ltmle=
 
 ----------------------------------------------------------------------
 
 * Superlearning nuisance parameter models
 
 - Open the R-studio project =register_project= and load all targets.
-
 - Open the file =register_project/sandbox= and fit a super learner
-  which combines the logistic regression models with and without interactions.
+  which combines the logistic regression models with and without interactions:
 
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
 library(SuperLearner)
 X=register_data[,c("sex","education","agegroups","tertile_income","index_heart_failure","diabetes_duration"),with=FALSE]
 Y=register_data[["Drug_0"]]
-sl_ps_super1 <- SuperLearner(Y=Y,X=X,SL.library=c("SL.glm","SL.glm.interaction"),family="binomial")
+set.seed(8)
+# default value for cross-validation is 10-fold
+sl_ps_super1 <- SuperLearner(Y=Y,
+                             X=X,
+                             SL.library=c("SL.glm","SL.glm.interaction"),
+                             family="binomial")
+# 2-fold is much faster
+set.seed(8)
+sl_ps_super_V2 <- SuperLearner(Y=Y, X=X,
+                               SL.library=c("SL.glm","SL.glm.interaction"),
+                               cvControl=list(V=2),
+                               family="binomial")
 #+END_SRC
 
-- Fit a second super learner which also uses the "SL.mean" and "SL.step.interaction" learners:
+- Why do we have to set the seed? 
+- Fit another super learner which also uses the "SL.mean" learner,
+  which predicts the average outcome, and the "SL.step.interaction"
+  learner, which adds interaction terms (c.f., part 1 of todays
+  exercises).
 
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
 library(SuperLearner)
 X=register_data[,c("sex","education","agegroups","tertile_income","index_heart_failure","diabetes_duration"),with=FALSE]
 Y=register_data[["Drug_0"]]
-sl_ps_super2 <- SuperLearner(Y=Y,X=X,SL.library=c("SL.mean","SL.glm","SL.glm.interaction","SL.step.interaction"),family="binomial")
+set.seed(8)
+sl_ps_super2 <- SuperLearner(Y=Y, X=X,
+                             # speed up by using 2-fold
+                             # cvControl=list(V=2)
+                             SL.library=c("SL.mean","SL.glm","SL.glm.interaction","SL.step.interaction"),
+                             family="binomial")
 #+END_SRC
 
-- Consider the coefficients of the 2 super learners: which models
+- Consider the coefficients of the super learners. Which models
   contribute the most?
 
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
@@ -40,7 +60,9 @@ print(sl_ps_super2)
 #+END_SRC  
   
 - Compare the predicted risks of the two super learners by adapting
-  the ggplot code of the previous exercise.
+  the ggplot code of part 1 of todays exercises.
+
+* SuperLearner within Ltmle
 
 - Re-consider the ltmle estimates of the 6 months risk of death from
   exercise 2 of day 2. Now, use the first superlearner to estimate the
@@ -57,6 +79,7 @@ tar_target(ltmle_sl_death_1,
                      timevar_data=time_covariates,
                      abar = list(0,1),
                      SL.library=c("glm","glm.interaction"),
+                     # speed up you may use 2-fold
                      # SL.cvControl(V=2),
                      verbose=TRUE)),
 tar_target(ltmle_sl_summary_death_1,{
@@ -64,7 +87,8 @@ tar_target(ltmle_sl_summary_death_1,{
 })
 #+END_SRC  
 
-- Compare the results with those from exercise 2 of day 2.
-
-- Do the same with the ltmle analysis of the 2 year risk of death
+- Compare the results with those from exercises part 2 of day 2.
+- Adapt the codes from exercises part 2 of day 2 for the 2-year risk of death,
+  so that a SuperLearner is used for all nuisance parameters. 
+  
 
