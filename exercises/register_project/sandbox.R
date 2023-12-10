@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  8 2023 (19:05) 
 ## Version: 
-## Last-Updated: Dec 10 2023 (08:20) 
+## Last-Updated: Dec 10 2023 (09:04) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 10
+##     Update #: 11
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -38,6 +38,14 @@ tar_load(baseline_covariates)
 
 tar_load(time_covariates)
 time_covariates
+
+## part 2
+tar_make()
+tar_load(ltmle_fit_death_1)
+tar_load(table_ltmle_death_1)
+
+tar_load(ltmle_fit_death_2)
+tar_load(table_ltmle_death_2)
 
 #--------------------------------------------------------
 # day 3

@@ -27,23 +27,24 @@ been randomized to take the treatment =Drug= vs not to take the treatment.
 
 - Add the following targets to the pipeline:
 
-tar_target(ltmle_fit_death_1,
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes
-run_Ltmle(name_outcome="Dead",
-          time_horizon=1,
-          outcome_data=survival_outcome_data,
-          regimen_data=list(Drug = regimen_data),
-          baseline_data=baseline_covariates,
-          timevar_data=time_covariates,
-          abar = list(0,1),
-          SL.library="glm",
-          verbose=TRUE)),
-tar_target(ltmle_summary_death_1,{
+tar_target(ltmle_fit_death_1,
+           run_Ltmle(name_outcome="Dead",
+                     time_horizon=1,
+                     outcome_data=survival_outcome_data,
+                     regimen_data=list(Drug = regimen_data),
+                     baseline_data=baseline_covariates,
+                     timevar_data=time_covariates,
+                     abar = list(0,1),
+                     SL.library="glm",
+                     verbose=TRUE)),
+tar_target(table_ltmle_death_1,{
   summary(ltmle_fit_death_1)
 })
 #+END_SRC
 
-Add the resulting table to the file =register_report.qmd=
+- run =tar_make()= from the file =sandbox.R=
+- Load the resulting table via =tar_load(table_ltmle_death_1) and interpret the results.
 
 ** Run Ltmle with 4 time intervals
 
@@ -52,25 +53,40 @@ of death within 2-years since index date) had everyone been randomized
 to take treatment =Drug= continously for 2 years vs not to take the
 treatment for 2 years.
 
-- Add the following target to the pipeline:
+- Add the following targets to the pipeline, run =tar_make()= and interprete the results.
 
-#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
-run_Ltmle(name_outcome="Dead",
-          time_horizon=4,
-          outcome_data=survival_outcome_data,
-          regimen_data=list(Drug = regimen_data),
-          baseline_data=baseline_covariates,
-          timevar_data=time_covariates,
-          abar = list(rep(1,4),rep(0,4)),
-          SL.library="glm",
-          verbose=TRUE)
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes
+tar_target(ltmle_fit_death_2,{
+  run_Ltmle(name_outcome="Dead",
+            time_horizon=4,
+            outcome_data=survival_outcome_data,
+            regimen_data=list(Drug = regimen_data),
+            baseline_data=baseline_covariates,
+            timevar_data=time_covariates,
+            abar = list(rep(1,4),rep(0,4)),
+            SL.library="glm",
+            verbose=TRUE)
+}),
+tar_target(table_ltmle_death_2,{
+  summary(ltmle_fit_death_2)
+}),
 #+END_SRC
 
-Under the usual causal assumptions, the standardized 2-year risks can
-have an interpretation of what would have been observed had all
-patients been randomized to take the drug, respectively, had all
-patients been randomized to not take the drug continously until the
-time_horizon. We then estimate the average treatment effect (ATE) as
-the difference between the standardized risks 2-year risks and the
-average treatment ratio (Ratio) as the ratio between the standardized
-risks 2-year risks.
+- Under the causal assumptions (consistency, positivity, no unmeasured
+  confounders), the standardized 2-year risks has an interpretation of
+  what would have been observed had *all patients* been randomized to
+  take the drug continously until the =time_horizon=, respectively,
+  had all patients been randomized to not take the drug continously
+  until the =time_horizon=. The output of =run_Ltmle= contains the
+  standardized risks (standardized to the population of all patients,
+  treated and untreated). The output also contains
+  We estimate the average treatment effect (ATE) as the difference
+  between the standardized risks 2-year risks and the average treatment
+  ratio (Ratio) as the ratio between the standardized risks 2-year
+  risks.
+- Export the summary tables to the file =reports/register_report.qmd= 
+- Interprete the results together with your neighbor and write the
+  interpretation into the file =reports/register_report.qmd=.
+
+
+

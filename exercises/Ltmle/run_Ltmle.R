@@ -28,12 +28,7 @@ run_Ltmle <- function(name_outcome,
     tar_source("../Ltmle")
     result <- foreach(tk=time_horizon)%do%{
         if (missing(abar)){
-            if (censor_others){
-                # Because A_0 = 1-B_0 we remove B_0
-                abar <- c(1,rep(1:0,(tk-1)))
-            } else{
                 abar <- rep(1,tk)
-            }
         }
         loop <- foreach(REG = names(regimen_data))%do%{
             ## [,.(pnr,sex,agegroups,index_heart_failure,tertile_income,education,diabetes_duration,secondline_duration,first_2ndline)]
@@ -51,11 +46,7 @@ run_Ltmle <- function(name_outcome,
             } else{
                 sub_id <- NULL
             }
-            if (censor_others){
-                regimens <- c(REG,"B")
-            }else{
-                regimens <- REG
-            }
+            regimens <- REG
             # all timevarying covariates but not treatment
             # should only enter the formula with their last value
             if (length(Markov)>0){
@@ -66,10 +57,7 @@ run_Ltmle <- function(name_outcome,
             } else{
                 markov=""
             }
-            if (censor_others==TRUE)
-                REG_data=copy(regimen_data[[REG]])[,B_0:=NULL]
-            else
-                REG_data=copy(regimen_data[[REG]])
+            REG_data=copy(regimen_data[[REG]])
             if (name_outcome == "Dead"){
                 pl=prepare_Ltmle(regimen_data=REG_data,
                                  outcome_data=outcome_data,

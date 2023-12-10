@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  8 2023 (08:01) 
 ## Version: 
-## Last-Updated: Dec  9 2023 (16:26) 
+## Last-Updated: Dec 10 2023 (09:13) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 104
+##     Update #: 106
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -47,6 +47,7 @@ list(
         get_table_1(baseline_covariates,time_covariates,regimen_data)
     }),
     # day 2 parts 2 and 4
+    # Outcome: death within 6 month
     tar_target(ltmle_fit_death_1,
                run_Ltmle(name_outcome="Dead",
                          name_censoring = "Censored",
@@ -60,6 +61,10 @@ list(
                          SL.library="glm",
                          verbose=TRUE)
                ),
+    tar_target(table_ltmle_death_1,{
+        summary(ltmle_fit_death_1)
+    }),
+    # Outcome: death within 2 years
     tar_target(ltmle_fit_death_2,{
         run_Ltmle(name_outcome="Dead",
                   name_censoring = "Censored",
@@ -73,7 +78,7 @@ list(
                   SL.library="glm",
                   verbose=TRUE)
     }),
-    tar_target(ltmle_summary_death_2,{
+    tar_target(table_ltmle_death_2,{
         summary(ltmle_fit_death_2)
     }),
     # day 3 part 1

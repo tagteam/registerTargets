@@ -113,7 +113,7 @@ Estimate <- function(inputs,
                                                   type), "prediction from a rank-deficient fit may be misleading")
         }
         else {
-            print(SL.library)
+            if (inputs$verbose) print(SL.library)
             if  (SL.library[[1]]=="glmnet"){
                 newX.list <- GetNewX(newdata1)
                 pred <- ProcessSLPrediction(pred=predict(m,newX=newX.list$newX),
