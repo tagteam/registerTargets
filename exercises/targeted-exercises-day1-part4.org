@@ -44,4 +44,4 @@ summary(ltmle_analysis)
 })
 #+END_SRC
 - Run =tar_make()= to produce the target.
-- Add the output of the =summary(ltmle_analysis)= to the file "example_report.qmd" 
+- Add the output of the =summary(ltmle_analysis)= to the file "example_report.qmd".

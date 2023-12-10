@@ -6,12 +6,7 @@ The learning targets of this exercise are:
 
 - Data structure for longitudinal targeted minimum loss based
   estimation
-- How to prepare the =ltmle= analysis  
-
-
-** Reading references
-
-- http://joshuaschwab.github.io/ltmle/articles/a02_intro.html
+- How to prepare a longitudinal targeted minimum loss based analysis
 
 ----------------------------------------------------------------------
 
@@ -23,10 +18,13 @@ are readily prepared for the analysis with the longitudinal minimum
 loss based estimator (ltmle). In this exercise we examine the data
 structure.
 
+- In RStudio switch to the project =register_project=.
+- Open the file =sandbox.R= 
+
 ** Baseline covariates
 
 - Load the pre-defined target =raw_baseline_covariates=
-- A a new target which prepares the baseline covariates as follows
+- Open the file =_targets.R= and add the following new target which prepares the baseline covariates:
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
 tar_target(baseline_covariates,{
   bsl <- copy(raw_baseline_covariates)
@@ -35,10 +33,15 @@ tar_target(baseline_covariates,{
   bsl
 })
 #+END_SRC
-  
+- Run =tar_make()= to evaluate this new target. Then load it via =tar_load(baseline_covariates)=
 - Create a new target which contains table 1 based on the
-  =baseline_covariates=. Adapt the corresponding target and function =get_table_1= from
-  the =example_project= (yesterdays exercises) but now use the following formula:
+  =baseline_covariates=. Adapt the corresponding target from the
+  =example_project= (yesterdays exercises). First copy the file
+  =example_project/functions/get_table_1.R= to
+  =register_project/functions/get_table_1=. Then add a new target very
+  much like the =table_1= target of yesterdays exercises to the
+  pipeline. As arguments of the function =get_table_1= use
+  =data=baseline_covariates= and the following formula:
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
 formula <- ~ sex + education + agegroups + tertile_income + index_heart_failure + diabetes_duration
 #+END_SRC  
