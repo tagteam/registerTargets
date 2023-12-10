@@ -2,19 +2,38 @@
 
 * Objectives
 
-The learning targets of this exercise are:
+The learning target of this exercise is to clean up the targets
+projects and to check reproducibility.
 
-- to diagnosing (near) positivity violations using the gbounds argument
-
-** Reading references
-
-- https://pubmed.ncbi.nlm.nih.gov/21030422/
-
-----------------------------------------------------------------------
-
-* Positivity violations
+* Clean-up
 
 
+- Clean-up and check if all targets of all previous exercises from
+  course days 2-4 are in the file =_target.R=.
+
+- Go through the file =register_project/sandbox.R= and check if you
+  miss anything valuable.
+
+- Consider the size and run-time of the targets:
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+show_performance()
+#+END_SRC  
+  
+- Destroy all targets:
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+tar_destroy()
+#+END_SRC
+
+
+- Re-run all targets:
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+tar_make()
+#+END_SRC
+  
+- Debug until everything works and the results have been reproduces.
 
 
 

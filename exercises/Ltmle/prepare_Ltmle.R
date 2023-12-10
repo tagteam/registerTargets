@@ -38,6 +38,7 @@ prepare_Ltmle <- function(regimen_data,
                           abar,
                           independent_regimens = FALSE,
                           ...) {
+    require(data.table)
     if (!inherits(outcome_data,"data.frame")) {
         stop("Argument 'outcome_data' must be a data.frame or data.table or tibble.")
     }

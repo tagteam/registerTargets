@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  8 2023 (19:05) 
 ## Version: 
-## Last-Updated: Dec 10 2023 (14:30) 
+## Last-Updated: Dec 10 2023 (15:55) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 18
+##     Update #: 21
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -192,6 +192,149 @@ ggplot(test_register_data,aes(x= propensity_test_logistic, y= propensity_test_ra
 #--------------------------------------------------------
 # day 4
 #--------------------------------------------------------
+
+# part 1
+library(targets)
+library(data.table)
+tar_source("functions")
+tar_source("../Ltmle/")
+tar_load_everything()
+
+pl <- prepare_Ltmle(regimen_data=regimen_data,
+                    outcome_data=mace_outcome_data,
+                    name_outcome="mace",
+                    name_regimen="Drug",
+                    name_censoring = "Censored",
+                    name_competing_risk = "Dead",
+                    survivalOutcome = TRUE,
+                    censored_label = 0,
+                    baseline_data=baseline_covariates,
+                    timevar_data=time_covariates,
+                    time_horizon=10,
+                    subset_id=NULL,
+                    SL.library="glm",
+                    abar=list(drug=rep(1L,10),control=rep(0L,10)))
+
+names(pl$data)
+
+tar_make()
+tar_load(ltmle_fit_glm_mace_2)
+tar_load(ltmle_summary_mace_2)
+
+tar_load(ltmle_summary_mace_2)
+tar_load(ltmle_summary_death_2)
+
+# part 2
+
+tar_target(ltmle_gcomp_mace_2,
+           run_Ltmle(name_outcome="mace",
+                     name_competing_risk = "Dead",
+                     name_censoring = "Censored",
+                     censored_label = 0,
+                     time_horizon=4,
+                     outcome_data=mace_outcome_data,
+                     regimen_data=list(Drug = regimen_data),
+                     baseline_data=baseline_covariates,
+                     timevar_data=time_covariates,
+                     abar = list(control = rep(0,4),treat = rep(1,4)),
+                     gcomp = TRUE,
+                     SL.library="glm",
+                     verbose=TRUE)),
+tar_target(ltmle_ipw_mace_2,
+           run_Ltmle(name_outcome="mace",
+                     name_competing_risk = "Dead",
+                     name_censoring = "Censored",
+                     censored_label = 0,
+                     time_horizon=4,
+                     outcome_data=mace_outcome_data,
+                     regimen_data=list(Drug = regimen_data),
+                     baseline_data=baseline_covariates,
+                     timevar_data=time_covariates,
+                     abar = list(control = rep(0,4),treat = rep(1,4)),
+                     iptw.only = TRUE,
+                     SL.library="glm",
+                     verbose=TRUE)
+           )
+
+tar_load_everything()
+ltmle_summary_mace_2
+ltmle_summary_ipw_mace_2
+ltmle_summary_gcomp_mace_2
+
+tar_target(ltmle_gcomp_mace_2_subset,
+           run_Ltmle(name_outcome="mace",
+                     name_competing_risk = "Dead",
+                     name_censoring = "Censored",
+                     censored_label = 0,
+                     time_horizon=4,
+                     sub_set = list(data = baseline_covariates[education == "High",.(pnr)]),
+                     outcome_data=mace_outcome_data,
+                     regimen_data=list(Drug = regimen_data),
+                     baseline_data=baseline_covariates,
+                     timevar_data=time_covariates,
+                     abar = list(control = rep(0,4),treat = rep(1,4)),
+                     gcomp = TRUE,
+                     SL.library="glm",
+                     verbose=TRUE)),
+tar_target(ltmle_summary_gcomp_mace_2_subset,{
+  summary(ltmle_gcomp_mace_2_subset)
+}),
+tar_target(ltmle_ipw_mace_2_subset,
+           run_Ltmle(name_outcome="mace",
+                     name_competing_risk = "Dead",
+                     name_censoring = "Censored",
+                     censored_label = 0,
+                     time_horizon=4,
+                     sub_set = list(data = baseline_covariates[education == "High",.(pnr)]),
+                     outcome_data=mace_outcome_data,
+                     regimen_data=list(Drug = regimen_data),
+                     baseline_data=baseline_covariates,
+                     timevar_data=time_covariates,
+                     abar = list(control = rep(0,4),treat = rep(1,4)),
+                     iptw.only = TRUE,
+                     SL.library="glm",
+                     verbose=TRUE)),
+tar_target(ltmle_summary_ipw_mace_2_subset,{
+  summary(ltmle_ipw_mace_2_subset)
+}),
+tar_target(ltmle_fit_glm_mace_2_subset,
+           run_Ltmle(name_outcome="mace",
+                     name_competing_risk = "Dead",
+                     name_censoring = "Censored",
+                     censored_label = 0,
+                     time_horizon=4,
+                     sub_set = list(data = baseline_covariates[education == "High",.(pnr)]),
+                     outcome_data=mace_outcome_data,
+                     regimen_data=list(Drug = regimen_data),
+                     baseline_data=baseline_covariates,
+                     timevar_data=time_covariates,
+                     abar = list(control = rep(0,4),treat = rep(1,4)),
+                     SL.library="glm",
+                     verbose=TRUE)),
+tar_target(ltmle_summary_glm_mace_2_subset,{
+  summary(ltmle_fit_glm_mace_2_subset)
+})
+
+tar_load_everything()
+ltmle_summary_gcomp_mace_2_subset
+ltmle_summary_ipw_mace_2_subset
+ltmle_summary_glm_mace_2_subset
+
+# part 3
+
+run_Ltmle(name_outcome="mace",
+          name_competing_risk = "Dead",
+          name_censoring = "Censored",
+          censored_label = 0,
+          time_horizon=4,
+          sub_set = list(data = baseline_covariates[education == "High",.(pnr)]),
+          outcome_data=mace_outcome_data,
+          regimen_data=list(Drug = regimen_data),
+          baseline_data=baseline_covariates,
+          timevar_data=time_covariates,
+          abar = list(control = rep(0,4),treat = rep(1,4)),
+          SL.library="glm",
+          verbose=TRUE)
 
 
 ######################################################################

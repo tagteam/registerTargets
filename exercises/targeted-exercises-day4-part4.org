@@ -2,21 +2,20 @@
 
 * Objectives
 
-The learning targets of this exercise are:
+The learning targets of this exercise are to produce a summary of the
+exercises and the course.
 
-- clean-up and collect results of all previous exercises
 
 * Course report
 
-- Go through all exercises of days 2-4, add targets to =_targets.R= if
-  needed, i.e., check if you miss anything that is in the file
-  =secret_targets.R=.
-- Destroy all targets
+- collect results of all previous exercises in the report
+  =register_project/reports/register_report.qmd= with as many results
+  as you feel appropriate and all valuable comments and discussions
+  about the methods as you can remember.
+
+- Start to convert one of your own real-life projects into
+  targets. Create an RStudio project and then initialize with:
+
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
-tar_destroy()
+use_targets()
 #+END_SRC
-- Run all targets
-#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
-tar_make()
-#+END_SRC
-- Add results in table and figure format to the file =reports/register_report.qmd=

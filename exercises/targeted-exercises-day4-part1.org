@@ -10,7 +10,8 @@ The learning targets of this exercise are:
 
 ** Reading references
 
-- http://joshuaschwab.github.io/ltmle/articles/a02_intro.html
+- [[goodies/augmented_ltmle.org]] (you have read this before)
+- http://joshuaschwab.github.io/ltmle/articles/a02_intro.html (read if time permits)
   
 ------------------------------------------------------------------------------------------------------
 
@@ -21,16 +22,19 @@ The learning targets of this exercise are:
 
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
 library(targets)
+library(data.table)
 tar_source("functions")
 tar_source("../Ltmle/")
 tar_load_everything()
 #+END_SRC  
 
+- Open the file =register_project/sandbox.R= 
 - Consider the target =mace_outcome_data=. It contains followup data
   for 10 time points for a MACE outcome. It also contains followup
   data for end of followup due to censoring and due to the competing
   risk of death without MACE.
-- Prepare the data for Ltmle analysis:
+- Prepare the data for Ltmle analysis (the function =prepare_Ltmle= is
+  usually called by the function =run_Ltmle=.
 
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
 pl <- prepare_Ltmle(regimen_data=regimen_data,
@@ -60,7 +64,10 @@ names(pl$data)
   events (time-covariate change, treatment change, censoring, mace
   outcome, competing risk) happen within a 6 months interval.
 
-- Add the following targets to the pipeline:
+- Add the following targets to the pipeline. They run the competing
+  risk =Ltmle= analysis to estimate the standardized risks of mace
+  within 2-years, if hypothetically all patients were randomized to
+  continous treatment or continous non-treatment.
 
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
 tar_target(ltmle_fit_glm_mace_2,
@@ -81,7 +88,7 @@ tar_target(ltmle_summary_mace_2,{
 })
 #+END_SRC
 
-- Run the pipeline and load the two new targets
+- Run the pipeline and load the two new targets:
 
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
 tar_make()
@@ -90,9 +97,10 @@ tar_load(ltmle_summary_mace_2)
 #+END_SRC  
 
 - Write a conclusion sentence which includes the results in the summary table.
-- Load the analysis of the 2-year death outcome and discuss the
-  results for MACE in the light of the fact that a patient who lives
-  longer is longer at risk for MACE.
+- Load the analysis of the 2-year death outcome, targeted by one of
+  the previous exercises, and discuss the results for MACE in the
+  light of the fact that a patient who lives longer is longer at risk
+  for MACE.
 
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
 tar_load(ltmle_summary_mace_2)
