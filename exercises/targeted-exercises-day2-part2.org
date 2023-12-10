@@ -4,10 +4,11 @@
 
 The learning targets of this exercise are:
 
-- applying =Ltmle= in register data
+- to apply the function =Ltmle= in simulated register data
 
 ** Reading references  
-  
+
+- [[goodies/augmented_ltmle.org]]
 - https://www.jstatsoft.org/article/view/v081i01 (read in this paper if time permits)
 
 ----------------------------------------------------------------------

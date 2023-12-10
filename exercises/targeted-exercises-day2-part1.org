@@ -85,8 +85,8 @@ formula <- Drug_0 ~ sex + education + agegroups + tertile_income + index_heart_f
   months long interval and that the analyst has to decide how to
   arrange the data in this case.
 - Discuss with your neighbor how the data should be arranged for
-  subjects for who mace, death and censoring occur in the same
-  interval.
+  subjects for who all three events (mace, death and censoring) occur
+  in the same interval.
   
 
 
