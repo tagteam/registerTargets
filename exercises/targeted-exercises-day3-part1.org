@@ -4,99 +4,117 @@
 
 The learning targets of this exercise are:
 
-- Super learning logistic regression models with and without interaction terms
+- Super learning using parametric models
+- Combine logistic regression models with and without interaction terms
 
 ** Reading references
 
-https://cran.r-project.org/web/packages/SuperLearner/vignettes/Guide-to-SuperLearner.html
+https://cran.r-project.org/web/packages/SuperLearner/vignettes/Guide-to-SuperLearner.html (read this if time permits)
 
 ----------------------------------------------------------------------  
 
 * Super learning alternative logistic regression models
 
-- Open the R-studio project =register_project= and load all targets:
+- Open the R-studio project =register_project= and load all targets
+  from yesterdays exercises:
 
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
 tar_load_everything()
 #+END_SRC
 
-- Open the file =register_project/sandbox= and fit a logistic
-  regression model for the propensity of treatment at time zero:
+- Open the file =register_project/sandbox.R= and fit a logistic
+  regression model for the propensity of treatment at time zero using
+  the following lines of code
 
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
-ps1 <- glm(Drug_0~ sex + education + agegroups + tertile_income + index_heart_failure + diabetes_duration,family = "binomial",data = register_data)
+ps <- glm(Drug_0~ sex + education + agegroups + tertile_income + index_heart_failure + diabetes_duration,
+          family = "binomial",
+          data = register_data)
+summary(ps)
 #+END_SRC  
 
 - Create a second propensity score model where you change the formula
   to include an interaction term between the variables =education= and
   =tertile_income= and between the variables =sex= and
-  =agegroups=. Call this second model =ps2=.
+  =agegroups=. Call this second model =ps_interaction=.
 
 - Predict the propensity of treatment based on both models and plot
-  the results with the propensity of the first model on x-axis and the
-  propensity of the second model on the y-axis:
+  the results. Put the propensity of treatment as predicted by the
+  first model on the x-axis and the propensity of treatment as
+  predicted by the second model on the y-axis:
 
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
 library(riskRegression)
 library(targets)
 library(ggplot2)
 tar_load_everything()
-ps1 <- glm(Drug_0~ sex + education + agegroups + tertile_income + index_heart_failure + diabetes_duration,family = "binomial",data = register_data)
-ps2 <- glm(Drug_0~ sex * agegroups + tertile_income * education + index_heart_failure + diabetes_duration,family = "binomial",data = register_data)
+ps <- glm(Drug_0~ sex + education + agegroups + tertile_income + index_heart_failure + diabetes_duration,family = "binomial",data = register_data)
+ps_interaction <- glm(Drug_0~ sex * agegroups + tertile_income * education + index_heart_failure + diabetes_duration,family = "binomial",data = register_data)
 # add predicted propensity scores as variables to data.table
-register_data[,propensity_score1:=predictRisk(ps1,newdata= register_data)]
-register_data[,propensity_score2:=predictRisk(ps2,newdata= register_data)]
-ggplot(register_data,aes(x= propensity_score1, y= propensity_score2))+geom_point()+xlim(c(0,1))+ylim(c(0,1))
+register_data[,propensity_score:=predictRisk(ps,newdata= register_data)]
+register_data[,propensity_score_interaction:=predictRisk(ps_interaction,newdata= register_data)]
+g <- ggplot(register_data,aes(x= propensity_score, y= propensity_score_interaction))+geom_point()+xlim(c(0,1))+ylim(c(0,1))
+g
 #+END_SRC  
-  
-- Do the same with the outcome model for the variable =Dead_1=, i.e., fit models for the risk of
-  death within 6 months instead of predicting the propoensity of
-  treatment
 
-#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
-library(riskRegression)
-library(targets)
-library(ggplot2)
-tar_load_everything()
-out1 <- glm(Dead_1~ Drug_0 + sex + education + agegroups + tertile_income + index_heart_failure + diabetes_duration,family = "binomial",data = register_data)
-out2 <- glm(Dead_1~ Drug_0 + sex * agegroups + tertile_income * education + index_heart_failure + diabetes_duration,family = "binomial",data = register_data)
-# add predicted propensity scores as variables to data.table
-register_data[,risk1:=predictRisk(out1,newdata= register_data)]
-register_data[,risk2:=predictRisk(out2,newdata= register_data)]
-ggplot(register_data,aes(x= risk1, y= risk2))+geom_point()+xlim(c(0,1))+ylim(c(0,1))
-#+END_SRC    
-
-- Use the SuperLearner to fit the propensity score models with and without interaction terms
+- Discuss the differences with your neighbor.
+- Use =g+facet_grid(sex~education)= to look at the differences within subgroups of the data.
+- Now use the SuperLearner package to fit both a propensity score
+  model with and one without interaction terms:
 
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
 library(SuperLearner)
+# SuperLearner does not provide a formula interface
 X=register_data[,c("sex","education","agegroups","tertile_income","index_heart_failure","diabetes_duration"),with=FALSE]
 Y=register_data[["Drug_0"]]
-sl_ps1 <- SuperLearner(Y=Y,X=X,SL.library="SL.glm",family="binomial")
-sl_ps2 <- SuperLearner(Y=Y,X=X,SL.library="SL.glm.interaction",family="binomial")
+# without interaction
+sl_ps <- SuperLearner(Y=Y,X=X,SL.library="SL.glm",family="binomial")
+# with interaction
+sl_ps_interaction <- SuperLearner(Y=Y,X=X,SL.library="SL.glm.interaction",family="binomial")
 #+END_SRC  
-
 
 - Plot the predicted propensities of the models fitted with glm vs SL.glm
 
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
-register_data[,sl_propensity1:=predict(sl_ps1,newdata=X)$pred]
-ggplot(register_data,aes(x= propensity_score1, y= sl_propensity1))+geom_point()+xlim(c(0,1))+ylim(c(0,1))
+register_data[,sl_propensity:=predict(sl_ps,newdata=X)$pred]
+ggplot(register_data,aes(x= propensity_score, y= sl_propensity))+geom_point()+xlim(c(0,1))+ylim(c(0,1))
 #+END_SRC
 
 - Plot the predicted propensities of the models fitted with glm vs SL.glm
 
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
-register_data[,sl_propensity2:=predict(sl_ps2,newdata=X)$pred]
-ggplot(register_data,aes(x= propensity_score2, y= sl_propensity2))+geom_point()+xlim(c(0,1))+ylim(c(0,1))
+register_data[,sl_propensity_interaction:=predict(sl_ps_interaction,newdata=X)$pred]
+ggplot(register_data,aes(x= propensity_score_interaction, y= sl_propensity_interaction))+geom_point()+xlim(c(0,1))+ylim(c(0,1))
 #+END_SRC
 
 - Explain the differences. Hint: Look at the fitted SuperLearner models:
 
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes
-summary(ps1)
-summary(sl_ps1$fitLibrary[[1]]$object)
-summary(ps2)
-summary(sl_ps2$fitLibrary[[1]]$object)
-#+END_SRC  
+summary(ps)
+summary(sl_ps$fitLibrary[[1]]$object)
+summary(ps_interaction)
+summary(sl_ps_interaction$fitLibrary[[1]]$object)
+#+END_SRC
 
+- Repeat all the steps above for the logistic regression model where
+  the variable =Dead_1= is the outcome. That is fit two models for the
+  risk of death within 6 months, one with one without interactions and
+  plot the predicted risks:
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+library(riskRegression)
+library(targets)
+library(ggplot2)
+tar_load_everything()
+out <- glm(Dead_1~ Drug_0 + sex + education + agegroups + tertile_income + index_heart_failure + diabetes_duration,family = "binomial",data = register_data)
+out_interaction <- glm(Dead_1~ Drug_0 + sex * agegroups + tertile_income * education + index_heart_failure + diabetes_duration,family = "binomial",data = register_data)
+# add predicted propensity scores as variables to data.table
+register_data[,risk:=predictRisk(out,newdata= register_data)]
+register_data[,risk_interaction:=predictRisk(out_interaction,newdata= register_data)]
+ggplot(register_data,aes(x= risk, y= risk_interaction))+geom_point()+xlim(c(0,1))+ylim(c(0,1))
+#+END_SRC    
+
+- Then fit a model with and without interactions with the SuperLearner function.
+- Discuss the differences with your neighbor.
+- If time permits add these objects as targets to the pipeline (this
+  is however not needed in the coming exercises).

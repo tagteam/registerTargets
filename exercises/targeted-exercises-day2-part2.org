@@ -69,7 +69,7 @@ tar_target(ltmle_fit_death_2,{
 }),
 tar_target(table_ltmle_death_2,{
   summary(ltmle_fit_death_2)
-}),
+})
 #+END_SRC
 
 - Under the causal assumptions (consistency, positivity, no unmeasured

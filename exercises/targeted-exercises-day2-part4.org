@@ -4,18 +4,20 @@
 
 The learning targets of this exercise are:
 
-- Investigating fitted nuisance parameter models
+- Consider the object fitted with =Ltmle=
+- Investigate the fit of the nuisance parameter models (propensity score, censoring, outcome)
 
 ----------------------------------------------------------------------  
 
 * Nuisance parameter estimators
 
-This exercise assumes that you have succeeded with the previous exercise.
+This exercise assumes that you have succeeded with the previous
+exercises today (part 1 and part 2). 
 
 - Open the file =register_project/sandbox.R= and load the target =ltmle_fit_death_1= into
-  R.
+  R. The object contains useful information.
 - Consider the outcome (Q) logistic regression model, the censoring logistic regression model and the
-  propensity score (g) logistic regression model:
+  propensity score (g) logistic regression model. The tables contain the log-odds ratios:
 
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes
 # outcome model
@@ -26,27 +28,28 @@ ltmle_fit_death_1[[1]][[1]]$Ltmle_fit$fit$g[[1]][["Drug_0"]]
 ltmle_fit_death_1[[1]][[1]]$Ltmle_fit$fit$g[[1]][["Drug_0"]]
 #+END_SRC
 
-- Note that the levels of the variables =agegroups=,
-  =diabetes_duration= and =education= are not correctly sorted. Change
-  that by adding the following lines (at an appropriate place) to the
-  pipeline and re-running the pipeline with =tar_make()=
+- Cosmetic intervention. Note that the levels of the variables
+  =agegroups=, =diabetes_duration= and =education= are not correctly
+  sorted. Change that by adding the following lines (at an appropriate
+  place) to the pipeline and re-running the pipeline with =tar_make()=
+  (If you are unsure about where/how to do this, have a look at the
+  file =secret_targets.R=).
 
 #+ATTR_LATEX: :options otherkeywords={}, deletekeywords={}
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
-baseline_covariates[,sex:=factor(sex,levels=c("0","1"),labels=c("Female","Male"))]
 baseline_covariates[,education:=factor(education,levels=c("Basic","Medium","High"),labels=c("Basic","Medium","High"))]
 baseline_covariates[,agegroups:=factor(agegroups,levels=c("below 45","45-50","50-55","55-60","60-65","65-70","70-75","75-80","80-85","above 85"),labels=c("below 45","45-50","50-55","55-60","60-65","65-70","70-75","75-80","80-85","above 85"))]
 baseline_covariates[,tertile_income:=factor(tertile_income,levels=c("Income_q1","Income_q2","Income_q3"),labels=c("Income_q1","Income_q2","Income_q3"))]
-baseline_covariates[,index_heart_failure:=factor(index_heart_failure,levels=c("0","1"),labels=c("No","Yes"))]
 baseline_covariates[,diabetes_duration:=factor(diabetes_duration,levels=c("below 5","5-10","above 10"),labels=c(,"below 5","5-10","above 10"))]
 #+END_SRC
 
 - Review the estimated beta coefficients (log-odds ratios) of the
   nuisance parameter models regarding their sign and magnitude.
+  Discuss them with your neighbor. 
 
-- Do the same with the two year horizon analysis. Here we have 4
-  logistic regression models for the outcome, 3 censoring logistic
-  regression models and 3 propensity score models
+- Now turn to the =Ltmle= analysis of the two year time horizon. Here
+  we have 4 logistic regression models for the outcome, 3 censoring
+  logistic regression models and 3 propensity score models
 
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes
 # 4 outcome model
@@ -63,7 +66,267 @@ ltmle_fit_death_2[[1]][[1]]$Ltmle_fit$fit$g[[1]][["Drug_3"]]
 ltmle_fit_death_2[[1]][[1]]$Ltmle_fit$fit$g[[1]][["Drug_2"]]
 ltmle_fit_death_2[[1]][[1]]$Ltmle_fit$fit$g[[1]][["Drug_1"]]
 #+END_SRC  
+
+#+RESULTS[(2023-12-10 10:46:45) 49dbfd8ed6b76319965de2ffa164a6e439116fa8]:
+Estimate   Std. Error      t value            Pr(>|t|)
+(Intercept)                -5.04430785    0.7558202 -6.673952369 0.00000000002588014
+sexMale                     0.19950386    0.2579722  0.773354054 0.43932652065591427
+educationMedium            -0.45431954    0.2752542 -1.650545614 0.09885483606833655
+educationHigh              -0.01711981    0.3734156 -0.045846537 0.96343325020795678
+agegroups45-50            -14.06324312  463.2014091 -0.030360968 0.97577962591202061
+agegroups50-55             -0.06583265    0.8472337 -0.077703056 0.93806542361147272
+agegroups55-60             -0.55162600    0.9274550 -0.594773873 0.55200468051798168
+agegroups60-65              0.84337981    0.7265083  1.160867345 0.24571653812842667
+agegroups65-70              1.13205911    0.7095032  1.595565858 0.11060934618021863
+agegroups70-75              1.71846357    0.6980632  2.461759276 0.01383824839612273
+agegroups75-80              1.68581233    0.7294166  2.311179132 0.02083806721265284
+agegroups80-85              1.54814682    0.8536013  1.813665057 0.06975167514444859
+agegroupsabove 85                   NA           NA           NA                  NA
+tertile_incomeIncome_q2    -0.61349776    0.3054061 -2.008793517 0.04457906537712326
+tertile_incomeIncome_q3    -0.45906642    0.3056318 -1.502024379 0.13311438515630872
+index_heart_failureYes     -0.75833467    0.6701336 -1.131617068 0.25781571930070935
+diabetes_duration5-10      -0.85383727    0.3264508 -2.615515778 0.00891926845109870
+diabetes_durationabove 10  -0.15035735    0.2860353 -0.525660142 0.59913306349524753
+statin_0                    0.63107737    0.4030159  1.565887109 0.11739867028187394
+statin_1                   -0.04667280    0.4821662 -0.096798157 0.92288813551925186
+statin_2                   -0.54837558    0.5144459 -1.065953809 0.28646373527894226
+statin_3                   -0.40273548    0.4109342 -0.980048624 0.32707981776265282
+af_0                      -14.89551110 3009.4602442 -0.004949562 0.99605091045336969
+af_1                       14.37608197 3009.4603120  0.004776963 0.99618862023313737
+af_2                                NA           NA           NA                  NA
+af_3                                NA           NA           NA                  NA
+Drug_0                      0.11108485    0.4169826  0.266401634 0.78993400737060604
+Drug_1                     -2.51354856    0.7451273 -3.373314229 0.00074479566062408
+Drug_2                      1.62253581    0.5125359  3.165701818 0.00155055838059451
+Drug_3                     -1.77398692    0.5986708 -2.963209554 0.00304984506160117
+Estimate   Std. Error     t value     Pr(>|t|)
+(Intercept)                -5.98030817   0.65486485 -9.13212574 7.539172e-20
+sexMale                    -0.15062688   0.09296220 -1.62030246 1.051879e-01
+educationMedium             0.05599419   0.09867935  0.56743578 5.704264e-01
+educationHigh               0.09856416   0.14470467  0.68114016 4.957931e-01
+agegroups45-50              0.79348316   0.78181604  1.01492310 3.101585e-01
+agegroups50-55              1.49436984   0.68625086  2.17758538 2.945209e-02
+agegroups55-60              2.21728854   0.66162325  3.35128573 8.063126e-04
+agegroups60-65              2.71739515   0.65248382  4.16469357 3.134740e-05
+agegroups65-70              2.97141380   0.65060600  4.56714785 4.982489e-06
+agegroups70-75              3.73674315   0.64678978  5.77736892 7.734748e-09
+agegroups75-80              3.97951560   0.64956034  6.12647564 9.203905e-10
+agegroups80-85              4.45363886   0.65677909  6.78103026 1.236753e-11
+agegroupsabove 85                   NA           NA          NA           NA
+tertile_incomeIncome_q2    -0.25791590   0.10629902 -2.42632427 1.526407e-02
+tertile_incomeIncome_q3    -0.51559030   0.11799059 -4.36975772 1.252007e-05
+index_heart_failureYes     -0.11710787   0.18300036 -0.63993248 5.222260e-01
+diabetes_duration5-10      -0.19007132   0.11292100 -1.68322390 9.235208e-02
+diabetes_durationabove 10  -0.16399647   0.11554234 -1.41936254 1.558136e-01
+statin_0                   -0.77802864   0.14801741 -5.25633197 1.489244e-07
+statin_1                    0.09960206   0.19057068  0.52265154 6.012243e-01
+statin_2                   -0.30401104   0.15098291 -2.01354604 4.407463e-02
+af_0                      -11.78215745 244.24633795 -0.04823883 9.615265e-01
+af_1                       12.11711307 244.24639356  0.04961020 9.604337e-01
+af_2                                NA           NA          NA           NA
+Drug_0                     -0.42896240   0.15328250 -2.79850861 5.140319e-03
+Drug_1                      0.74262607   0.12188219  6.09298285 1.134721e-09
+Drug_2                      0.49987815   0.12455834  4.01320488 6.018409e-05
+Estimate   Std. Error     t value     Pr(>|t|)
+(Intercept)               -4.81501050   0.38518513 -12.5005099 1.029675e-35
+sexMale                    0.04843180   0.03867332   1.2523310 2.104649e-01
+educationMedium           -0.01379527   0.04055348  -0.3401748 7.337287e-01
+educationHigh              0.05262854   0.06020067   0.8742184 3.820105e-01
+agegroups45-50             2.47001418   0.39864295   6.1960564 5.910289e-10
+agegroups50-55             2.38207748   0.39275963   6.0649753 1.345042e-09
+agegroups55-60             3.44605932   0.38515130   8.9472873 3.975792e-19
+agegroups60-65             3.53419549   0.38466074   9.1878249 4.416924e-20
+agegroups65-70             3.85980773   0.38383769  10.0558330 9.945449e-24
+agegroups70-75             4.35592950   0.38353144  11.3574247 8.525369e-30
+agegroups75-80             4.56726579   0.38450688  11.8782420 2.007423e-32
+agegroups80-85             5.40857441   0.38608358  14.0088176 2.304878e-44
+agegroupsabove 85         23.55070369 153.19736739   0.1537279 8.778260e-01
+tertile_incomeIncome_q2   -0.12403259   0.04331877  -2.8632531 4.197805e-03
+tertile_incomeIncome_q3   -0.57294165   0.04925410 -11.6323657 3.610822e-31
+index_heart_failureYes    -0.18578784   0.07909969  -2.3487809 1.884531e-02
+diabetes_duration5-10     -0.34969812   0.04617623  -7.5731200 3.812490e-14
+diabetes_durationabove 10 -0.24165867   0.04678044  -5.1658058 2.418572e-07
+statin_0                  -0.44785862   0.06179864  -7.2470631 4.424484e-13
+statin_1                  -0.29195414   0.06146829  -4.7496709 2.052559e-06
+af_0                      -1.32566773   0.78937096  -1.6793976 9.309124e-02
+af_1                       1.69293895   0.79211285   2.1372447 3.259100e-02
+Drug_0                     0.08291833   0.06005167   1.3807831 1.673621e-01
+Drug_1                    -0.87530114   0.04919174 -17.7936622 2.993460e-70
+Estimate  Std. Error     t value      Pr(>|t|)
+(Intercept)               -4.52548400  0.19301402 -23.4464008 4.108312e-120
+sexMale                    0.08296540  0.02612490   3.1757213  1.496683e-03
+educationMedium            0.01143725  0.02729918   0.4189595  6.752497e-01
+educationHigh              0.09006745  0.04004932   2.2489135  2.452774e-02
+agegroups45-50             1.77233493  0.20650258   8.5826286  9.870579e-18
+agegroups50-55             1.83192089  0.19930742   9.1914333  4.207062e-20
+agegroups55-60             2.61214048  0.19362375  13.4908059  2.575333e-41
+agegroups60-65             2.77360724  0.19287116  14.3806218  1.108913e-46
+agegroups65-70             3.03608148  0.19220941  15.7956960  6.705430e-56
+agegroups70-75             3.47164129  0.19182064  18.0983718  1.090600e-72
+agegroups75-80             3.83501949  0.19217607  19.9557598  7.836679e-88
+agegroups80-85             4.64081337  0.19299537  24.0462420 3.713521e-126
+agegroupsabove 85         22.28351943 75.60188241   0.2947482  7.681890e-01
+tertile_incomeIncome_q2   -0.10870676  0.02929262  -3.7110633  2.068930e-04
+tertile_incomeIncome_q3   -0.54128764  0.03268561 -16.5604270  3.131411e-61
+index_heart_failureYes    -0.31950453  0.05583865  -5.7219244  1.066762e-08
+diabetes_duration5-10     -0.33706048  0.03098508 -10.8781561  1.718086e-27
+diabetes_durationabove 10 -0.25519810  0.03116944  -8.1874457  2.810339e-16
+statin_0                  -0.74483757  0.02589866 -28.7596946 1.260999e-178
+af_0                       0.27716990  0.04795436   5.7798682  7.575740e-09
+Drug_0                    -0.18648414  0.03910429  -4.7688916  1.864145e-06
+Estimate Std. Error     t value      Pr(>|t|)
+(Intercept)                2.878416959 0.13158733  21.8745754 1.254989e-104
+sexMale                    0.008493651 0.05390096   0.1575788  8.747906e-01
+educationMedium           -0.063731934 0.05646773  -1.1286435  2.590642e-01
+educationHigh             -0.034199618 0.08546815  -0.4001446  6.890551e-01
+agegroups45-50             0.108518162 0.14612270   0.7426510  4.577033e-01
+agegroups50-55            -0.080304402 0.12549663  -0.6398929  5.222509e-01
+agegroups55-60            -0.315307743 0.11910506  -2.6473077  8.121034e-03
+agegroups60-65            -0.199648385 0.11965789  -1.6684933  9.523627e-02
+agegroups65-70            -0.309779518 0.11827769  -2.6190867  8.824383e-03
+agegroups70-75            -0.389852640 0.12123645  -3.2156389  1.303979e-03
+agegroups75-80            -0.872685894 0.12562335  -6.9468447  3.870840e-12
+agegroups80-85            -0.977384695 0.15585814  -6.2709892  3.674234e-10
+agegroupsabove 85                   NA         NA          NA            NA
+tertile_incomeIncome_q2    0.037767493 0.06634597   0.5692508  5.691935e-01
+tertile_incomeIncome_q3   -0.295907431 0.06281157  -4.7110335  2.484139e-06
+index_heart_failureYes    -0.034961419 0.09781059  -0.3574400  7.207669e-01
+diabetes_duration5-10      0.192259092 0.06614337   2.9067024  3.657324e-03
+diabetes_durationabove 10  0.112170884 0.06527204   1.7185135  8.572121e-02
+statin_0                   0.026057274 0.08959664   0.2908287  7.711859e-01
+statin_1                   0.200718106 0.11206395   1.7911032  7.329452e-02
+statin_2                  -0.148347132 0.08966551  -1.6544503  9.805452e-02
+af_0                      -0.574627223 0.55679557  -1.0320255  3.020749e-01
+af_1                       0.482948372 0.56561491   0.8538466  3.932020e-01
+af_2                                NA         NA          NA            NA
+Drug_0                    -0.840441729 0.06258641 -13.4285013  6.654293e-41
+Drug_1                     0.079363846 0.07643174   1.0383625  2.991161e-01
+Drug_2                    -0.631354031 0.07702603  -8.1966322  2.646594e-16
+Estimate Std. Error       t value      Pr(>|t|)
+(Intercept)                2.38267864451 0.10468136  22.761251281 2.380742e-113
+sexMale                    0.02784753150 0.04137653   0.673027261  5.009371e-01
+educationMedium           -0.05952255215 0.04326067  -1.375904661  1.688654e-01
+educationHigh              0.04443328675 0.06688792   0.664294593  5.065089e-01
+agegroups45-50            -0.01295533607 0.11804030  -0.109753504  9.126059e-01
+agegroups50-55            -0.05395090856 0.10459194  -0.515822831  6.059834e-01
+agegroups55-60            -0.33306076165 0.09749897  -3.416043952  6.365477e-04
+agegroups60-65            -0.26346762657 0.09767796  -2.697308792  6.995659e-03
+agegroups65-70            -0.30930927464 0.09689200  -3.192309769  1.413417e-03
+agegroups70-75            -0.42859303514 0.09805693  -4.370859278  1.243353e-05
+agegroups75-80            -0.81692844509 0.10134008  -8.061257281  7.940130e-16
+agegroups80-85            -0.93761151642 0.11659370  -8.041699515  9.311778e-16
+agegroupsabove 85         -0.90891741075 0.14916678  -6.093296250  1.124788e-09
+tertile_incomeIncome_q2    0.14057066919 0.05178066   2.714733039  6.638182e-03
+tertile_incomeIncome_q3   -0.33039296593 0.04760990  -6.939585225  4.043659e-12
+index_heart_failureYes     0.00002015995 0.07718264   0.000261198  9.997916e-01
+diabetes_duration5-10      0.27342918528 0.05042900   5.422062096  5.954624e-08
+diabetes_durationabove 10  0.16461081038 0.04961448   3.317797736  9.087980e-04
+statin_0                   0.06809513478 0.06862990   0.992208012  3.211072e-01
+statin_1                   0.03193374249 0.06792592   0.470126020  6.382697e-01
+af_0                      -1.01875621233 0.36359519  -2.801896866  5.084826e-03
+af_1                       0.97347163381 0.37152311   2.620218224  8.793491e-03
+Drug_0                    -0.64662467779 0.04983675 -12.974857539  2.362802e-38
+Drug_1                    -0.40443145440 0.04302391  -9.400155339  5.973445e-21
+Estimate Std. Error      t value     Pr(>|t|)
+(Intercept)                4.155840628 0.20143614  20.63105760 1.009007e-93
+sexMale                   -0.060730288 0.07150159  -0.84935581 3.956921e-01
+educationMedium           -0.136593206 0.07424235  -1.83982867 6.580620e-02
+educationHigh              0.006421813 0.11621634   0.05525741 9.559339e-01
+agegroups45-50            -0.189447092 0.23346859  -0.81144573 4.171181e-01
+agegroups50-55            -0.496317380 0.20042117  -2.47637202 1.327962e-02
+agegroups55-60            -0.415595625 0.19660184  -2.11389484 3.453493e-02
+agegroups60-65            -0.369123683 0.19698848  -1.87383385 6.096593e-02
+agegroups65-70            -0.692361146 0.18912467  -3.66087158 2.519183e-04
+agegroups70-75            -0.914631851 0.18844730  -4.85351522 1.220824e-06
+agegroups75-80            -1.192382714 0.19222224  -6.20314641 5.628349e-10
+agegroups80-85            -1.364406298 0.20828379  -6.55070819 5.846832e-11
+agegroupsabove 85         -1.282708269 0.25236816  -5.08268663 3.750318e-07
+tertile_incomeIncome_q2   -0.001325908 0.09187671  -0.01443138 9.884859e-01
+tertile_incomeIncome_q3   -0.488092093 0.08217110  -5.93994817 2.891886e-09
+index_heart_failureYes    -0.217982121 0.12062090  -1.80716711 7.074922e-02
+diabetes_duration5-10      0.419548628 0.08793046   4.77136868 1.840947e-06
+diabetes_durationabove 10  0.182350037 0.08237456   2.21366926 2.686126e-02
+statin_0                   0.096015306 0.07512746   1.27803204 2.012510e-01
+af_0                       0.099135322 0.14554797   0.68111784 4.958037e-01
+Drug_0                    -0.871988203 0.07859154 -11.09519194 1.562595e-28
+Estimate Std. Error     t value      Pr(>|t|)
+(Intercept)               -1.67381952 0.11495336 -14.5608583  1.055552e-47
+sexMale                    0.07266515 0.05018807   1.4478572  1.476779e-01
+educationMedium           -0.01125164 0.05262922  -0.2137907  8.307132e-01
+educationHigh              0.08516455 0.07881681   1.0805379  2.799201e-01
+agegroups45-50            -0.29584881 0.12137572  -2.4374628  1.480230e-02
+agegroups50-55            -0.11625796 0.10659449  -1.0906564  2.754417e-01
+agegroups55-60            -0.13455818 0.10426083  -1.2905919  1.968652e-01
+agegroups60-65            -0.28369218 0.10320229  -2.7488943  5.986834e-03
+agegroups65-70            -0.20764183 0.10231314  -2.0294737  4.242772e-02
+agegroups70-75            -0.38559617 0.10813844  -3.5657641  3.639286e-04
+agegroups75-80            -0.54309053 0.12577461  -4.3179664  1.584862e-05
+agegroups80-85            -0.59508756 0.16731395  -3.5567121  3.766848e-04
+agegroupsabove 85                  NA         NA          NA            NA
+tertile_incomeIncome_q2   -0.03259594 0.05906049  -0.5519078  5.810198e-01
+tertile_incomeIncome_q3    0.07159774 0.06021953   1.1889455  2.344800e-01
+index_heart_failureYes    -0.04275002 0.10110451  -0.4228300  6.724254e-01
+diabetes_duration5-10     -0.09732708 0.06046064  -1.6097592  1.074715e-01
+diabetes_durationabove 10 -0.03332355 0.06249582  -0.5332125  5.938944e-01
+statin_0                  -0.25569205 0.08295136  -3.0824335  2.056887e-03
+statin_1                   0.18671926 0.10534413   1.7724696  7.633697e-02
+statin_2                   0.16013351 0.08462806   1.8922035  5.848315e-02
+af_0                       0.48090580 0.55827844   0.8614085  3.890269e-01
+af_1                      -0.58581554 0.56678210  -1.0335816  3.013485e-01
+af_2                               NA         NA          NA            NA
+Drug_0                    -1.42547252 0.08763594 -16.2658430  5.524501e-59
+Drug_1                     1.90146080 0.05756539  33.0313171 5.140599e-231
+Drug_2                     3.49464785 0.07881746  44.3385000  0.000000e+00
+Estimate Std. Error     t value      Pr(>|t|)
+(Intercept)               -2.79653904 0.11410803 -24.5078207 2.213960e-130
+sexMale                    0.15920105 0.04834381   3.2931009  9.929122e-04
+educationMedium           -0.03614216 0.05051096  -0.7155310  4.742908e-01
+educationHigh              0.01657593 0.07591924   0.2183364  8.271697e-01
+agegroups45-50             0.03796057 0.11651152   0.3258096  7.445724e-01
+agegroups50-55            -0.14362896 0.10331938  -1.3901454  1.645029e-01
+agegroups55-60            -0.23989929 0.10099923  -2.3752587  1.754768e-02
+agegroups60-65            -0.16468923 0.09956808  -1.6540364  9.813857e-02
+agegroups65-70            -0.38302213 0.10031554  -3.8181735  1.349206e-04
+agegroups70-75            -0.41864202 0.10343568  -4.0473656  5.202657e-05
+agegroups75-80            -0.55981135 0.11607647  -4.8227808  1.427965e-06
+agegroups80-85            -0.88468799 0.15643266  -5.6553917  1.579920e-08
+agegroupsabove 85                  NA         NA          NA            NA
+tertile_incomeIncome_q2    0.02487943 0.05675508   0.4383648  6.611274e-01
+tertile_incomeIncome_q3    0.01354344 0.05772282   0.2346290  8.144996e-01
+index_heart_failureYes     0.28233648 0.08955321   3.1527231  1.620364e-03
+diabetes_duration5-10      0.02078502 0.05956748   0.3489322  7.271445e-01
+diabetes_durationabove 10  0.12218475 0.05987545   2.0406483  4.130121e-02
+statin_0                   0.02207281 0.08082410   0.2730970  7.847820e-01
+statin_1                   0.06836262 0.07992236   0.8553630  3.923623e-01
+af_0                      -0.12648422 0.59199607  -0.2136572  8.308170e-01
+af_1                      -0.06396528 0.59915057  -0.1067599  9.149807e-01
+Drug_0                     0.44527106 0.05896481   7.5514716  4.521543e-14
+Drug_1                     3.55697986 0.05054717  70.3695184  0.000000e+00
+Estimate Std. Error      t value      Pr(>|t|)
+(Intercept)               -1.207683729 0.07215245 -16.73794582  1.715270e-62
+sexMale                    0.124238824 0.03063748   4.05512477  5.028301e-05
+educationMedium            0.066716648 0.03198041   2.08617260  3.697468e-02
+educationHigh              0.097925152 0.04821002   2.03121981  4.224490e-02
+agegroups45-50            -0.125422915 0.07810983  -1.60572519  1.083489e-01
+agegroups50-55            -0.004945851 0.06913777  -0.07153617  9.429717e-01
+agegroups55-60            -0.064018355 0.06672554  -0.95942807  3.373539e-01
+agegroups60-65            -0.064087653 0.06600083  -0.97101290  3.315527e-01
+agegroups65-70            -0.202010222 0.06610381  -3.05595439  2.246187e-03
+agegroups70-75            -0.129604196 0.06759757  -1.91729067  5.521417e-02
+agegroups75-80            -0.119884125 0.07382954  -1.62379612  1.044339e-01
+agegroups80-85            -0.289725291 0.09176759  -3.15716362  1.595306e-03
+agegroupsabove 85         -0.714807388 0.13417136  -5.32757072  1.005302e-07
+tertile_incomeIncome_q2   -0.021689239 0.03617495  -0.59956521  5.488023e-01
+tertile_incomeIncome_q3    0.033245294 0.03634450   0.91472698  3.603452e-01
+index_heart_failureYes     0.142498433 0.05730962   2.48646627  1.290936e-02
+diabetes_duration5-10      0.156597632 0.03753507   4.17203464  3.030695e-05
+diabetes_durationabove 10  0.303253011 0.03762316   8.06027497  8.003950e-16
+statin_0                   0.135972898 0.03319810   4.09580403  4.222358e-05
+af_0                      -0.049542241 0.06086657  -0.81394828  4.156835e-01
+Drug_0                     1.286078615 0.03798940  33.85362112 7.690345e-245
  
 - There are missing values for the log-odds ratios for age group
   "above 85" after time point 1. Consider and discuss what to do about
-  this with your neighbor (and then do it).
+  this with your neighbor (and then do it). Possible actions are to
+  reduce the population, to re-group the age variable, to change the
+  formula of the nuisance parameter models.

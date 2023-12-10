@@ -6,7 +6,7 @@ The learning target of this exercise is to prepare the next lecture.
 
 ** Reading references
 
-[[../lecture_notes/Day2/State_Level_Masking_Mandates_and_COVID_19_Outcomes.10.pdf]]
+[[../lecture_notes/Day2/State_Level_Masking_Mandates_and_COVID_19_Outcomes.10.pdf]] (read this!)
 
 ----------------------------------------------------------------------
 

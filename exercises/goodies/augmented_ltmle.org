@@ -6,8 +6,10 @@ help pages. But following list covers the most important changes
 compared to ltmle::ltmle:
 
 * Ltmle
+
 - Dnodes can be specified to deal with competing risks
 - Argument gbounds default value is c(0,1) instead of c(0.01,1)
+- Can run multiple time_horizons in one call
   
 * run_Ltmle
 
