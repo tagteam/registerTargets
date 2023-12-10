@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  9 2023 (07:23) 
 ## Version: 
-## Last-Updated: Dec  9 2023 (15:44) 
+## Last-Updated: Dec 10 2023 (14:39) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 9
+##     Update #: 11
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -22,6 +22,12 @@ SL.ranger2 <- function (Y, X, newX, family, obsWeights, num.trees = 50, mtry = f
                         num.threads = 1, verbose = T, ...) 
 {
     SuperLearner:::.SL.require("ranger")
+
+    # CHANGED
+    # We want probability estimates
+    probability <- TRUE
+
+    # CHANGED
     # When the outcome Y is a predicted probability
     # as it occurs in the iterative regression formula
     # we do not want to fit ranger to a factor with many levels

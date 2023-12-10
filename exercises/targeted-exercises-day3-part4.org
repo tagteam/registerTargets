@@ -4,6 +4,7 @@
 
 The learning targets of this exercise are:
 
+- random forests for prediction of binary outcomes
 - to add random forest models for super learning
   risks
 
@@ -15,31 +16,78 @@ The learning targets of this exercise are:
 
 * Random forests
 
-- In the file =sandbox.R=, run a random forest which predicts the
-  propensity of treatment and another which predicts the risk of death
-  within 6 months.
+** Nuisance parameters estimation: predicting propensity
 
+- In the file =sandbox.R=, run a random forest which predicts the
+  propensity of treatment at time zero. Do not use all data but
+  reserve a random 10th for prediction:
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes
 tar_load_everything()
 library(ranger)
 library(riskRegression)
+# avoid that ranger treats our 0-1 variable Drug_0 as numeric
 register_data[,Drug_0:=factor(Drug_0)]
+# reserve a random tenth of the data for prediction
+set.seed(9)
+learning <- sample(1:NROW(register_data),size=NROW(register_data)*9/10)
+learning_register_data  <- register_data[learning]
+test_register_data  <- register_data[!learning]
 ps1_ranger <- ranger(Drug_0~ sex + education + agegroups + tertile_income + index_heart_failure + diabetes_duration,
-                     data = register_data,
-                     classification = TRUE)
-propensity1_ranger <- predictRisk(ps1_ranger,newdata=register_data)
-head(propensity1_ranger)
+                     data = learning_register_data,
+                     seed=8, classification = TRUE,
+                     probability=FALSE)
+# propensity score
+propensity1_ranger <- predictRisk(ps1_ranger,newdata=test_register_data)
+mean(propensity1_ranger)
 #+END_SRC  
 
-- Adapt the codes from the exercises part 1 and plot the predicted
-  propensity scores of ranger against those of logistic regression.
-  
+- Compare the average predicted values in the training data set to the
+  overall propensity of treatment and discuss the result.
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+mean(propensity1_ranger)
+mean(test_register_data[["Drug_0"]]==1)
+#+END_SRC
+
+- Fit a logistic regression model as in the exercises part 1 from today,
+  but now in the random learning subset of the data:
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+ps_learn <- glm(Drug_0~ sex + education + agegroups + tertile_income + index_heart_failure + diabetes_duration,
+          family = "binomial",
+          data = learning_register_data)
+propensity_test <- predictRisk(ps_learn,newdata=test_register_data)
+mean(propensity_test)
+#+END_SRC
+
+- Compare the random forest versus logistic regression results in
+  terms of predicted propensity scores in the test data:
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+library(ggplot2)
+test_register_data[,propensity_test_logistic := predictRisk(ps_learn,newdata=test_register_data)]
+test_register_data[,propensity_test_ranger := predictRisk(ps1_ranger,newdata=test_register_data)]
+ggplot(test_register_data,aes(x= propensity_test_logistic, y= propensity_test_ranger))+geom_point()+xlim(c(0,1))+ylim(c(0,1))
+#+END_SRC  
+
+- Go back to the beginning and change the =probability= argument to
+  =probability=TRUE=. Re-run all steps and discuss the results.
+- If time permits, vary other hyperparameters of ranger (e.g., min.node.size or mtry) and see how the
+  predicted propensity scores change.
+
+** Target parameter estimation
+
+- We aim to add ranger to the SuperLearner for all the nuisance
+  parameter of the standardized 6-months risk of death and 2-year risk
+  of death.
 - There is a problem with the official implementation of the function
   =SL.ranger= when it is applied within =ltmle= to estimate the
   iterative regression formula.  To circumvent this problem and to be
   able to change hyper parameters, copy the file
   =secret_functions/SL.ranger2= to the folder =functions= and open it.
-  Add the following targets to the pipeline:
+  Compared to =SuperLearner::SL.ranger= we have implemented two
+  important changes.
+- Add the following targets to the pipeline:
 
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
     tar_target(ltmle_SL_ranger_death_1,
@@ -61,10 +109,7 @@ head(propensity1_ranger)
     })
 #+END_SRC
 
-- Compare the results with those of the previous exercises
-- Change the =mtry= hyperparameter of ranger by copying the file
-  =SL.ranger2.R= to a new file =SL.ranger3.R= and then editing the
-  arguments where you change the value for =mtry= from
-  =floor(sqrt(ncol(X)))= to =floor(ncol(X)/2)=. Add new targets
-  with the SL.library=c("SL.glm","SL.glm.interaction","SL.ranger3","SL.glmnet").
-  
+- Compare the results with those of the previous exercises where fewer
+  learners were used to estimate the nuisance parameters.
+- If time permits also add =SL.ranger2= to the Ltmle estimator of the
+  2 year risks of death.

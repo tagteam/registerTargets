@@ -4,11 +4,12 @@
 
 The learning targets of this exercise are:
 
+- penalized logistic regression with glmnet (LASSO, ridge, elastic net)
 - to add penalized logistic regression models to the super learner
 
 ** Reading references
 
-- https://glmnet.stanford.edu/articles/glmnet.html
+- https://glmnet.stanford.edu/articles/glmnet.html (read if time permits)
 
 ----------------------------------------------------------------------  
 
