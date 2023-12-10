@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  7 2023 (08:37) 
 ## Version: 
-## Last-Updated: Dec  9 2023 (16:13) 
+## Last-Updated: Dec 10 2023 (07:21) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 21
+##     Update #: 25
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -20,6 +20,11 @@
 
 library(targets)
 library(Publish)
+library(gdata)
+
+# load functions
+tar_source("functions")
+
 # list the targets
 tar_manifest()
 # plot the dependency graf
@@ -93,6 +98,8 @@ tar_load_everything()
 figure_1
 
 # look at the computation times, seeds and warnings/errors
+show_performance()
+show_warnings()
 tar_meta()
 
 
