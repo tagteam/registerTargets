@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  8 2023 (08:01) 
 ## Version: 
-## Last-Updated: Dec 10 2023 (09:13) 
+## Last-Updated: Dec 10 2023 (11:33) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 106
+##     Update #: 107
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -189,7 +189,7 @@ list(
     tar_target(ltmle_summary_ipw_mace_2,{
         summary(ltmle_ipw_mace_2)
     }),
-    tar_target(ltmle_gcomp_mace_2,
+    tar_tartget(ltmle_gcomp_mace_2,
                run_Ltmle(name_outcome="mace",
                          name_competing_risk = "Dead",
                          name_censoring = "Censored",
