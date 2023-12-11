@@ -26,9 +26,10 @@ tar_option_set(packages=c("prodlim","foreach","riskRegression","data.table","lav
 
 # Definition of project functions
 tar_source("functions")
+tar_source("secret_functions")
 
 # Definition of augmented Ltmle functions
-source("../Ltmle/Ltmle.R")
+tar_source("../Ltmle")
 
 # Constants which are not saved as targets
 # can be defined here
