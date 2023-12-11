@@ -43,7 +43,7 @@ Run =tar_make()= then load and print this new target:
   help.
 - Adapt the file =_targets.R= as follows:
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
-tar_target(demo_table,{
+tar_target(propensity_score_table,{
   get_propensity_score_table(formula,data)
 },packages=c("data.table","Publish"))
 #+END_SRC  

@@ -63,6 +63,7 @@ tar_outdated()
 tar_visnetwork()
 # run a specific target which need running
 tar_make(table_1)
+tar_load_everything()
 # plot the dependency graf
 tar_visnetwork(targets_only = TRUE)
 # look at a specific target
