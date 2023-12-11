@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  6 2023 (14:55) 
 ## Version: 
-## Last-Updated: Dec  8 2023 (07:41) 
+## Last-Updated: Dec 11 2023 (09:46) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 34
+##     Update #: 44
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -56,17 +56,19 @@ list(tar_target(sample_size,{137}),
          fwrite(t1,"export/table1.csv")
          t1
      }),
+     tar_target(figure_1,{
+         print("hi")
+         subset = data[age<70]
+         subset[,mycol := rep(cbPalette,length.out = .N)]
+         g = ggplot(subset,aes(x = age,fill = mycol))+geom_histogram()
+         ggsave(g,file = "export/figure1.pdf")
+         g
+     },packages = c("data.table","ggplot2")),
      tar_target(table_2, {
          analyse_data(data = data,
                       formula = Surv(time,event)~sex+age+treatment+biomarker)
-     },packages = "survival"),
-     tar_target(figure_1,{
-         data[,mycol := factor(sex,labels=cbPalette[1:2])]
-         g = ggplot(subset,aes(x=sex,y = age,fill=sex))+geom_boxplot()+scale_fill_manual(values=cbPalette)
-         ggsave(g,file = "export/figure1.pdf")
-         g
-     },packages = c("ggplot2"))
-)
+     },packages = "survival")
+     )
 
 
 
