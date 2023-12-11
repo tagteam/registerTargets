@@ -9,6 +9,7 @@ used to create a target in the pipeline.
 
 -  [[goodies/R-functions.org]] (skip if you know how to write R functions)
 -  [[goodies/lazy-coder.org]] (read this if time permits)
+-  https://bookdown.org/yihui/rmarkdown-cookbook/working-directory.html (if you have working directory trouble with quarto)
 
 ----------------------------------------------------------------------
 
