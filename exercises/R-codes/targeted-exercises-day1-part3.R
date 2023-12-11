@@ -4,6 +4,6 @@ tar_target(propensity_score_table,{
   publish(ps,print=FALSE)
 })
 
-tar_target(demo_table,{
+tar_target(propensity_score_table,{
   get_propensity_score_table(formula,data)
 },packages=c("data.table","Publish"))
