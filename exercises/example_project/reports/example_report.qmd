@@ -3,9 +3,6 @@ title: "example report"
 author: "You and Me"
 format: html
 editor: visual
-knitr:
-  opts_knit:
-    root.dir: ".."
 ---
 
 ## Quarto
@@ -24,6 +21,8 @@ You can embed code like this:
 
 ```{r}
 #| echo: false
+#| 
+knitr::opts_knit$set(root.dir = '/home/tag/metropolis/Teaching/targetedRegisterAnalysis/exercises/example_project/')
 library(targets)
 print(getwd())
 tar_load(table_1)
