@@ -23,7 +23,7 @@ exercises today (part 1 and part 2).
 # outcome model
 ltmle_fit_death_1[[1]][[1]]$Ltmle_fit$fit$Q[[1]]
 # censoring model
-ltmle_fit_death_1[[1]][[1]]$Ltmle_fit$fit$g[[1]][["Drug_0"]]
+ltmle_fit_death_1[[1]][[1]]$Ltmle_fit$fit$g[[1]][["Censored_1"]]
 # propensity score model
 ltmle_fit_death_1[[1]][[1]]$Ltmle_fit$fit$g[[1]][["Drug_0"]]
 #+END_SRC
@@ -65,6 +65,7 @@ ltmle_fit_death_2[[1]][[1]]$Ltmle_fit$fit$g[[1]][["Censored_1"]]
 ltmle_fit_death_2[[1]][[1]]$Ltmle_fit$fit$g[[1]][["Drug_3"]]
 ltmle_fit_death_2[[1]][[1]]$Ltmle_fit$fit$g[[1]][["Drug_2"]]
 ltmle_fit_death_2[[1]][[1]]$Ltmle_fit$fit$g[[1]][["Drug_1"]]
+ltmle_fit_death_2[[1]][[1]]$Ltmle_fit$fit$g[[1]][["Drug_0"]]
 #+END_SRC  
 
 - There are missing values for the log-odds ratios for age group
