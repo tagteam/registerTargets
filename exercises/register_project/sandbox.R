@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  8 2023 (19:05) 
 ## Version: 
-## Last-Updated: Dec 10 2023 (15:55) 
+## Last-Updated: Dec 12 2023 (11:18) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 21
+##     Update #: 22
 #----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -38,6 +38,18 @@ tar_load(baseline_covariates)
 
 tar_load(time_covariates)
 time_covariates
+
+tar_load(regimen_data)
+regimen_data
+
+tar_load(survival_outcome_data)
+survival_outcome_data
+
+tar_load(mace_outcome_data)
+mace_outcome_data
+
+tar_load(outcome_data)
+outcome_data()
 
 ## part 2
 tar_make()

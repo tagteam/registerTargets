@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  7 2023 (17:32) 
 ## Version: 
-## Last-Updated: Dec 12 2023 (10:05) 
+## Last-Updated: Dec 12 2023 (11:14) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 16
+##     Update #: 17
 #----------------------------------------------------------------------
 ## 
 ### Commentary:
@@ -30,7 +30,7 @@ tar_option_set(packages=c("prodlim",
                           "Publish"))
 # Definition of project functions
 tar_source("functions")
-source("../Ltmle")
+tar_source("../Ltmle")
 
 list(
     tar_target(register_data, fread("data/register_data.csv")),
