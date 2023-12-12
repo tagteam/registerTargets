@@ -5,7 +5,23 @@ version =4.3.0= and RStudio version =2023.09.1+494=. The versions of
 the most important R-packages are:
 
 #+BEGIN_SRC R  :results output   :exports  (exercise-with-code)  :session *R* :cache yes
-course_packages  <- c("devtools","targets","SuperLearner","data.table","ranger","glmnet","Publish","lava","riskRegression","Matrix1","matrixStats","ggplot2","survival","prodlim","heaven")
+course_packages  <- c("devtools",
+                      "targets",
+                      "SuperLearner",
+                      "data.table",
+                      "ranger",
+                      "glmnet",
+                      "Publish",
+                      "lava",
+                      "gdata",
+                      "riskRegression",
+                      "fastglm",
+                      "Matrix1",
+                      "matrixStats",
+                      "ggplot2",
+                      "survival",
+                      "prodlim")
+                      # "heaven")
 for (p in course_packages){
   v=packageVersion(p)
   cat(paste(p,":",v,"\n"))
@@ -60,13 +76,15 @@ if (!require("SuperLearner",quietly=TRUE)) install.packages("SuperLearner")
 if (!require("glmnet",quietly=TRUE)) install.packages("glmnet")
 if (!require("Publish",quietly=TRUE)) install.packages("Publish")
 if (!require("lava",quietly=TRUE)) install.packages("lava")
+if (!require("gdata",quietly=TRUE)) install.packages("gdata")
+if (!require("fastglm",quietly=TRUE)) install.packages("fastglm")
 if (!require("riskRegression",quietly=TRUE)) install.packages("riskRegression")
 if (!require("matrixStats",quietly=TRUE)) install.packages("matrixStats")
 if (!require("Matrix",quietly=TRUE)) install.packages("Matrix")
 if (!require("ggplot2",quietly=TRUE)) install.packages("ggplot2")
 if (!require("prodlim",quietly=TRUE)) install.packages("prodlim")
 if (!require("survival",quietly=TRUE)) install.packages("survival")
-if (!require("heaven",quietly=TRUE)) devtools::install_github("tagteam/heaven")
+# if (!require("heaven",quietly=TRUE)) devtools::install_github("tagteam/heaven")
 #+END_SRC
 
 If you cannot install one of the packages, in particular, the package

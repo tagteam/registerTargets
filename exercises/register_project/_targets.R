@@ -3,9 +3,9 @@
 ## Author: Thomas Alexander Gerds
 ## Created: Dec  7 2023 (17:32) 
 ## Version: 
-## Last-Updated: Dec  9 2023 (07:24) 
+## Last-Updated: Dec 12 2023 (10:04) 
 ##           By: Thomas Alexander Gerds
-##     Update #: 14
+##     Update #: 15
 #----------------------------------------------------------------------
 ## 
 ### Commentary:
@@ -34,7 +34,7 @@ source("../Ltmle/Ltmle.R")
 
 list(
     tar_target(register_data, fread("data/register_data.csv")),
-    tar_target(baseline_covariates, fread("data/baseline_covariates.csv")),
+    tar_target(raw_baseline_covariates, fread("data/baseline_covariates.csv")),
     tar_target(time_covariates, fread("data/time_covariates.csv")),
     tar_target(regimen_data, fread("data/regimen_data.csv")),
     tar_target(mace_outcome_data, fread("data/mace_outcome_data.csv")),
