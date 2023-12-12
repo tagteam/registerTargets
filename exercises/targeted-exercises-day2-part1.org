@@ -75,7 +75,7 @@ formula <- Drug_0 ~ sex + education + agegroups + tertile_income + index_heart_f
 
 ** Outcome data
 
-- Load the pre-defined target =outcome_data=. There are three
+- Load the pre-defined target =survival_outcome_data=. There are three
   variables =mace= and =Dead= and =Censored= followed over 10 time
   intervals.  There are no variables =mace_0=, =Dead_0= and
   =Censored_0= because those patients are excluded.  For the variables
